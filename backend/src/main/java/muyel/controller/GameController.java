@@ -1,30 +1,24 @@
 package muyel.controller;
 
 import muyel.model.*;
+import muyel.service.GameService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/blackjack")
+@CrossOrigin(origins = "http://localhost:3000")
 public class GameController {
 
-    //private Deck deck;
-    private Dealer dealer;
-    private List<Player> players;
-    
+    @Autowired
+    private GameService gameService;
 
-    // Get the current state of all players' hands
-    @GetMapping("/players")
-    public List<Player> getPlayers() {
-        return players;
-    }
+    ///// METHODS TO CONNECT TO FRONTEND /////
 
-    // Get the current state of all players' hands
-    @GetMapping("/players")
-    public Dealer getDealer() {
-        return dealer;
-    }
+
 
 
     

@@ -63,9 +63,8 @@ public class Player extends Participant {
 
     /*
      * Changes the password upon request 
-     * Returns true if the password is set, false if it fails to be set
-     *  
-     * The password will be successfully reset if the password entered is between 4 - 15 chars long
+     * 
+     * REQUIRES: The password string be between 4-15 chars long
      */
     public void setPassword(String password) {
         this.password = password;
