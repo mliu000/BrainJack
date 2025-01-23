@@ -20,7 +20,7 @@ public class Player extends Participant {
     // constructs a new player with given username and password, and default accumulators
     public Player(String username, String password) {
         this.username = username;
-        setPassWord(password);
+        setPassword(password);
         this.gameEarnings = 0;
         this.totalEarnings = 0;
         this.roundsPlayed = 0;
@@ -62,9 +62,12 @@ public class Player extends Participant {
     }
 
     /*
-     * Changes the password of a player upon request. 
+     * Changes the password upon request 
+     * Returns true if the password is set, false if it fails to be set
+     *  
+     * The password will be successfully reset if the password entered is between 4 - 15 chars long
      */
-    public void setPassWord(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 

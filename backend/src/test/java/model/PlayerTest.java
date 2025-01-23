@@ -1,6 +1,7 @@
 package model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -68,6 +69,7 @@ public class PlayerTest {
 
     ///// HELPER METHODS /////
     
+    // Helper method to check the values of the fields of player
     public void checkPlayerFields(int a, int b, int c, int d, int e, double f) {
         assertEquals(a, player.getcurrBet());
         assertEquals(b, player.getRoundsPlayed());
@@ -76,8 +78,5 @@ public class PlayerTest {
         assertEquals(e, player.getTotalEarnings());
         assertEquals(f, player.getWinPercentage(), 0.01); // Delta for double comparison
     }
-
-    // Helper method to 
-
 
 }
