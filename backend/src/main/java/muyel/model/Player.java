@@ -1,77 +1,91 @@
 package muyel.model;
 
-import java.util.ArrayList;
-import java.util.List;
+/*
+ * @Mu Ye Liu - Jan 2025
+ * 
+ * Represnts a player class in blackjack. The player has the additional accumulators that show career 
+ * statistics of the player throughout their lifetime
+ */
+public class Player extends Participant {
+    // Fields to store personal information, such as username, password.
+    private String username, password; 
 
+    // Stores the current bet of the player
+    private int currBet;
 
-public class Player {
-    private List<PokerCard> hand;  // List to store player's hand (cards)
-    private int score;        // The score of the player's hand
-    private int id;
-    private int balance;
+    // Accumulators to store account totals, like rounds played, etc
+    private int roundsPlayed, roundsWon, totalEarnings, gameEarnings;
+    private double winPercentage;
 
-    // Constructor to initialize the player's hand and score
-    public Player(int id) {
-        this.id = id;
-        this.hand = new ArrayList<>();
-        this.score = 0;
-        this.balance = 0;
-        
+    // constructs a new player with given username and password, and default accumulators
+    public Player(String username, String password) {
+        this.username = username;
+        setPassWord(password);
+        this.gameEarnings = 0;
+        this.totalEarnings = 0;
+        this.roundsPlayed = 0;
+        this.roundsWon = 0;
+        this.currBet = 0;
+        this.winPercentage = 0;
     }
 
-    // Method to add a card to the player's hand
-    public void addCard(PokerCard card) {
-        hand.add(card);
-        calculateScore();  // Recalculate score when a new card is added
-    }
-
-    // Method to calculate the total score of the player's hand
-    public void calculateScore() {
-        score = 0;
-        int aceCount = 0;
-
-        // Loop through each card and calculate the score
-        for (PokerCard card : hand) {
-            int cardValue = card.getValue();
-            score += cardValue;
-
-            // Count aces to adjust for their value later if necessary
-            if (cardValue == 11) {
-                aceCount++;
+    /*
+     * Updates the player's stats after they finish a round (after a win or loss).
+     * If the player loses, they will get to answer a question. If they answer it correctly, only 
+     * lost half of their bet. If they answer it incorrectly, lose all their bet
+     * 
+     * Parameter result: true if the player wins, false if the player loses.
+     * Parameter correct: true if player answers question correctly, false if incorrect
+     */
+    public void updateStatistics(boolean result, boolean correct) {
+        roundsPlayed++;
+        if (result) {
+            // Win case
+            roundsWon++;
+            gameEarnings += currBet;
+            totalEarnings += currBet;
+        } else {
+            // Lose case
+            if (correct) {
+                // Case: answers question correctly
+                gameEarnings -= currBet / 2;
+                totalEarnings -= currBet / 2;
+            } else {
+                // Case: answers question incorrectly
+                gameEarnings -= currBet;
+                totalEarnings -= currBet;
             }
         }
-
-        // Adjust the score for aces (if score exceeds 21, convert aces from 11 to 1)
-        while (score > 21 && aceCount > 0) {
-            score -= 10;  // Reduce score by 10 for each Ace counted as 11
-            aceCount--;
-        }
+        // Reset the current bet and update the win percentage
+        currBet = 0;
+        winPercentage = ((double) roundsWon / (double) roundsPlayed)*100;
     }
 
-    // Method to check if the player is busted (score exceeds 21)
-    public boolean isBusted() {
-        return score > 21;
+    /*
+     * Changes the password of a player upon request. 
+     */
+    public void setPassWord(String password) {
+        this.password = password;
     }
 
-    // Changes the balance
-    public void changeBalance(int change) {
-        balance += change;
+    // Reset game earnings (to be called once a player leaves the lobby)
+    public void resetGameEarnings() {
+        this.gameEarnings = 0;
     }
 
-    // Method to get a string representation of the player's hand
-    // @Override
-    // public String toString() {
-    //     StringBuilder handString = new StringBuilder("Player's hand: ");
-    //     for (PokerCard card : hand) {
-    //         handString.append(card.toString()).append(" ");
-    //     }
-    //     return handString.toString() + "Score: " + score;
-    // }
+    // Sets bet 
+    public void setCurrBet(int bet) {
+        this.currBet = bet;
+    }
 
     ///// GETTER METHODS /////
     
-    public int getScore() { return score; }
-    public List<PokerCard> getHand() { return hand; }
-    public int getId() { return id; }
-    public int getBalance() { return balance; }
+    public String getUsername() { return username; }
+    public String getPassword() { return password; }
+    public int getGameEarnings() { return gameEarnings; }
+    public int getRoundsPlayed() { return roundsPlayed; }
+    public int getRoundsWon() { return roundsWon; }
+    public int getTotalEarnings() { return totalEarnings; }
+    public int getcurrBet() { return currBet; }
+    public double getWinPercentage() { return winPercentage; }
 }

@@ -4,18 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-// Represents the deck of 52 poker cards. Singleton because we only need one card deck to play. 
-// Card aesthetics customization could be done in the front end
+/*
+ * @Mu Ye Liu - Jan 2025
+ * 
+ * Represents a deck of 52 cards
+ */
 public class Deck {
 
-    // Random number generator
+    // Random number generator that generates an array index that allows retrieval and removal of 
+    // Randomly generated card
     private Random randomGenerator;
     
-    // Hashset stores the deck of cards. We chose a hashset because we don't care about the order.
-    // Also, it has a faster runtime for lookup and retrieval
+    // List that stores the cards. 
     private List<PokerCard> deckOfCards;
 
-    // Private constructor constructs a new deck of 52 poker cards. 
+    // Constructs a new deck of 52 cards
     public Deck() {
         this.randomGenerator = new Random();
         this.deckOfCards = new ArrayList<>();
@@ -28,6 +31,18 @@ public class Deck {
             for (String number: numbers) {
                 deckOfCards.add(new PokerCard(suite, number));
             } 
+        }
+    }
+
+    /*
+     * Adds card back to deck. If card is already in deck, do nothing
+     * Although the runtime per operation is O(n), it is negligible because n is bounded by 52
+     *
+     * REQUIRES: Card is originally part of deck
+     */
+    public void addCardBackToDeck(PokerCard card) {
+        if (!deckOfCards.contains(card)) {
+            deckOfCards.add(card);
         }
     }
 
@@ -50,5 +65,6 @@ public class Deck {
     ///// GETTER METHODS /////  
     
     public List<PokerCard> getDeckOfCards() { return deckOfCards; }
+    public Random getRandomGenerator() { return randomGenerator; }
 
 }   

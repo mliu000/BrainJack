@@ -7,9 +7,14 @@ import org.junit.jupiter.api.Test;
 
 import muyel.model.*;
 
-
-// placeholder rename this once we start implementation
+/*
+ * @Mu Ye Liu - Jan 2025
+ * 
+ * Tests the Card class
+ */
 public class CardTest {
+
+    // Sample poker Cards
     public PokerCard cardA;
     public PokerCard card2;
     public PokerCard cardJ;

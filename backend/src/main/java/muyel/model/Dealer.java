@@ -1,26 +1,24 @@
 package muyel.model;
 
-public class Dealer extends Player {
+/*
+ * @Mu Ye Liu - Jan 2025
+ * 
+ * Represents a dealer class that extends the participant class. The dealer cannot draw cards 
+ * individually, they must draw cards until bust or 17
+ */
+public class Dealer extends Participant {
     
-    // Constructor to initialize the dealer (uses Player's constructor)
-    public Dealer() {
-        super(0);
-    }
+    /*
+     * Creates a new dealer
+     * Default constructor (same as participant) because dealer doesn't have any additional fields
+     */
+    public Dealer() {}
 
-    // Method for the dealer to play their turn
-    // REQUIRES: this method can only be run after the dealer already has 2 cards. 
-    public void playTurn(Deck deck) {
-        // Dealer must draw cards until their score is 17 or higher
-        while (getScore() < 17) {
-            // Draw a card from the deck and add it to the dealer's hand
-            PokerCard drawnCard = deck.drawCard();
-            addCard(drawnCard);  // Add card to hand and recalculate score
+    // Plays hand until it reaches 17
+    public void playHand(Deck cardDeck) {
+        while (score < 17) {
+            drawCard(cardDeck);
         }
     }
-
-    // Optional: Add a custom toString method to differentiate between player and dealer
-    // @Override
-    // public String toString() {
-    //     return "Dealer's hand: " + super.toString();
-    // }
+    
 }

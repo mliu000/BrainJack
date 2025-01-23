@@ -7,19 +7,62 @@ import org.junit.jupiter.api.Test;
 
 import muyel.model.*;
 
+/*
+ * @Mu Ye Liu - Jan 2025
+ * 
+ * Tests the Deck class
+ */
 public class DeckTest {
     
-    public Deck instance1;
+    // Sample deck
+    public Deck deck;
 
     // Gets the instance of the Deck class, or creates a new one if it hasn't been initialized yet. 
     @BeforeEach
     public void initialize() {
-        instance1 = new Deck();
+        deck = new Deck();
     }
 
     // Test to see whether or not card deck was constructed properly
     @Test
     public void deckOfCardsConstructionTest() {
+        checkDeckState(deck);
+    }
+
+    // Tests drawing random card from deck. Also, makes sure that drawn cards are not still in deck
+    @Test 
+    public void drawRandomCardTest() {
+        PokerCard card1 = deck.drawCard();
+        PokerCard card2 = deck.drawCard();
+        assertEquals(50, deck.getDeckOfCards().size());
+        assertFalse(deck.getDeckOfCards().contains(card1));
+        assertFalse(deck.getDeckOfCards().contains(card2));
+
+        while (!deck.getDeckOfCards().isEmpty()) {
+            deck.drawCard();
+        }
+
+        assertNull(deck.drawCard());
+    }
+
+    // Tests the method where you return card to deck
+    @Test
+    public void addCardBackToDeckTest() {
+        // Case 1: all cards to put back into deck are not already in the deck
+        PokerCard card1 = deck.drawCard();
+        PokerCard card2 = deck.drawCard();
+        deck.addCardBackToDeck(card2);
+        deck.addCardBackToDeck(card1);
+        assertTrue(deck.getDeckOfCards().contains(card2));
+        assertTrue(deck.getDeckOfCards().contains(card1));
+        assertEquals(52, deck.getDeckOfCards().size());
+        // Case 2: Trying to add card back into deck that is already there
+        deck.addCardBackToDeck(card2);
+        assertEquals(52, deck.getDeckOfCards().size());
+    }
+
+    // Helper method to check that all cards in the deck are restored
+    public static void checkDeckState(Deck deckParam) {
         int diamondCount = 0;
         int cloverCount = 0;
         int heartsCount = 0;
@@ -38,7 +81,7 @@ public class DeckTest {
         int numQcount = 0;
         int numKcount = 0;
 
-        for (PokerCard card: instance1.getDeckOfCards()) {
+        for (PokerCard card: deckParam.getDeckOfCards()) {
             String suite = card.getSuite();
             String number = card.getNumber();
             switch(suite) {
@@ -117,21 +160,7 @@ public class DeckTest {
         assertEquals(13, heartsCount);
         assertEquals(13, spadesCount);
         assertEquals(13, cloverCount);
-        assertEquals(52, instance1.getDeckOfCards().size());
+        assertEquals(52, deckParam.getDeckOfCards().size());
     }
-
-    // Tests drawing random card from deck
-    @Test 
-    public void drawRandomCardTest() {
-        instance1.drawCard();
-        instance1.drawCard();
-        assertEquals(50, instance1.getDeckOfCards().size());
-
-        while (!instance1.getDeckOfCards().isEmpty()) {
-            instance1.drawCard();
-        }
-
-        assertNull(instance1.drawCard());
-    }
-
+    
 }
