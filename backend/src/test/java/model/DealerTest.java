@@ -85,7 +85,6 @@ public class DealerTest {
         deck.getRandomGenerator().setSeed(13);
         dealer.startDraw(deck);
         dealer.playHand(deck); // CARDS: A, A, 2, 6 where first A is 11, second A is 1
-        System.out.println(dealer.getScore());
         dealer.reset(deck);
         // Check dealer fields
         assertTrue(dealer.getHand().isEmpty());
