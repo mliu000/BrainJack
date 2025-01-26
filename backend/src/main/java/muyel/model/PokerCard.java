@@ -1,6 +1,10 @@
 package muyel.model;
 
-// Represents the card class for a deck of cards
+/*
+ * @Mu Ye Liu
+ * 
+ * Represents the card class for a deck of cards
+ */
 public class PokerCard {
 
     // Stores the value of the card in blackjack

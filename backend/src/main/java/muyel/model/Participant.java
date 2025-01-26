@@ -78,7 +78,7 @@ public abstract class Participant {
         if (score > 21) {
             for (PokerCard currCard: hand) {
                 if (currCard.getNumber().equals("A") && currCard.getValue() == 11) {
-                    card.changeValueOfA(true);
+                    currCard.changeValueOfA(true);
                     score -= 10;
                     break;
                 }
