@@ -1,5 +1,7 @@
 package muyel.model;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 /*
  * @Mu Ye Liu - Jan 2025
  * 
@@ -62,12 +64,13 @@ public class Player extends Participant {
     }
 
     /*
-     * Changes the password upon request 
+     * Changes the password upon request. First hashes it to ensure security
      * 
      * REQUIRES: The password string be between 4-15 chars long
      */
     public void setPassword(String password) {
-        this.password = password;
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        this.password = encoder.encode(password);
     }
 
     // Reset game earnings (to be called once a player leaves the lobby)

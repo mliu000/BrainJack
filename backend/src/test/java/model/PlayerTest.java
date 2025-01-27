@@ -1,9 +1,11 @@
 package model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import muyel.model.Player;
 
@@ -17,17 +19,21 @@ public class PlayerTest {
     // Sample player
     Player player;
 
+    // Password encoder to check password field
+    BCryptPasswordEncoder encoder;
+
     // Constructs a new player for each test
     @BeforeEach
     public void constructPlayer() {
         this.player = new Player("user1", "abcdefg");
+        this.encoder = new BCryptPasswordEncoder();
     }
 
     // Tests the constructor
     @Test
     public void constructorTest() {
         assertEquals("user1", player.getUsername());
-        assertEquals("abcdefg", player.getPassword());
+        assertTrue(encoder.matches("abcdefg", player.getPassword()));
         checkPlayerFields(0, 0, 0, 0, 0, 0);
     }
 

@@ -1,4 +1,7 @@
-model\CardTest.class
 model\DeckTest.class
-model\PlayerTest.class
+model\QuestionBankTest.class
 model\DealerTest.class
+model\CardTest.class
+utility\PairTest.class
+model\PlayerTest.class
+model\QuestionTest.class

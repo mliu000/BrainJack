@@ -3,7 +3,9 @@ muyel\service\GameService.class
 muyel\model\Participant.class
 muyel\controller\GameController.class
 muyel\Main.class
-muyel\model\Questions.class
 muyel\model\Deck.class
 muyel\model\Player.class
 muyel\model\PokerCard.class
+muyel\utility\Pair.class
+muyel\model\Question.class
+muyel\model\QuestionBank.class
