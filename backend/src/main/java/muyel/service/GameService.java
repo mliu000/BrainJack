@@ -1,14 +1,18 @@
 package muyel.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import muyel.model.*;
-import muyel.utility.Pair;
 
+/*
+ * @Mu Ye Liu - Jan 2025
+ * 
+ * Represents the service class that handles all the cases for user input as well as its validity
+ */
 @Service
 public class GameService {
 
@@ -20,17 +24,21 @@ public class GameService {
     @Autowired
     private QuestionBank questionBank;
 
-    // HashSet stores the players currently in match
+    // List stores the players currently in match
     @Autowired
-    private Set<Player> playersInMatch;
+    private ArrayList<Player> playersInMatch;
     
     // Creates a dealer
     @Autowired
     private Dealer dealer;
 
+    // Creates a deck
+    @Autowired
+    private Deck deck;
+
     // Uses default constructor
 
-    ///// INPUT METHODS FOR PLAYER AND DEALER /////
+    ///// INPUT METHODS FOR PARTICIPANTS (PLAYER AND DEALER) /////
     
     /*
      * Creates a new player, but checks the username and password first
@@ -57,27 +65,69 @@ public class GameService {
 
     /* 
      * Changes the password of the player 
-     * Returns true along with Player if successful, false with player if not, false with null
-     * if player not found
+     * Returns true if password successfully changed. False if not
      */
-    public Pair<Player, Boolean> changePlayerPassword(String userName, String newPassword) {
-        Player playerToChangePwd = playerDataBase.get(newPassword);
-        if (playerToChangePwd == null) {
-            // Case 1: Account with given username not found
-            return new Pair<Player,Boolean>(null, false);
-        } else if (newPassword.length() >= 4 && newPassword.length() <= 20) {
-            // Case 2: Password Successfully changes
+    public boolean changePlayerPassword(Player playerToChangePwd, String newPassword) {
+        if (newPassword.length() >= 4 && newPassword.length() <= 20) {
+            // Case 1: Password Successfully changes
             playerToChangePwd.setPassword(newPassword);
-            return new Pair<Player,Boolean>(playerToChangePwd, true);
+            return true;
         } else {
-            // Case 3: Password not sucessfullyl changes
-            return new Pair<Player,Boolean>(playerToChangePwd, false);
+            // Case 2: Password not successfully changed
+            return false;
         } 
     }
 
+    // Updates the players statistics
+    public void updatePlayerStatistics(Player playerToUpdate, boolean win, boolean correct) {
+        playerToUpdate.updateStatistics(win, correct);
+    }
+
+    // Sets the player's bet
+    public void setPlayerBet(Player playerToUpdate, int bet) {
+        playerToUpdate.setCurrBet(bet);
+    }
+
+    // Reset player curr earning
+    public void resetPlayerCurrEarnings(Player playerToUpdate) {
+        playerToUpdate.resetGameEarnings();
+    }
+
+    // Player hit draw card
+    public void playerHit(Player playerToUpdate) {
+        playerToUpdate.drawCard(deck);
+    }
+
+    ///// INPUT METHODS FOR PARTICIPANTS (BOTH DEALER AND PLAYER) /////
+    
+    // Start draw 2 cards
+    public void participantStartDraw(Participant participantToDraw) {
+        participantToDraw.drawCard(deck);
+    }
+
+    // Resets the participants after they finish
+    public void participantReset(Participant participantToReset) {
+        participantToReset.reset(deck);
+    }
+
+    ///// INPUT METHODS FOR DEALER ONLY /////
+    
+    public void dealerPlayHand() {
+        dealer.playHand(deck);
+    }
+
     ///// INPUT METHODS FOR THE QUESTION BANK /////
-    
 
+    ///// GETTER METHODS /////
 
-    
+    // Returns the requested player by username, null if no player with inputted username exists
+    public Player getPlayer(String username) {
+        return playerDataBase.get(username);
+    }
+
+    public HashMap<String, Player> getPlayerDatabase() { return playerDataBase; }
+    public Dealer getDealer() { return dealer; }
+    public ArrayList<Player> getPlayersInMatch() { return playersInMatch; } 
+    public QuestionBank getQuestionBank() { return questionBank; }
+
 }

@@ -89,7 +89,7 @@ public class DealerTest {
         // Check dealer fields
         assertTrue(dealer.getHand().isEmpty());
         assertEquals(0, dealer.getScore());
-        // Check to make sure that card is reinitialized properly
+        // Check to make sure that deck is reinitialized properly
         DeckTest.checkDeckState(deck);
         // Check to make sure that all A cards are 11
         for (PokerCard card: deck.getDeckOfCards()) {

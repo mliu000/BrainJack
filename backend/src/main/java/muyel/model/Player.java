@@ -10,7 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  */
 public class Player extends Participant {
     // Fields to store personal information, such as username, password.
-    private String username, password; 
+    private final String USERNAME;
+    private String password; 
 
     // Stores the current bet of the player
     private int currBet;
@@ -21,7 +22,7 @@ public class Player extends Participant {
 
     // constructs a new player with given username and password, and default accumulators
     public Player(String username, String password) {
-        this.username = username;
+        this.USERNAME = username;
         setPassword(password);
         this.gameEarnings = 0;
         this.totalEarnings = 0;
@@ -85,7 +86,7 @@ public class Player extends Participant {
 
     ///// GETTER METHODS /////
     
-    public String getUsername() { return username; }
+    public String getUsername() { return USERNAME; }
     public String getPassword() { return password; }
     public int getGameEarnings() { return gameEarnings; }
     public int getRoundsPlayed() { return roundsPlayed; }

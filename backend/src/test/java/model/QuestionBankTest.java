@@ -55,6 +55,8 @@ public class QuestionBankTest {
         assertEquals(0, qb.isCorrectAnswer(idGood, answerIncorrect));
         // Case 3: answer not found (error case)
         assertEquals(-1, qb.isCorrectAnswer(idNotFound, answerCorrect));
+        // Case 4: not answered
+        assertEquals(0, qb.isCorrectAnswer(idGood, null));
     }
     
 }
