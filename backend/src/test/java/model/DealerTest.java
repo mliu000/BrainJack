@@ -82,7 +82,7 @@ public class DealerTest {
      */
     @Test
     public void resetTest() {
-        deck.getRandomGenerator().setSeed(13);
+        deck.getRandomGenerator().setSeed(18);
         dealer.startDraw(deck);
         dealer.playHand(deck); // CARDS: A, A, 2, 6 where first A is 11, second A is 1
         dealer.reset(deck);

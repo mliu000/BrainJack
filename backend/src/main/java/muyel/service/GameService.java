@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import muyel.model.*;
+import muyel.utility.Pair;
 
 @Service
 public class GameService {
@@ -56,17 +57,21 @@ public class GameService {
 
     /* 
      * Changes the password of the player 
-     * Returns true if password changed, false if not
+     * Returns true along with Player if successful, false with player if not, false with null
+     * if player not found
      */
-    public boolean changePlayerPassword(String userName, String newPassword) {
+    public Pair<Player, Boolean> changePlayerPassword(String userName, String newPassword) {
         Player playerToChangePwd = playerDataBase.get(newPassword);
-        if (playerToChangePwd == null || !(newPassword.length() >= 4 && newPassword.length() <= 20)) {
-            // Case 1 and 2: Account with given username not found, and password does not meet reqs
-            return false;
-        } else {
-            // Case 2: Password successfully changes
+        if (playerToChangePwd == null) {
+            // Case 1: Account with given username not found
+            return new Pair<Player,Boolean>(null, false);
+        } else if (newPassword.length() >= 4 && newPassword.length() <= 20) {
+            // Case 2: Password Successfully changes
             playerToChangePwd.setPassword(newPassword);
-            return true;
+            return new Pair<Player,Boolean>(playerToChangePwd, true);
+        } else {
+            // Case 3: Password not sucessfullyl changes
+            return new Pair<Player,Boolean>(playerToChangePwd, false);
         } 
     }
 

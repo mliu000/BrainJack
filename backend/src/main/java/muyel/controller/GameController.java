@@ -27,9 +27,12 @@ public class GameController {
 
     // Requests to update password for a player
     @PutMapping("/players/{username}/update_player_password")
-    public Pair<Boolean, Player> updatePassword() {
-        return null; // stub
+    public Pair<Player, Boolean> updatePassword(@PathVariable String username, 
+            @RequestBody String newPassword) {
+        return gameService.changePlayerPassword(username, newPassword);
     }
+
+    //
 
 
 
