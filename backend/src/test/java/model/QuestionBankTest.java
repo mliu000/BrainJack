@@ -20,7 +20,8 @@ public class QuestionBankTest {
 
     // Tests the Question bank class in general. Can't create too many instances at once with scraping
     @Test
-    public void test() {
+    public void test() throws InterruptedException {
+        Thread.sleep(5000);
         qb = new QuestionBank();
         qb.getRandomGenerator().setSeed(1);
         Map<Integer, Question> qnBank = qb.getQnBank();

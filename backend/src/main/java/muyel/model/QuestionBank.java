@@ -59,8 +59,8 @@ public class QuestionBank {
             URL url = new URL("https://opentdb.com/api.php?amount=50&type=multiple");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setConnectTimeout(5000);
-            connection.setReadTimeout(5000);
+            connection.setConnectTimeout(15000);
+            connection.setReadTimeout(15000);
 
             // If the response code is not 200, then there is an error, so throw exception
             int responseCode = connection.getResponseCode();

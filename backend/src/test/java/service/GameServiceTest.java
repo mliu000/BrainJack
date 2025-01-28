@@ -1,22 +1,18 @@
 package service;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import muyel.Main;
-import muyel.model.Dealer;
-import muyel.model.Deck;
 import muyel.model.Player;
-import muyel.model.QuestionBank;
+import muyel.model.Question;
 import muyel.service.GameService;
+import muyel.utility.Pair;
 
 /*
  * @Mu Ye Liu - Jan 2025
@@ -26,18 +22,134 @@ import muyel.service.GameService;
 @SpringBootTest(classes = Main.class)
 public class GameServiceTest {
     
-    // 2 instances of gameService to resolve the issue with api limits
+    // Instance of gameService Autowired
     @Autowired
     public GameService gameService;
 
+
+    // Tests everything because of api issues
     @Test
-    public void constructorTest() {
+    public void test() {
         // Make sure the autowired fields are not null
+
+        ///// public void constructorTest()
         assertNotNull(gameService.getDealer());
         assertNotNull(gameService.getPlayerDatabase());
         assertNotNull(gameService.getQuestionBank());
         assertNotNull(gameService.getPlayersInMatch());
+        assertNotNull(gameService.getEncoder());
         assertTrue(gameService.getPlayerDatabase().size() == 0);
         assertTrue(gameService.getPlayersInMatch().size() == 0);
+        assertEquals(50, gameService.getQuestionBank().getQnBank().size());
+
+        ///// public void createPlayerTest()
+        // Case 1: successfully creates player
+        Player createdPlayer1 = gameService.createPlayer("player1", "password1");
+        assertNotNull(createdPlayer1);
+        assertEquals(1, gameService.getPlayerDatabase().size());
+        assertEquals(createdPlayer1, gameService.getPlayerDatabase().get("player1"));
+        assertTrue(gameService.getPlayersInMatch().isEmpty());
+        // Case 2: Player  not created, username too chort
+        Player createdPlayer2 = gameService.createPlayer("pl1", "password1");
+        assertNull(createdPlayer2);
+        // Case 3: Player not created, username too long
+        Player createdPlayer3 = gameService.createPlayer("playerplayerplayerplayer1", "password1");
+        assertNull(createdPlayer3);
+        // Case 4: Player not created, password too short
+        Player createdPlayer4 = gameService.createPlayer("player2", "pw1");
+        assertNull(createdPlayer4);
+        // Case 4: Player not crated, password too long
+        Player createdPlayer5 = gameService.createPlayer("player3", "passwordpasswordpassword1");
+        assertNull(createdPlayer5);
+        // Case 5: User already exists
+        Player createdPlayer6 = gameService.createPlayer("player1", "password1");
+        assertNull(createdPlayer6);
+        assertEquals(1, gameService.getPlayerDatabase().size());
+
+        ///// public void changePlayerPasswordTest()
+        // Initialize playerDataBase of size 10
+        for (int i = 0; i < 10; i++) {
+            gameService.createPlayer("player"+i, "password"+i);
+        }
+        // Case 1: successfully changes password
+        Player player1 = gameService.getPlayer("player1");
+        gameService.changePlayerPassword(player1, "nullpassword1");
+        assertTrue(gameService.getEncoder().matches("nullpassword1", player1.getPassword()));
+        // Case 2: not successfully changed (too short)
+        Player player2 = gameService.getPlayer("player2");
+        gameService.changePlayerPassword(player1, "np1");
+        assertFalse(gameService.getEncoder().matches("np1", player2.getPassword()));
+        // Case 3: not successfully changed (too short)
+        Player player3 = gameService.getPlayer("player3");
+        gameService.changePlayerPassword(player1, "player3player3player3");
+        assertFalse(gameService.getEncoder().matches("player3player3player3", player3.getPassword()));
+
+
+        ///// public void modifyParticipantFieldsTest()
+        // setPlayerBet
+        Player player4 = gameService.getPlayer("player4");
+        gameService.setPlayerBet(player4, 500);
+        assertEquals(500, player4.getcurrBet());
+        // updatePlayerStatistics
+        gameService.updatePlayerStatistics(player4, true, true);
+        assertEquals(100, player4.getWinPercentage());
+        assertEquals(500, player4.getGameEarnings());
+        // resetPlayerCurrEarnings
+        gameService.resetPlayerCurrEarnings(player4);
+        assertEquals(0, player4.getGameEarnings());
+        // playerHit and ParticipantStartDraw (player)
+        gameService.participantStartDraw(player4);
+        assertEquals(2, player4.getHand().size());
+        gameService.playerHit(player4);
+        assertEquals(3, player4.getHand().size());
+        // participantReset
+        gameService.participantReset(player4);
+        assertEquals(0, player4.getHand().size());
+        assertEquals(0, player4.getcurrBet());
+        // participantStartDraw (dealer)
+        gameService.participantStartDraw(null);
+        assertEquals(2, gameService.getDealer().getHand().size());
+        gameService.dealerPlayHand();
+        assertTrue(gameService.getDealer().getScore() >= 17);
+
+        ///// public void playerLoginTest()
+        // Case 1: Player username not found
+        Pair<Integer, Player> result1 = gameService.playerLogin("randominvalid", "ajrj");
+        assertEquals(-1, result1.getFirst());
+        assertEquals(null, result1.getSecond());
+        // Case 2: Player password incorrect
+        Pair<Integer, Player> result2 = gameService.playerLogin("player9", "jkjk");
+        assertEquals(-1, result1.getFirst());
+        assertEquals(null, result2.getSecond());
+        // Case 3: Player successfully logges in
+        Pair<Integer, Player> result3 = gameService.playerLogin("player9", "password9");
+        assertEquals(1, result3.getFirst());
+        assertEquals(gameService.getPlayer("player9"), result3.getSecond());
+        assertEquals(1, gameService.getPlayersInMatch().size());
+        assertNotNull(gameService.getPlayersInMatch().get("player9"));
+        // Case 4: Player already logged in
+        Pair<Integer, Player> result4 = gameService.playerLogin("player9", "password9");
+        assertEquals(0, result4.getFirst());
+        assertEquals(null, result4.getSecond());
+        assertEquals(1, gameService.getPlayersInMatch().size());
+
+        ///// public void playerLogoutTest()
+        // Case 1: Username not found
+        boolean logout1 = gameService.playerLogout("badusername");
+        assertFalse(logout1);
+        // Case 2: Username found
+        boolean logout2 = gameService.playerLogout("player9");
+        assertTrue(logout2);
+        assertEquals(0, gameService.getPlayersInMatch().size());
+        assertNull(gameService.getPlayersInMatch().get("player9"));
+
+        ///// public void generateRandomQuestionTest()
+        Map.Entry<Integer, Question> question = gameService.getARandomQuestion();
+        assertNotNull(question);
+        assertTrue(gameService.getQuestionBank().getQnBank().containsKey(question.getKey()));
+        assertTrue(gameService.getQuestionBank().getQnBank().containsValue(question.getValue()));
+        
     }
+
+
 }

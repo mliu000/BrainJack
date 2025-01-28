@@ -2,13 +2,14 @@ package muyel.controller;
 
 import muyel.model.*;
 import muyel.service.GameService;
+import muyel.utility.Pair;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -29,7 +30,7 @@ public class GameController {
 
     // Gets the list of participants in match
     @GetMapping("players/getActivePlayers")
-    public ResponseEntity<ArrayList<Player>> getActivePlayers() {
+    public ResponseEntity<HashMap<String, Player>> getActivePlayers() {
         return ResponseEntity.ok(gameService.getPlayersInMatch());
     }
 
@@ -48,63 +49,95 @@ public class GameController {
         return ResponseEntity.ok(playerToChangePwd);
     }
 
-    // Updates the statistics of the player
+    // Updates the statistics of the player in game
     @PutMapping("/players/{username}/updatePlayerStatistics")
     public ResponseEntity<?> updatePlayerStatistics(@PathVariable String username, 
             @RequestBody boolean win, @RequestBody boolean correct) {
         // Attempts to find player
-        Player playerToUpdate = gameService.getPlayer(username);
+        Player playerToUpdate = gameService.getPlayersInMatch().get(username);
         // Returns error message if Player with given username not found
         if (playerToUpdate == null) {
-            return getPlayerNotFoundErrorCode();
-        }
+            return getPlayerNotInMatchErrorCode();
+        } 
         // If Player is found, update the players statistics and return it
         gameService.updatePlayerStatistics(playerToUpdate, win, correct);
         return ResponseEntity.ok(playerToUpdate);
     }
 
-    // Sets the bet of the player
+    // Sets the bet of the player in game
     @PutMapping("/players/{username}/setPlayerBet")
     public ResponseEntity<?> setPlayerBet(@PathVariable String username, 
             @RequestBody int bet) {
         // Attempts to find player
-        Player playerToUpdate = gameService.getPlayer(username);
+        Player playerToUpdate = gameService.getPlayersInMatch().get(username);
         // Returns error message if Player with given username not found
         if (playerToUpdate == null) {
-            return getPlayerNotFoundErrorCode();
-        }
+            return getPlayerNotInMatchErrorCode();
+        } 
         // If Player is found, update the players statistics and return it
         gameService.setPlayerBet(playerToUpdate, bet);
         return ResponseEntity.ok(playerToUpdate);
     }
 
-    // Resets the player's curr earnings for a sequence of matches
+    // Resets the player's curr earnings for a sequence of matches (player must be in game)
     @PutMapping("/players/{username}/resetPlayerCurrEarnings")
     public ResponseEntity<?> resetPlayerCurrEarnings(@PathVariable String username) {
         // Attempts to find player
-        Player playerToUpdate = gameService.getPlayer(username);
+        Player playerToUpdate = gameService.getPlayersInMatch().get(username);
         // Returns error message if Player with given username not found
         if (playerToUpdate == null) {
-            return getPlayerNotFoundErrorCode();
-        }
+            return getPlayerNotInMatchErrorCode();
+        } 
         // If Player is found, update the players statistics and return it
         gameService.resetPlayerCurrEarnings(playerToUpdate);
         return ResponseEntity.ok(playerToUpdate);
     }
-
-    // Resets the player's curr earnings for a sequence of matches
+ 
+    // Resets the player's curr earnings for a sequence of matches (player must be in game)
     @PutMapping("/players/{username}/playerHit")
     public ResponseEntity<?> playerHit(@PathVariable String username) {
         // Attempts to find player
-        Player playerToUpdate = gameService.getPlayer(username);
+        Player playerToUpdate = gameService.getPlayersInMatch().get(username);
         // Returns error message if Player with given username not found
         if (playerToUpdate == null) {
-            return getPlayerNotFoundErrorCode();
+            return getPlayerNotInMatchErrorCode();
         }
         // If Player is found, update the players statistics and return it
         gameService.playerHit(playerToUpdate);
         return ResponseEntity.ok(playerToUpdate);
     }
+
+    // Logs in player
+    @PostMapping("/players/playerLogin")
+    public ResponseEntity<?> playerLogin(@RequestBody String username, @RequestBody String password) {
+        Pair<Integer, Player> logInStatus = gameService.playerLogin(username, password);
+        if (logInStatus.getFirst() == -1 && logInStatus.getSecond() == null) {
+            // Account with usename not found or password incorrect
+            return getPlayerNotFoundErrorCode();
+        } else if (logInStatus.getFirst() == 0 && logInStatus.getSecond() == null) {
+            // Account already logged in 
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                Map.of("error_code", 4001, "message", "Player already logged in"));
+        }
+
+        return ResponseEntity.ok(logInStatus.getSecond());
+    }
+
+    // Logs player out 
+    @PostMapping("/players/playerLogout")
+    public ResponseEntity<?> playerLogout(@RequestBody String username) {
+        boolean response = gameService.playerLogout(username);
+        if (!response) {
+            // Account cannot be found in match
+            return getPlayerNotFoundErrorCode();
+        }
+
+        return ResponseEntity.ok(true);
+    }
+
+    // Logs out player
+    //@PostMapping("/players/playerLogout")
+    //public ResponseEntity<
 
     ///// INPUT METHODS FOR BOTH PLAYER AND DEALER OPERATIONS (PARTICIPANT SUPERCLASS) /////
     
@@ -117,16 +150,16 @@ public class GameController {
         if (username.isEmpty()) {
             // Case 1: string is empty so we will proceed with dealer
             Dealer dealerToUpdate = gameService.getDealer();
-            gameService.participantStartDraw(dealerToUpdate);
+            gameService.participantStartDraw(null);
             return ResponseEntity.ok(dealerToUpdate);
         } else {
             // Case 2: string is not empty so we will attempt to find the 
             // Attempts to find player
-            Player playerToUpdate = gameService.getPlayer(username);
+            Player playerToUpdate = gameService.getPlayersInMatch().get(username);
             // Returns error message if Player with given username not found
             if (playerToUpdate == null) {
-                return getPlayerNotFoundErrorCode();
-            }
+                return getPlayerNotInMatchErrorCode();
+            } 
             // If Player is found, update the players statistics and return it
             gameService.participantStartDraw(playerToUpdate);
             return ResponseEntity.ok(playerToUpdate);
@@ -147,11 +180,11 @@ public class GameController {
         } else {
             // Case 2: string is not empty so we will attempt to find the 
             // Attempts to find player
-            Player playerToUpdate = gameService.getPlayer(username);
+            Player playerToUpdate = gameService.getPlayersInMatch().get(username);
             // Returns error message if Player with given username not found
             if (playerToUpdate == null) {
-                return getPlayerNotFoundErrorCode();
-            }
+                return getPlayerNotInMatchErrorCode();
+            } 
             // If Player is found, update the players statistics and return it
             gameService.participantReset(playerToUpdate);;
             return ResponseEntity.ok(playerToUpdate);
@@ -179,5 +212,11 @@ public class GameController {
     private ResponseEntity<?> getPlayerNotFoundErrorCode() {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 Map.of("error_code", 4041, "message", "Player not found"));
+    }
+
+    // Method to create "Player not in match" error responseEntity
+    private ResponseEntity<?> getPlayerNotInMatchErrorCode() {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                Map.of("error_code", 4042, "message", "Player not in match"));
     }
 }
