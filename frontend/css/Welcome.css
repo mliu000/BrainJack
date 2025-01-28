@@ -1,3 +1,54 @@
-h1 {
-    color: blue;
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+h1 {
+    color: rgba(163, 163, 168, 0.766);
+    font-size: 80px;
+}
+
+h3 {
+    color: rgba(163, 163, 168, 0.766);
+    font-size: 25px;
+}
+
+.button {
+    background-color: rgba(65, 104, 134, 0.886); /* Green background */
+    color: rgba(226, 226, 226, 0.766);             /* White text */
+    border: 5px;  
+    padding: 0;        /* Add padding */
+    text-align: center;        /* Center text */
+    text-decoration: none;     /* Remove text underline */
+    display: inline-block;     /* Inline element */
+    font-size: 16px;           /* Set font size */
+    cursor: pointer;    
+    border-radius: 60px;       /* Rounded corners */
+    transition: background-color 0.3s ease;
+    font-size: 25px;
+    width: 300px;
+    height: 100px;
+}
+
+#middle-container {
+    width: 1000%;
+    height: 50%;
+    background-color: transparent;
+    padding: 0%;
+    text-align: center;
+    box-sizing: border-box;
+    vertical-align: center;
+}
+
+#middle-container-text h1 {
+    margin-bottom: 0px;
+}
+
+#middle-container-text h3 {
+    margin-top: 0px;
+    margin-bottom: 30px;
+}
+
