@@ -160,12 +160,19 @@ public class GameController {
 
     ///// INPUT METHODS FOR DEALER ONLY /////
     
-    @PutMapping("/dealer/dealerPlayHand") 
+    @PutMapping("/dealerPlayHand") 
     public ResponseEntity<Dealer> dealerPlanHand() {
         gameService.dealerPlayHand();
         return ResponseEntity.ok(gameService.getDealer());
     }
 
+    //// INPUT METHOD FOR QUESTION BANK /////
+    
+    @GetMapping("/getRandomQuestion") 
+    public ResponseEntity<Question> getRandomQuestion() {
+        return ResponseEntity.ok(gameService.getARandomQuestion().getValue());
+    }
+    
     ///// HELPER METHODS /////
     
     // Method to create "Player not found" error responseEntity (since it is very repetitive)

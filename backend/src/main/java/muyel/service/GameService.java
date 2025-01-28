@@ -2,8 +2,8 @@ package muyel.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import muyel.model.*;
@@ -17,26 +17,28 @@ import muyel.model.*;
 public class GameService {
 
     // The player database uses a hashmap that stores the username as the key, player object as value 
-    @Autowired
     private HashMap<String, Player> playerDataBase;
 
     // Stores the instance of the question bank
-    @Autowired
     private QuestionBank questionBank;
 
     // List stores the players currently in match
-    @Autowired
     private ArrayList<Player> playersInMatch;
     
     // Creates a dealer
-    @Autowired
     private Dealer dealer;
 
     // Creates a deck
-    @Autowired
     private Deck deck;
 
-    // Uses default constructor
+    // Constructs a new game service
+    public GameService() {
+        this.playerDataBase = new HashMap<>();
+        this.questionBank = new QuestionBank();
+        this.playersInMatch = new ArrayList<>();
+        this.dealer = new Dealer();
+        this.deck = new Deck();
+    }
 
     ///// INPUT METHODS FOR PARTICIPANTS (PLAYER AND DEALER) /////
     
@@ -117,6 +119,10 @@ public class GameService {
     }
 
     ///// INPUT METHODS FOR THE QUESTION BANK /////
+    
+    public Map.Entry<Integer, Question> getARandomQuestion() {
+        return questionBank.getRandomQuestion();
+    }
 
     ///// GETTER METHODS /////
 

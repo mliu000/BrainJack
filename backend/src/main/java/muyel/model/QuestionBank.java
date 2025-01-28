@@ -40,27 +40,6 @@ public class QuestionBank {
     }
 
     /*
-     * Based on the answer to the question, determines whether or not question is correct
-     * Returns 0 if the question is wrong, 1 if correct, -1 for error case where the qn not found
-     * 
-     * REQUIRES: The question Passed in from the frontend must be the same as the original question
-     *           The answer passed from the frontend must also be the same as the original id
-     */
-    public int isCorrectAnswer(int id, String answer) {
-        Question qn = qnBank.get(id);
-        if (qn == null) {
-            // Case 1: question could not be located (error case)
-            return -1;
-        } else if (qn.getCorrectAnswer().equals(answer)) {
-            // Case 2: answer correct
-            return 1; 
-        } else {
-            // Case 3: answer incorrect
-            return 0;
-        }
-    }
-
-    /*
      * Gets a random question from bank where you shuffle the list of Pairs around in different
      * order before returning it.
      */

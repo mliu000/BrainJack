@@ -43,20 +43,6 @@ public class QuestionBankTest {
         // Tests the getRandomQuestion method
         Map.Entry<Integer, Question> randomEntry = qb.getRandomQuestion();
         assertEquals(qb.getQnBank().get(randomEntry.getKey()), randomEntry.getValue());
-
-        // Tests the isCorrect method
-        String answerCorrect = randomEntry.getValue().getCorrectAnswer();
-        String answerIncorrect = "";
-        int idGood = randomEntry.getKey();
-        int idNotFound = 99;
-        // Case 1: answer correct
-        assertEquals(1, qb.isCorrectAnswer(idGood, answerCorrect));
-        // Case 2: answer incorrect
-        assertEquals(0, qb.isCorrectAnswer(idGood, answerIncorrect));
-        // Case 3: answer not found (error case)
-        assertEquals(-1, qb.isCorrectAnswer(idNotFound, answerCorrect));
-        // Case 4: not answered
-        assertEquals(0, qb.isCorrectAnswer(idGood, null));
     }
     
 }
