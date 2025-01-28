@@ -4,7 +4,11 @@
 /* Applying the font to the entire project */
 * {
     font-family: 'Rye', cursive;
-    background-image: url(../images/10081449.jpg);
+}
+
+
+body {
+    background-image: url(images/10081449.jpg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
