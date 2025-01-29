@@ -2,15 +2,21 @@ package muyel.model;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 /*
  * @Mu Ye Liu - Jan 2025
  * 
  * Represnts a player class in blackjack. The player has the additional accumulators that show career 
  * statistics of the player throughout their lifetime
  */
+@Entity
 public class Player extends Participant {
     // Fields to store personal information, such as username, password.
-    private final String USERNAME;
+    @Id
+    private String username;
+
     private String password; 
 
     // Stores the current bet of the player
@@ -20,9 +26,12 @@ public class Player extends Participant {
     private int roundsPlayed, roundsWon, totalEarnings, gameEarnings;
     private double winPercentage;
 
+    // Default constructor for api purposes (Do not call)
+    public Player() {}
+
     // constructs a new player with given username and password, and default accumulators
     public Player(String username, String password) {
-        this.USERNAME = username;
+        this.username = username;
         setPassword(password);
         this.gameEarnings = 0;
         this.totalEarnings = 0;
@@ -86,7 +95,7 @@ public class Player extends Participant {
 
     ///// GETTER METHODS /////
     
-    public String getUsername() { return USERNAME; }
+    public String getUsername() { return username; }
     public String getPassword() { return password; }
     public int getGameEarnings() { return gameEarnings; }
     public int getRoundsPlayed() { return roundsPlayed; }
