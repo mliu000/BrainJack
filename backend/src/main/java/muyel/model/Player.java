@@ -4,6 +4,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /*
  * @Mu Ye Liu - Jan 2025
@@ -12,6 +13,7 @@ import javax.persistence.Id;
  * statistics of the player throughout their lifetime
  */
 @Entity
+@Table(name = "players")
 public class Player extends Participant {
     // Fields to store personal information, such as username, password.
     @Id
