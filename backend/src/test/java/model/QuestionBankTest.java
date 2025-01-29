@@ -21,7 +21,7 @@ public class QuestionBankTest {
     // Tests the Question bank class in general. Can't create too many instances at once with scraping
     @Test
     public void test() throws InterruptedException {
-        Thread.sleep(5000);
+        Thread.sleep(3000);
         qb = new QuestionBank();
         qb.getRandomGenerator().setSeed(1);
         Map<Integer, Question> qnBank = qb.getQnBank();
@@ -44,6 +44,7 @@ public class QuestionBankTest {
         // Tests the getRandomQuestion method
         Map.Entry<Integer, Question> randomEntry = qb.getRandomQuestion();
         assertEquals(qb.getQnBank().get(randomEntry.getKey()), randomEntry.getValue());
+        Thread.sleep(3000);
     }
     
 }
