@@ -4,4 +4,5 @@ model\DealerTest.class
 model\CardTest.class
 utility\PairTest.class
 model\PlayerTest.class
+service\GameServiceTest.class
 model\QuestionTest.class
