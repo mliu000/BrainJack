@@ -7,6 +7,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import muyel.Main;
@@ -77,9 +78,10 @@ public class GameServiceTest {
 
         ///// public void changePlayerPasswordTest()
         // Initialize player database of size 10
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 2; i <= 15; i++) {
             gameService.createPlayer("player" + i, "password" + i);
         }
+        assertEquals(15, playerRepository.count());
 
         // Case 1: successfully changes password
         Player player1 = gameService.getPlayer("player1");
