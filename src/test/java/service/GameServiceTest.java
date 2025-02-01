@@ -36,6 +36,7 @@ public class GameServiceTest {
     @Test
     @Transactional
     public void test() {
+        gameService.getDeck().getRandomGenerator().setSeed(100);
         // Make sure the autowired fields are not null
         assertNotNull(gameService.getDealer());
         assertNotNull(gameService.getQuestionBank());
@@ -99,9 +100,13 @@ public class GameServiceTest {
 
         ///// public void modifyParticipantFieldsTest()
         // setPlayerBet
+        // Case 1: less than 1 million
         Player player4 = gameService.getPlayer("player4");
         gameService.setPlayerBet(player4, 500);
         assertEquals(500, player4.getcurrBet());
+        // Case 2: more than 1 million (caps to 1 million)
+        gameService.setPlayerBet(player1, 10000000);
+        assertEquals(1000000, player1.getcurrBet());
 
         // updatePlayerStatistics
         gameService.updatePlayerStatistics(player4, true, true);
@@ -115,7 +120,13 @@ public class GameServiceTest {
         // playerHit and ParticipantStartDraw (player)
         gameService.participantStartDraw(player4);
         assertEquals(2, player4.getHand().size());
+        gameService.participantStartDraw(player4);
+        assertEquals(2, player4.getHand().size());
         gameService.playerHit(player4);
+        assertEquals(3, player4.getHand().size());
+        gameService.playerHit(player4);
+        assertEquals(3, player4.getHand().size());
+        gameService.participantStartDraw(player4);
         assertEquals(3, player4.getHand().size());
 
         // participantReset
@@ -124,6 +135,8 @@ public class GameServiceTest {
         assertEquals(0, player4.getcurrBet());
 
         // participantStartDraw (dealer)
+        gameService.participantStartDraw(null);
+        assertEquals(2, gameService.getDealer().getHand().size());
         gameService.participantStartDraw(null);
         assertEquals(2, gameService.getDealer().getHand().size());
         gameService.dealerPlayHand();

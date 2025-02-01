@@ -13,23 +13,34 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/blackjack")
-@CrossOrigin(origins = "http://localhost:8000")
+@RequestMapping("/api/brainjack")
+@CrossOrigin(origins = "http://localhost:8080")
 public class GameController {
 
     @Autowired
     private GameService gameService;
 
+    // Inner class for post request for player
+    private static class PlayerRequest {
+        public String username;
+        public String password;
+    } 
+
+    private static class FinishRequest {
+        public Boolean win;
+        public Boolean correct;
+    }
+
     ///// METHODS FOR PLAYER OPERATIONS /////
 
     // Request to create a new player
     @PostMapping("/players/createPlayer")
-    public Player createPlayer(@RequestBody String username, @RequestBody String password) {
-        return gameService.createPlayer(username, password);
+    public Player createPlayer(@RequestBody PlayerRequest request) {
+        return gameService.createPlayer(request.username, request.password);
     }
 
     // Gets the list of participants in match
-    @GetMapping("players/getActivePlayers")
+    @GetMapping("/players/getActivePlayers")
     public ResponseEntity<HashMap<String, Player>> getActivePlayers() {
         return ResponseEntity.ok(gameService.getPlayersInMatch());
     }
@@ -52,7 +63,7 @@ public class GameController {
     // Updates the statistics of the player in game
     @PutMapping("/players/{username}/updatePlayerStatistics")
     public ResponseEntity<?> updatePlayerStatistics(@PathVariable String username, 
-            @RequestBody boolean win, @RequestBody boolean correct) {
+            @RequestBody FinishRequest request) {
         // Attempts to find player
         Player playerToUpdate = gameService.getPlayersInMatch().get(username);
         // Returns error message if Player with given username not found
@@ -60,7 +71,7 @@ public class GameController {
             return getPlayerNotInMatchErrorCode();
         } 
         // If Player is found, update the players statistics and return it
-        gameService.updatePlayerStatistics(playerToUpdate, win, correct);
+        gameService.updatePlayerStatistics(playerToUpdate, request.win, request.correct);
         return ResponseEntity.ok(playerToUpdate);
     }
 
@@ -109,8 +120,8 @@ public class GameController {
 
     // Logs in player
     @PostMapping("/players/playerLogin")
-    public ResponseEntity<?> playerLogin(@RequestBody String username, @RequestBody String password) {
-        Pair<Integer, Player> logInStatus = gameService.playerLogin(username, password);
+    public ResponseEntity<?> playerLogin(@RequestBody PlayerRequest request) {
+        Pair<Integer, Player> logInStatus = gameService.playerLogin(request.username, request.password);
         if (logInStatus.getFirst() == -1 && logInStatus.getSecond() == null) {
             // Account with usename not found or password incorrect
             return getPlayerNotFoundErrorCode();

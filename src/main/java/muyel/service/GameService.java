@@ -95,10 +95,14 @@ public class GameService {
         playerRepository.save(playerToUpdate);
     }
 
-    // Sets the player's bet
+    // Sets the player's bet. Max bet 1 million
     @Transactional
     public void setPlayerBet(Player playerToUpdate, int bet) {
-        playerToUpdate.setCurrBet(bet);
+        if (bet > 1000000) {
+            playerToUpdate.setCurrBet(1000000);
+        } else {
+            playerToUpdate.setCurrBet(bet);
+        }
         playerRepository.save(playerToUpdate);
     }
 
@@ -112,8 +116,10 @@ public class GameService {
     // Player hit draw card
     @Transactional
     public void playerHit(Player playerToUpdate) {
-        playerToUpdate.drawCard(DECK);
-        playerRepository.save(playerToUpdate);
+        if (playerToUpdate.getScore() < 21) {
+            playerToUpdate.drawCard(DECK);
+            playerRepository.save(playerToUpdate);
+        }
     }
 
     // Player login to round
@@ -140,12 +146,16 @@ public class GameService {
 
     ///// INPUT METHODS FOR PARTICIPANTS (BOTH DEALER AND PLAYER) /////
 
-    // Start draw 2 cards, null for dealer
+    // Start draw 2 cards, null for dealer. Does nothing if the player hand is not null
     public void participantStartDraw(Player participantToDraw) {
         if (participantToDraw == null) {
-            DEALER.startDraw(DECK);
+            if (DEALER.getHand().isEmpty()) {
+                DEALER.startDraw(DECK);
+            }
         } else {
-            participantToDraw.startDraw(DECK);
+            if (participantToDraw.getHand().isEmpty()) {
+                participantToDraw.startDraw(DECK);
+            }
         }
     }
 
@@ -174,4 +184,5 @@ public class GameService {
     public HashMap<String, Player> getPlayersInMatch() { return PLAYERS_IN_MATCH; }
     public QuestionBank getQuestionBank() { return QUESTION_BANK; }
     public BCryptPasswordEncoder getEncoder() { return ENCODER; }
+    public Deck getDeck() { return DECK; }
 }
