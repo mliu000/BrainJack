@@ -49,39 +49,43 @@ public class GameServiceTest {
 
         ///// public void createPlayerTest()
         // Case 1: successfully creates player
-        Player createdPlayer1 = gameService.createPlayer("player1", "password1");
+        Player createdPlayer1 = gameService.createPlayer("player1", "password1").getSecond();
         assertNotNull(createdPlayer1);
         assertEquals(1, playerRepository.count());
         assertEquals(createdPlayer1, playerRepository.findByUsername("player1"));
-        assertTrue(gameService.getPlayersInMatch().isEmpty());
+        assertEquals(1, gameService.getPlayersInMatch().size());
 
         // Case 2: Player not created, username too short
-        Player createdPlayer2 = gameService.createPlayer("pl1", "password1");
+        Player createdPlayer2 = gameService.createPlayer("pl1", "password1").getSecond();
         assertNull(createdPlayer2);
 
         // Case 3: Player not created, username too long
-        Player createdPlayer3 = gameService.createPlayer("playerplayerplayerplayer1", "password1");
+        Player createdPlayer3 = gameService.createPlayer("playerplayerplayerplayer1", "password1").getSecond();
         assertNull(createdPlayer3);
 
         // Case 4: Player not created, password too short
-        Player createdPlayer4 = gameService.createPlayer("player2", "pw1");
+        Player createdPlayer4 = gameService.createPlayer("player2", "pw1").getSecond();
         assertNull(createdPlayer4);
 
         // Case 5: Player not created, password too long
-        Player createdPlayer5 = gameService.createPlayer("player3", "passwordpasswordpassword1");
+        Player createdPlayer5 = gameService.createPlayer("player3", "passwordpasswordpassword1").getSecond();
         assertNull(createdPlayer5);
 
         // Case 6: User already exists
-        Player createdPlayer6 = gameService.createPlayer("player1", "password1");
+        Player createdPlayer6 = gameService.createPlayer("player1", "password1").getSecond();
         assertNull(createdPlayer6);
         assertEquals(1, playerRepository.count());
 
-        ///// public void changePlayerPasswordTest()
-        // Initialize player database of size 10
-        for (int i = 2; i <= 15; i++) {
+        // Case 7: Size > 4
+        for (int i = 2; i <= 4; i++) {
             gameService.createPlayer("player" + i, "password" + i);
         }
-        assertEquals(15, playerRepository.count());
+        assertEquals(4, playerRepository.count());;
+        Pair<Boolean, Player> createdPlayerNull5 = gameService.createPlayer("player3", "passwordpasswordpassword1");
+        assertNull(createdPlayerNull5.getSecond());
+        assertFalse(createdPlayerNull5.getFirst());
+
+        ///// public void changePlayerPasswordTest()
 
         // Case 1: successfully changes password
         Player player1 = gameService.getPlayer("player1");
@@ -142,6 +146,18 @@ public class GameServiceTest {
         gameService.dealerPlayHand();
         assertTrue(gameService.getDealer().getScore() >= 17);
 
+        ///// public void playerLogoutTest()
+        // Case 1: Username not found
+        boolean logout1 = gameService.playerLogout("badusername");
+        assertFalse(logout1);
+
+        // Case 2: Username found
+        boolean logout2 = gameService.playerLogout("player4");
+        assertTrue(logout2);
+        assertEquals(3, gameService.getPlayersInMatch().size());
+        assertFalse(gameService.getPlayersInMatch().contains("player4"));
+
+
         ///// public void playerLoginTest()
         // Case 1: Player username not found
         Pair<Integer, Player> result1 = gameService.playerLogin("randominvalid", "ajrj");
@@ -149,33 +165,22 @@ public class GameServiceTest {
         assertNull(result1.getSecond());
 
         // Case 2: Player password incorrect
-        Pair<Integer, Player> result2 = gameService.playerLogin("player9", "jkjk");
+        Pair<Integer, Player> result2 = gameService.playerLogin("player4", "jkjk");
         assertEquals(-1, result2.getFirst());
         assertNull(result2.getSecond());
 
         // Case 3: Player successfully logs in
-        Pair<Integer, Player> result3 = gameService.playerLogin("player9", "password9");
+        Pair<Integer, Player> result3 = gameService.playerLogin("player4", "password4");
         assertEquals(1, result3.getFirst());
-        assertEquals(gameService.getPlayer("player9"), result3.getSecond());
-        assertEquals(1, gameService.getPlayersInMatch().size());
-        assertNotNull(gameService.getPlayersInMatch().get("player9"));
+        assertEquals(gameService.getPlayer("player4"), result3.getSecond());
+        assertEquals(4, gameService.getPlayersInMatch().size());
+        assertTrue(gameService.getPlayersInMatch().contains("player4"));
 
         // Case 4: Player already logged in
-        Pair<Integer, Player> result4 = gameService.playerLogin("player9", "password9");
+        Pair<Integer, Player> result4 = gameService.playerLogin("player4", "password4");
         assertEquals(0, result4.getFirst());
         assertNull(result4.getSecond());
-        assertEquals(1, gameService.getPlayersInMatch().size());
-
-        ///// public void playerLogoutTest()
-        // Case 1: Username not found
-        boolean logout1 = gameService.playerLogout("badusername");
-        assertFalse(logout1);
-
-        // Case 2: Username found
-        boolean logout2 = gameService.playerLogout("player9");
-        assertTrue(logout2);
-        assertEquals(0, gameService.getPlayersInMatch().size());
-        assertNull(gameService.getPlayersInMatch().get("player9"));
+        assertEquals(4, gameService.getPlayersInMatch().size());
 
         ///// public void generateRandomQuestionTest()
         Map.Entry<Integer, Question> question = gameService.getARandomQuestion();

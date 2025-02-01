@@ -1,6 +1,6 @@
 package muyel.service;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class GameService {
     private final QuestionBank QUESTION_BANK;
 
     // List stores the players currently in match
-    private final HashMap<String, Player> PLAYERS_IN_MATCH;
+    private final HashSet<String> PLAYERS_IN_MATCH;
 
     // Creates a DEALER
     private final Dealer DEALER;
@@ -42,7 +42,7 @@ public class GameService {
     // Constructs a new game service
     public GameService() {
         this.QUESTION_BANK = new QuestionBank();
-        this.PLAYERS_IN_MATCH = new HashMap<>();
+        this.PLAYERS_IN_MATCH = new HashSet<>();
         this.DEALER = new Dealer();
         this.DECK = new Deck();
         this.ENCODER = new BCryptPasswordEncoder();
@@ -55,20 +55,27 @@ public class GameService {
      * The username and password must both be between 4-20 chars long.
      * The username must not exist already
      *
-     * Returns the player if successfully created, null if not
+     * Only creates player if the number of players logged in is less than 4
+     * Returns the player if successfully created, null if not, 
      *
      */
     @Transactional
-    public Player createPlayer(String username, String password) {
-        boolean distinctUserName = playerRepository.findByUsername(username) == null;
-        boolean usernameLengthAppropriate = username.length() >= 4 && username.length() <= 20;
-        boolean passwordLengthAppropriate = password.length() >= 4 && password.length() <= 20;
+    public Pair<Boolean, Player> createPlayer(String username, String password) {
+        if (PLAYERS_IN_MATCH.size() < 4) {
+            boolean distinctUserName = playerRepository.findByUsername(username) == null;
+            boolean usernameLengthAppropriate = username.length() >= 4 && username.length() <= 20;
+            boolean passwordLengthAppropriate = password.length() >= 4 && password.length() <= 20;
 
-        if (distinctUserName && usernameLengthAppropriate && passwordLengthAppropriate) {
-            Player newPlayer = new Player(username, password);
-            return playerRepository.save(newPlayer);
+            if (distinctUserName && usernameLengthAppropriate && passwordLengthAppropriate) {
+                Player newPlayer = new Player(username, password);
+                PLAYERS_IN_MATCH.add(username);
+                return new Pair<>(true, playerRepository.save(newPlayer));
+            }
+
+            return new Pair<>(true, null);
+
         }
-        return null;
+        return new Pair<>(false, null);
     }
 
     /*
@@ -127,17 +134,19 @@ public class GameService {
         Player playerToLogin = playerRepository.findByUsername(username);
         if (playerToLogin == null || !ENCODER.matches(password, playerToLogin.getPassword())) {
             return new Pair<>(-1, null);
-        } else if (PLAYERS_IN_MATCH.get(username) != null) {
+        } else if (PLAYERS_IN_MATCH.contains(username)) {
             return new Pair<>(0, null);
+        } else if (PLAYERS_IN_MATCH.size() == 4) {
+            return new Pair<>(-2, null);
         } else {
-            PLAYERS_IN_MATCH.put(username, playerToLogin);
+            PLAYERS_IN_MATCH.add(username);
             return new Pair<>(1, playerToLogin);
         }
     }
 
     // Player logout
     public boolean playerLogout(String username) {
-        if (PLAYERS_IN_MATCH.get(username) != null) {
+        if (PLAYERS_IN_MATCH.contains(username)) {
             PLAYERS_IN_MATCH.remove(username);
             return true;
         }
@@ -181,7 +190,7 @@ public class GameService {
     // Returns the requested player by username, null if no player with inputted username exists
     public Player getPlayer(String username) { return playerRepository.findByUsername(username); }
     public Dealer getDealer() { return DEALER; }
-    public HashMap<String, Player> getPlayersInMatch() { return PLAYERS_IN_MATCH; }
+    public HashSet<String> getPlayersInMatch() { return PLAYERS_IN_MATCH; }
     public QuestionBank getQuestionBank() { return QUESTION_BANK; }
     public BCryptPasswordEncoder getEncoder() { return ENCODER; }
     public Deck getDeck() { return DECK; }
