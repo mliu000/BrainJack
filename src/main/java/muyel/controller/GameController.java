@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -39,8 +39,8 @@ public class GameController {
         Pair<Boolean, Player> result = gameService.createPlayer(request.username, request.password);
         if (result.getFirst() && result.getSecond() == null) {
              // Case 2: player username already exists
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                Map.of("error_code", 4044, "message", "username Already Exists"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                Map.of("error_code", 4004, "message", "invalid"));
         } else if (!result.getFirst() && result.getSecond() == null ) {
             // Case 3: Lobby already full
             return getPlayerLobbyFullErrorCode();
@@ -51,7 +51,7 @@ public class GameController {
 
     // Gets the list of participants in match
     @GetMapping("/players/getActivePlayers")
-    public ResponseEntity<HashSet<String>> getActivePlayers() {
+    public ResponseEntity<HashMap<String, Player>> getActivePlayers() {
         return ResponseEntity.ok(gameService.getPlayersInMatch());
     }
 
@@ -60,13 +60,17 @@ public class GameController {
     public ResponseEntity<?> changePlayerPassword(@PathVariable String username, 
             @RequestBody String newPassword) {
         // Attempts to find player
-        Player playerToChangePwd = gameService.getPlayer(username);
-        // Returns error message if Player with given username not found
+        Player playerToChangePwd = gameService.getPlayersInMatch().get(username);
+        // Returns error message if Player with given username not in match
         if (playerToChangePwd == null) {
-            return getPlayerNotFoundErrorCode();
+            return getPlayerNotInMatchErrorCode();
+        } 
+        // If player if found, attempt to change player password
+        boolean result = gameService.changePlayerPassword(playerToChangePwd, newPassword);
+        if (!result) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                Map.of("error_code", 4002, "message", "password invalid"));
         }
-        // If player if found, update the player's statistics and return it
-        gameService.changePlayerPassword(playerToChangePwd, newPassword);
         return ResponseEntity.ok(playerToChangePwd);
     }
 
@@ -75,12 +79,11 @@ public class GameController {
     public ResponseEntity<?> updatePlayerStatistics(@PathVariable String username, 
             @RequestBody FinishRequest request) {
         // Attempts to find player
-        boolean playerInMatch = gameService.getPlayersInMatch().contains(username);
+        Player playerToUpdate = gameService.getPlayersInMatch().get(username);
         // Returns error message if Player with given username not in match
-        if (!playerInMatch) {
+        if (playerToUpdate == null) {
             return getPlayerNotInMatchErrorCode();
         } 
-        Player playerToUpdate = gameService.getPlayer(username);
         // If Player is found, update the players statistics and return it
         gameService.updatePlayerStatistics(playerToUpdate, request.win, request.correct);
         return ResponseEntity.ok(playerToUpdate);
@@ -91,29 +94,13 @@ public class GameController {
     public ResponseEntity<?> setPlayerBet(@PathVariable String username, 
             @RequestBody int bet) {
         // Attempts to find player
-        boolean playerInMatch = gameService.getPlayersInMatch().contains(username);
+        Player playerToUpdate = gameService.getPlayersInMatch().get(username);
         // Returns error message if Player with given username not in match
-        if (!playerInMatch) {
+        if (playerToUpdate == null) {
             return getPlayerNotInMatchErrorCode();
         } 
-        Player playerToUpdate = gameService.getPlayer(username);
         // If Player is found, update the players statistics and return it
         gameService.setPlayerBet(playerToUpdate, bet);
-        return ResponseEntity.ok(playerToUpdate);
-    }
-
-    // Resets the player's curr earnings for a sequence of matches (player must be in game)
-    @PutMapping("/players/{username}/resetPlayerCurrEarnings")
-    public ResponseEntity<?> resetPlayerCurrEarnings(@PathVariable String username) {
-        // Attempts to find player
-        boolean playerInMatch = gameService.getPlayersInMatch().contains(username);
-        // Returns error message if Player with given username not in match
-        if (!playerInMatch) {
-            return getPlayerNotInMatchErrorCode();
-        } 
-        Player playerToUpdate = gameService.getPlayer(username);
-        // If Player is found, update the players statistics and return it
-        gameService.resetPlayerCurrEarnings(playerToUpdate);
         return ResponseEntity.ok(playerToUpdate);
     }
  
@@ -121,12 +108,11 @@ public class GameController {
     @PutMapping("/players/{username}/playerHit")
     public ResponseEntity<?> playerHit(@PathVariable String username) {
         // Attempts to find player
-        boolean playerInMatch = gameService.getPlayersInMatch().contains(username);
+        Player playerToUpdate = gameService.getPlayersInMatch().get(username);
         // Returns error message if Player with given username not in match
-        if (!playerInMatch) {
+        if (playerToUpdate == null) {
             return getPlayerNotInMatchErrorCode();
         } 
-        Player playerToUpdate = gameService.getPlayer(username);
         // If Player is found, update the players statistics and return it
         gameService.playerHit(playerToUpdate);
         return ResponseEntity.ok(playerToUpdate);
@@ -170,24 +156,23 @@ public class GameController {
     
     /*
      * Draw 2 cards to start match for both dealer and player. 
-     * username = "" for dealer, actual username for player
+     * username = "d" for dealer, actual username for player
      */ 
     @PutMapping("/participant/{username}/participantStartDraw")
     public ResponseEntity<?> participantStartDraw(@PathVariable String username) {
-        if (username.isEmpty()) {
+        if (username.equals("d")) {
             // Case 1: string is empty so we will proceed with dealer
             Dealer dealerToUpdate = gameService.getDealer();
-            gameService.participantStartDraw(null);
+            gameService.participantStartDraw(dealerToUpdate);
             return ResponseEntity.ok(dealerToUpdate);
         } else {
             // Case 2: string is not empty so we will attempt to find the 
             // Attempts to find player
-            boolean playerInMatch = gameService.getPlayersInMatch().contains(username);
+            Player playerToUpdate = gameService.getPlayersInMatch().get(username);
             // Returns error message if Player with given username not in match
-            if (!playerInMatch) {
+            if (playerToUpdate == null) {
                 return getPlayerNotInMatchErrorCode();
             } 
-            Player playerToUpdate = gameService.getPlayer(username);
             // If Player is found, update the players statistics and return it
             gameService.participantStartDraw(playerToUpdate);
             return ResponseEntity.ok(playerToUpdate);
@@ -196,24 +181,22 @@ public class GameController {
 
     /*
      * Resets the participant after round
-     * username = "" for dealer, actual username for player
+     * username = "d" for dealer, actual username for player
      */ 
     @PutMapping("/participant/{username}/participantReset")
     public ResponseEntity<?> participantReset(@PathVariable String username) {
-        if (username.isEmpty()) {
-            // Case 1: string is empty so we will proceed with dealer
+        if (username.equals("d")) {
+            // Case 1: string is "d" so we will proceed with dealer
             Dealer dealerToUpdate = gameService.getDealer();
             gameService.participantReset(dealerToUpdate);
             return ResponseEntity.ok(dealerToUpdate);
         } else {
             // Case 2: string is not empty so we will attempt to find the 
             // Attempts to find player
-            boolean playerInMatch = gameService.getPlayersInMatch().contains(username);
-            // Returns error message if Player with given username not in match
-            if (!playerInMatch) {
+            Player playerToUpdate = gameService.getPlayersInMatch().get(username);
+            if (playerToUpdate == null) {
                 return getPlayerNotInMatchErrorCode();
             } 
-            Player playerToUpdate = gameService.getPlayer(username);
             // If Player is found, update the players statistics and return it
             gameService.participantReset(playerToUpdate);;
             return ResponseEntity.ok(playerToUpdate);
@@ -251,7 +234,7 @@ public class GameController {
 
     // Method to create "Player not in match" error responseEntity
     private ResponseEntity<?> getPlayerLobbyFullErrorCode() {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                Map.of("error_code", 4043, "message", "Match is full"));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                Map.of("error_code", 4003, "message", "Match is full"));
     }
 }

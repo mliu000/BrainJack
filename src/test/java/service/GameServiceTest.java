@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import model.DeckTest;
 import muyel.Main;
 import muyel.model.Player;
 import muyel.model.Question;
@@ -88,17 +89,17 @@ public class GameServiceTest {
         ///// public void changePlayerPasswordTest()
 
         // Case 1: successfully changes password
-        Player player1 = gameService.getPlayer("player1");
+        Player player1 = gameService.getPlayersInMatch().get("player1");
         gameService.changePlayerPassword(player1, "nullpassword1");
         assertTrue(gameService.getEncoder().matches("nullpassword1", player1.getPassword()));
 
         // Case 2: not successfully changed (too short)
-        Player player2 = gameService.getPlayer("player2");
+        Player player2 = gameService.getPlayersInMatch().get("player2");
         gameService.changePlayerPassword(player2, "np1");
         assertFalse(gameService.getEncoder().matches("np1", player2.getPassword()));
 
         // Case 3: not successfully changed (too long)
-        Player player3 = gameService.getPlayer("player3");
+        Player player3 = gameService.getPlayersInMatch().get("player3");
         gameService.changePlayerPassword(player3, "player3player3player3");
         assertFalse(gameService.getEncoder().matches("player3player3player3", player3.getPassword()));
 
@@ -117,10 +118,6 @@ public class GameServiceTest {
         assertEquals(100, player4.getWinPercentage());
         assertEquals(500, player4.getGameEarnings());
 
-        // resetPlayerCurrEarnings
-        gameService.resetPlayerCurrEarnings(player4);
-        assertEquals(0, player4.getGameEarnings());
-
         // playerHit and ParticipantStartDraw (player)
         gameService.participantStartDraw(player4);
         assertEquals(2, player4.getHand().size());
@@ -133,15 +130,19 @@ public class GameServiceTest {
         gameService.participantStartDraw(player4);
         assertEquals(3, player4.getHand().size());
 
-        // participantReset
+        // participantReset (both dealer and player)
         gameService.participantReset(player4);
         assertEquals(0, player4.getHand().size());
         assertEquals(0, player4.getcurrBet());
+        gameService.participantStartDraw(gameService.getDealer());
+        gameService.dealerPlayHand();
+        gameService.participantReset(gameService.getDealer());
+        assertTrue(gameService.getDealer().getHand().isEmpty());
 
         // participantStartDraw (dealer)
-        gameService.participantStartDraw(null);
+        gameService.participantStartDraw(gameService.getDealer());
         assertEquals(2, gameService.getDealer().getHand().size());
-        gameService.participantStartDraw(null);
+        gameService.participantStartDraw(gameService.getDealer());
         assertEquals(2, gameService.getDealer().getHand().size());
         gameService.dealerPlayHand();
         assertTrue(gameService.getDealer().getScore() >= 17);
@@ -151,14 +152,24 @@ public class GameServiceTest {
         boolean logout1 = gameService.playerLogout("badusername");
         assertFalse(logout1);
 
-        // Case 2: Username found
+        // Case 2: Username found (deck is already empty)
         boolean logout2 = gameService.playerLogout("player4");
         assertTrue(logout2);
         assertEquals(3, gameService.getPlayersInMatch().size());
-        assertFalse(gameService.getPlayersInMatch().contains("player4"));
+        assertNull(gameService.getPlayersInMatch().get("player4"));
 
+        // Case 3: Username found (deck is not empty (error case))
+        assertNotNull(gameService.getPlayersInMatch().get("player3"));
+        gameService.participantStartDraw(player3);
+        gameService.playerLogout("player3");
+        assertNull(gameService.getPlayersInMatch().get("player3"));
+        assertTrue(player3.getHand().isEmpty());
 
         ///// public void playerLoginTest()
+        // Create extra dummy logged out player for case 5
+        gameService.createPlayer("player5", "password5").getSecond();
+        gameService.playerLogout("player5");
+
         // Case 1: Player username not found
         Pair<Integer, Player> result1 = gameService.playerLogin("randominvalid", "ajrj");
         assertEquals(-1, result1.getFirst());
@@ -173,13 +184,20 @@ public class GameServiceTest {
         Pair<Integer, Player> result3 = gameService.playerLogin("player4", "password4");
         assertEquals(1, result3.getFirst());
         assertEquals(gameService.getPlayer("player4"), result3.getSecond());
-        assertEquals(4, gameService.getPlayersInMatch().size());
-        assertTrue(gameService.getPlayersInMatch().contains("player4"));
+        assertEquals(3, gameService.getPlayersInMatch().size());
+        assertNotNull(gameService.getPlayersInMatch().get("player4"));
 
         // Case 4: Player already logged in
         Pair<Integer, Player> result4 = gameService.playerLogin("player4", "password4");
         assertEquals(0, result4.getFirst());
         assertNull(result4.getSecond());
+        assertEquals(3, gameService.getPlayersInMatch().size());
+
+        // Case 5: Match is already full
+        gameService.playerLogin("player3", "password3");
+        Pair<Integer, Player> result5 = gameService.playerLogin("player5", "password5");
+        assertEquals(-2, result5.getFirst());
+        assertNull(result5.getSecond());
         assertEquals(4, gameService.getPlayersInMatch().size());
 
         ///// public void generateRandomQuestionTest()
@@ -187,5 +205,9 @@ public class GameServiceTest {
         assertNotNull(question);
         assertTrue(gameService.getQuestionBank().getQnBank().containsKey(question.getKey()));
         assertTrue(gameService.getQuestionBank().getQnBank().containsValue(question.getValue()));
+
+        // Check the state of the deck after all those tests!
+        gameService.getDealer().reset(gameService.getDeck());
+        DeckTest.checkDeckState(gameService.getDeck());
     }
 }

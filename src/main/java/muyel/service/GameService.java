@@ -1,6 +1,6 @@
 package muyel.service;
 
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class GameService {
     private final QuestionBank QUESTION_BANK;
 
     // List stores the players currently in match
-    private final HashSet<String> PLAYERS_IN_MATCH;
+    private final HashMap<String, Player> PLAYERS_IN_MATCH;
 
     // Creates a DEALER
     private final Dealer DEALER;
@@ -42,7 +42,7 @@ public class GameService {
     // Constructs a new game service
     public GameService() {
         this.QUESTION_BANK = new QuestionBank();
-        this.PLAYERS_IN_MATCH = new HashSet<>();
+        this.PLAYERS_IN_MATCH = new HashMap<>();
         this.DEALER = new Dealer();
         this.DECK = new Deck();
         this.ENCODER = new BCryptPasswordEncoder();
@@ -68,7 +68,7 @@ public class GameService {
 
             if (distinctUserName && usernameLengthAppropriate && passwordLengthAppropriate) {
                 Player newPlayer = new Player(username, password);
-                PLAYERS_IN_MATCH.add(username);
+                PLAYERS_IN_MATCH.put(username, newPlayer);
                 return new Pair<>(true, playerRepository.save(newPlayer));
             }
 
@@ -110,14 +110,6 @@ public class GameService {
         } else {
             playerToUpdate.setCurrBet(bet);
         }
-        playerRepository.save(playerToUpdate);
-    }
-
-    // Reset player curr earning
-    @Transactional
-    public void resetPlayerCurrEarnings(Player playerToUpdate) {
-        playerToUpdate.resetGameEarnings();
-        playerRepository.save(playerToUpdate);
     }
 
     // Player hit draw card
@@ -125,28 +117,32 @@ public class GameService {
     public void playerHit(Player playerToUpdate) {
         if (playerToUpdate.getScore() < 21) {
             playerToUpdate.drawCard(DECK);
-            playerRepository.save(playerToUpdate);
         }
     }
 
     // Player login to round
+    @Transactional
     public Pair<Integer, Player> playerLogin(String username, String password) {
         Player playerToLogin = playerRepository.findByUsername(username);
         if (playerToLogin == null || !ENCODER.matches(password, playerToLogin.getPassword())) {
             return new Pair<>(-1, null);
-        } else if (PLAYERS_IN_MATCH.contains(username)) {
+        } else if (PLAYERS_IN_MATCH.get(username) != null) {
             return new Pair<>(0, null);
         } else if (PLAYERS_IN_MATCH.size() == 4) {
             return new Pair<>(-2, null);
         } else {
-            PLAYERS_IN_MATCH.add(username);
+            PLAYERS_IN_MATCH.put(username, playerToLogin);
             return new Pair<>(1, playerToLogin);
         }
     }
 
     // Player logout
     public boolean playerLogout(String username) {
-        if (PLAYERS_IN_MATCH.contains(username)) {
+        Player logoutPlayer = PLAYERS_IN_MATCH.get(username);
+        if (logoutPlayer != null) {
+            if (!logoutPlayer.getHand().isEmpty()) {
+                logoutPlayer.reset(DECK);
+            }
             PLAYERS_IN_MATCH.remove(username);
             return true;
         }
@@ -156,15 +152,9 @@ public class GameService {
     ///// INPUT METHODS FOR PARTICIPANTS (BOTH DEALER AND PLAYER) /////
 
     // Start draw 2 cards, null for dealer. Does nothing if the player hand is not null
-    public void participantStartDraw(Player participantToDraw) {
-        if (participantToDraw == null) {
-            if (DEALER.getHand().isEmpty()) {
-                DEALER.startDraw(DECK);
-            }
-        } else {
-            if (participantToDraw.getHand().isEmpty()) {
-                participantToDraw.startDraw(DECK);
-            }
+    public void participantStartDraw(Participant participantToDraw) {
+        if (participantToDraw.getHand().isEmpty()) {
+            participantToDraw.startDraw(DECK);
         }
     }
 
@@ -190,7 +180,7 @@ public class GameService {
     // Returns the requested player by username, null if no player with inputted username exists
     public Player getPlayer(String username) { return playerRepository.findByUsername(username); }
     public Dealer getDealer() { return DEALER; }
-    public HashSet<String> getPlayersInMatch() { return PLAYERS_IN_MATCH; }
+    public HashMap<String, Player> getPlayersInMatch() { return PLAYERS_IN_MATCH; }
     public QuestionBank getQuestionBank() { return QUESTION_BANK; }
     public BCryptPasswordEncoder getEncoder() { return ENCODER; }
     public Deck getDeck() { return DECK; }

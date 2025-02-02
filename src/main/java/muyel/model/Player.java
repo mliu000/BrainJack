@@ -5,6 +5,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /*
  * @Mu Ye Liu - Jan 2025
@@ -22,6 +23,7 @@ public class Player extends Participant {
     private String password; 
 
     // Stores the current bet of the player
+    @Transient
     private int currBet;
 
     // Accumulators to store account totals, like rounds played, etc
@@ -85,7 +87,7 @@ public class Player extends Participant {
         this.password = encoder.encode(password);
     }
 
-    // Reset game earnings (to be called once a player leaves the lobby)
+    // Reset game earnings (used for testing purposes)
     public void resetGameEarnings() {
         this.gameEarnings = 0;
     }
