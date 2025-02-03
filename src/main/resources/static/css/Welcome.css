@@ -5,12 +5,13 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    --text-color: aliceblue;
 }
 
 .button {
     background-color: rgba(65, 104, 134, 0.886);
-    color: rgba(226, 226, 226, 0.766);
-    border: 3px solid rgba(226, 226, 226, 0.766);  
+    color: aliceblue;
+    border: 3px solid var(--text-color);  
     text-align: center;        
     font-size: 2vh;         
     cursor: pointer;  
@@ -19,11 +20,11 @@ html, body {
     font-size: 3vh;
     width: 35vh;
     height: 10vh;
+    cursor: pointer;
 }
 
 .button:hover {
     background-color: rgba(36, 78, 110, 0.886);
-    color: rgba(226, 226, 226, 0.766); 
 }
 
 #text-container {
@@ -32,7 +33,7 @@ html, body {
     align-items: center;
     position: absolute;
     top: 5vh;
-    color: rgba(163, 163, 168, 0.766);
+    color: var(--text-color)
 }
 
 #text-container h1, h3 {
@@ -78,9 +79,11 @@ html, body {
     background-size: cover;
     left: 0vw;
     top: 0vh;
-    border: 2px solid rgba(226, 226, 226);
+    border: 2px solid var(--text-color);
     border-radius: 10px;
     width: 50px;
     height: 50px;
     background-color: rgba(65, 104, 134, 0.886);
+    transition: background-color 0.3s ease;
+    cursor: pointer;
 }
