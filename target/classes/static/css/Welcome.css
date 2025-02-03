@@ -71,3 +71,16 @@ html, body {
     width: 30vw;
     height: 23vw;
 }
+
+#github-link-button {
+    position: absolute;
+    background-image: url("../images/pngegg_github_logo.png");
+    background-size: cover;
+    left: 0vw;
+    top: 0vh;
+    border: 2px solid rgba(226, 226, 226);
+    border-radius: 10px;
+    width: 50px;
+    height: 50px;
+    background-color: rgba(65, 104, 134, 0.886);
+}
