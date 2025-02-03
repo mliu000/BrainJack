@@ -6,10 +6,12 @@
     font-family: 'Rye', cursive;
 }
 
-
 body {
+    overflow: auto;
     background-image: url(images/10081449.jpg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    background-attachment: fixed; 
+    min-height: 100vh;
 }

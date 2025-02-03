@@ -198,7 +198,7 @@ public class GameController {
                 return getPlayerNotInMatchErrorCode();
             } 
             // If Player is found, update the players statistics and return it
-            gameService.participantReset(playerToUpdate);;
+            gameService.participantReset(playerToUpdate);
             return ResponseEntity.ok(playerToUpdate);
         } 
     }
