@@ -33,7 +33,7 @@ html, body {
     align-items: center;
     position: absolute;
     top: 5vh;
-    color: var(--text-color)
+    color: var(--text-color);
 }
 
 #text-container h1, h3 {
