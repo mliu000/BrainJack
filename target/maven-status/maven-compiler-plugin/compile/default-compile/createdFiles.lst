@@ -1,12 +1,14 @@
 muyel\model\Dealer.class
 muyel\service\GameService.class
 muyel\respository\PlayerRepository.class
-muyel\model\Participant.class
+muyel\controller\GameController$PlayerRequest.class
 muyel\model\Player.class
 muyel\model\PokerCard.class
 muyel\utility\Pair.class
+muyel\model\Deck.class
+muyel\model\Participant.class
 muyel\model\Question.class
 muyel\model\QuestionBank.class
 muyel\controller\GameController.class
 muyel\Main.class
-muyel\model\Deck.class
+muyel\controller\GameController$FinishRequest.class
