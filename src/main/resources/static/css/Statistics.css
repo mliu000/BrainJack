@@ -1,0 +1,33 @@
+:root {
+    --text-color: aliceblue;
+    --text-color2: lightgray;
+    --button-color: ;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+#back-button {
+    background-color: rgba(65, 104, 134, 0.886);
+    color: var(--text-color);
+    border: 3px solid var(--text-color);  
+    text-align: center;        
+    font-size: 2vh;         
+    cursor: pointer;  
+    border-radius: 4vh;      
+    transition: background-color 0.3s ease;
+    font-size: clamp(0vw, 2vw, 3vh);
+    width: clamp(0vw, 25vw, 35vh);
+    height: 10vh;
+    cursor: pointer;
+    position: absolute;
+    left: 5vw;
+    bottom: 5vh;
+}

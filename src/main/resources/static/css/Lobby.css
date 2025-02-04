@@ -80,7 +80,7 @@ body, html {
     justify-content: center;
     position: absolute;
     gap: 2.5vh;
-    bottom: 10vh;
+    bottom: 9vh;
     transform: translateX(-50%);
 }
 
