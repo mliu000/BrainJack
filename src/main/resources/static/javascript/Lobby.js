@@ -11,15 +11,15 @@ REQUIRES: the param: setVisible must be a boolean
 function toggleStatsButtonVisibility(setVisible) {
     // Get the stats button element
     if (setVisible) {
-        statsButton.style.visibility = "visible";
+        statsButton.style.display = "inline-block";
     } else {
-        statsButton.style.visibility = "hidden";
+        statsButton.style.display = "none";
     }
 }
 
 // Make the login popup visible upon corresponding button click
 function handleLoginButtonClick() {
-    loginPopup.style.visibility = "visible";
+    loginPopup.style.display = "flex";
 }
 
 ///// PROCEDURAL CODE ////
@@ -29,14 +29,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Add the button action listeners
     loginButton.addEventListener("click", handleLoginButtonClick);
 
-    // Add listeners to close prompts when you click anywhere outside the element
-
 });
 
 // Hide if click is outside the popup (and not the show button)
 document.addEventListener("click", (e) => {
-    if (loginPopup.style.visibility === "visible" && !loginPopup.contains(e.target) && e.target !== loginButton) {
-        loginPopup.style.visibility = "hidden";
+    if (loginPopup.style.display === "flex" 
+        && !loginPopup.contains(e.target) 
+        && e.target !== loginButton) {
+        loginPopup.style.display = "none";
     }
 });
 

@@ -54,21 +54,21 @@ body, html {
     display: flex;
     position: absolute;
     flex-direction: column;
-    align-items: left;
     justify-content: center;
     top: 20vh;
     width: clamp(30vh, 40vw, 50vh);
 }
 
 #logged-in-player-list {
-    list-style-type: none;
-    color: var(--text-color2);
-    background-color: rgba(200, 200, 200, 0.3);
-    font-size: 2.5vh;
     padding: 1.5vh 1.5vh 1.5vh 1.8vh;
     height: 14vh;
     line-height: 3.5vh;
     border-radius: 3vh;
+    text-align: center;
+    list-style-type: none;
+    color: var(--text-color2);
+    background-color: rgba(200, 200, 200, 0.3);
+    font-size: 2.5vh;
     border: 0.3vh solid aliceblue;
 }
 
@@ -102,23 +102,19 @@ body, html {
     left: 5vw;
 }
 
-/* For all the pop up elements */
+/* Login container */
 
 .popup {
-    display: flex;
-    flex-direction: column;
-    align-items: right;
-    justify-content: top;
-    position: absolute;
     top: 50vh;
     left: 50vw;
     width: 30vh;
-    height: 60vh;
+    height: auto;
     transform: translate(-50%, -50%);
     padding: 5vh;
     background-color: var(--pop-up-background-color);
     border-radius: 8vh;
     border: 0.3vh solid aliceblue;
+    transition: opacity 0.3s ease;
 }
 
 .popup h1 {
@@ -138,29 +134,9 @@ body, html {
     padding: 0;
 }
 
-#login-popup input[type="text"] {
-    width: 100%;
-    height: 50%;
-    font-size: 1.5vh;
-    color: darkslategray;
-    border-radius: 10%;
-    box-shadow: 0 2vh 3vh rgba(0, 0, 0, 0.2);
-}
-
-#username-container {
-    padding-bottom: 15%;
-}
-
-#login-error-message {
-    color: rgb(208, 1, 1);
-    font-size: 1.5vh;
-}
-
-#authenticate-login-button {
-    position: absolute;
+.container-button {
     width: 30vh;
     height: 10vh;
-    bottom: 4vh;
     background-color: rgba(65, 104, 134, 0.886);
     color: var(--text-color);
     border: 3px solid var(--text-color);  
@@ -173,6 +149,60 @@ body, html {
     cursor: pointer;
 }
 
-#authenticate-login-button:hover {
+.container-button:hover {
     background-color: rgba(36, 78, 110, 0.886);
+}
+
+#login-popup {
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    position: absolute;
+}
+
+#login-popup input[type="text"] {
+    width: 100%;
+    font-size: 1.8vh;
+    color: darkslategray;
+    border-radius: 10%;
+    box-shadow: 0 2vh 3vh rgba(0, 0, 0, 0.2);
+}
+
+#username-container {
+    padding-bottom: 5%;
+}
+
+#login-error-message {
+    color: rgb(208, 1, 1);
+    font-size: 1.5vh;
+}
+
+/* View statistics popup container */ 
+
+.popup-header {
+    color: var(--text-color);
+    font-size: 3vh;
+    margin: 0;
+    text-decoration: underline;
+    text-align: center;
+}
+
+#statistics-popup {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 2vh;
+}
+
+/* Logout popup container */
+
+#logout-popup {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 2vh;
 }

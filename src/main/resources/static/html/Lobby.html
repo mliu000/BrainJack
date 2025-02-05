@@ -21,13 +21,13 @@
         </div>
         <div id="middle-3-buttons" class="stacked-buttons">
             <button class="main-buttons" id="login-button">
-                Log In A Player
+                Login A Player
             </button>
-            <button class="main-buttons" id="logout-button">
-                Log Out A Player
+            <button class="main-buttons" id="logout-button" style="display: none;">
+                Logout A Player
             </button>
             <a href="Game.html">
-                <button class="main-buttons" id="start-game-button">
+                <button class="main-buttons" id="start-game-button" style="display: none;">
                     Start Match
                 </button>
             </a>
@@ -44,10 +44,10 @@
                 </button>
             </a>
         </div>
-        <a href="Statistics.html" style="visibility: hidden;">
+        <a href="Statistics.html" style="display: none;"">
             <button id="stats-button" class="main-buttons">View Player Statistics</button>
         </a>
-        <div id="login-popup" class="popup" style="visibility: hidden;">
+        <div id="login-popup" class="popup" style="display: none;">
             <h1>Log In</h1>
             <div id="username-container" class="text-input-container">
                 <h3>Enter Username</h3>
@@ -58,7 +58,21 @@
                 <input type="text" maxlength="20" id="password-text-field">
             </div>
             <h5 id="login-error-message">Error message placeholder</h5>
-            <button id="authenticate-login-button" class="button">Log In</button>
+            <button id="authenticate-login-button" class="container-button">Log In</button>
+        </div>
+        <div id="statistics-popup" class="popup" style="display: none;">
+            <h2 id="statistics-popup-header" class="popup-header">Choose Player To View Statistics</h2>
+            <button id="player-1-statistics-button" class="container-button" style="display: none;"></button>
+            <button id="player-2-statistics-button" class="container-button" style="display: none;"></button>
+            <button id="player-3-statistics-button" class="container-button" style="display: none;"></button>
+            <button id="player-4-statistics-button" class="container-button" style="display: none;"></button>
+        </div>
+        <div id="logout-popup" class="popup" style="display: none;">
+            <h2 id="logout-popup-header" class="popup-header">Choose Player To Logout</h2>
+            <button id="player-1-logout-button" class="container-button" style="display: none;"></button>
+            <button id="player-2-logout-button" class="container-button" style="display: none;"></button>
+            <button id="player-3-logout-button" class="container-button" style="display: none;"></button>
+            <button id="player-4-logout-button" class="container-button" style="display: none;"></button>
         </div>
     </body>
 </html>
