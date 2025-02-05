@@ -44,8 +44,21 @@
                 </button>
             </a>
         </div>
-        <a href="Statistics.html">
+        <a href="Statistics.html" style="visibility: hidden;">
             <button id="stats-button" class="main-buttons">View Player Statistics</button>
         </a>
+        <div id="login-popup" class="popup" style="visibility: hidden;">
+            <h1>Log In</h1>
+            <div id="username-container" class="text-input-container">
+                <h3>Enter Username</h3>
+                <input type="text" maxlength="20" id="username-text-field">
+            </div>
+            <div id="password-container" class="text-input-container">
+                <h3>Enter Password</h3>
+                <input type="text" maxlength="20" id="password-text-field">
+            </div>
+            <h5 id="login-error-message">Error message placeholder</h5>
+            <button id="authenticate-login-button" class="button">Log In</button>
+        </div>
     </body>
 </html>

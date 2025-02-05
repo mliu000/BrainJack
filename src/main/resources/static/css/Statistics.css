@@ -31,3 +31,7 @@ body, html {
     left: 5vw;
     bottom: 5vh;
 }
+
+#back-button:hover {
+    background-color: rgba(36, 78, 110, 0.886);
+}

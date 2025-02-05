@@ -1,7 +1,7 @@
 :root {
     --text-color: aliceblue;
     --text-color2: lightgray;
-    --button-color: ;
+    --pop-up-background-color: rgba(77, 134, 169, 0.95);
 }
 
 body, html {
@@ -13,6 +13,8 @@ body, html {
     overflow: hidden;
     flex-direction: column;
 }
+
+/* For all the elements on the main page */
 
 .main-buttons {
     background-color: rgba(65, 104, 134, 0.886);
@@ -27,6 +29,10 @@ body, html {
     width: clamp(0vw, 25vw, 35vh);
     height: 10vh;
     cursor: pointer;
+}
+
+.main-buttons:hover {
+    background-color: rgba(36, 78, 110, 0.886);
 }
 
 .stacked-buttons {
@@ -94,4 +100,79 @@ body, html {
     position: absolute;
     bottom: 5vh;
     left: 5vw;
+}
+
+/* For all the pop up elements */
+
+.popup {
+    display: flex;
+    flex-direction: column;
+    align-items: right;
+    justify-content: top;
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    width: 30vh;
+    height: 60vh;
+    transform: translate(-50%, -50%);
+    padding: 5vh;
+    background-color: var(--pop-up-background-color);
+    border-radius: 8vh;
+    border: 0.3vh solid aliceblue;
+}
+
+.popup h1 {
+    font-size: 4vh;
+    color: var(--text-color);
+    text-decoration: underline;
+}
+
+.popup h3 {
+    color: var(--text-color2);
+    margin-top: 0vh;
+    margin-bottom: 0.5vh;
+    font-size: 2vh;
+}
+
+.text-input-container {
+    padding: 0;
+}
+
+#login-popup input[type="text"] {
+    width: 100%;
+    height: 50%;
+    font-size: 1.5vh;
+    color: darkslategray;
+    border-radius: 10%;
+    box-shadow: 0 2vh 3vh rgba(0, 0, 0, 0.2);
+}
+
+#username-container {
+    padding-bottom: 15%;
+}
+
+#login-error-message {
+    color: rgb(208, 1, 1);
+    font-size: 1.5vh;
+}
+
+#authenticate-login-button {
+    position: absolute;
+    width: 30vh;
+    height: 10vh;
+    bottom: 4vh;
+    background-color: rgba(65, 104, 134, 0.886);
+    color: var(--text-color);
+    border: 3px solid var(--text-color);  
+    text-align: center;        
+    font-size: 2vh;         
+    cursor: pointer;  
+    border-radius: 4vh;      
+    transition: background-color 0.3s ease;
+    font-size: clamp(0vw, 2vw, 3vh);
+    cursor: pointer;
+}
+
+#authenticate-login-button:hover {
+    background-color: rgba(36, 78, 110, 0.886);
 }
