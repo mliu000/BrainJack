@@ -31,6 +31,21 @@ body, html {
     cursor: pointer;
 }
 
+.center-buttons {
+    background-color: rgba(65, 104, 134, 0.886);
+    color: var(--text-color);
+    border: 3px solid var(--text-color);  
+    text-align: center;        
+    font-size: 2vh;         
+    cursor: pointer;  
+    border-radius: 4vh;      
+    transition: background-color 0.3s ease;
+    font-size: clamp(0vw, 2vw, 3vh);
+    width: clamp(0vw, 25vw, 35vh);
+    height: 7vh;
+    cursor: pointer;
+}
+
 .main-buttons:hover {
     background-color: rgba(36, 78, 110, 0.886);
 }
@@ -102,7 +117,7 @@ body, html {
     left: 5vw;
 }
 
-/* Login container */
+/* Create Player popup container */
 
 .popup {
     top: 50vh;
@@ -153,19 +168,28 @@ body, html {
     background-color: rgba(36, 78, 110, 0.886);
 }
 
-#login-popup {
+.input-field {
+    width: 100%;
+    font-size: 1.8vh;
+    color: darkslategray;
+    border-radius: 10%;
+    box-shadow: 0 2vh 3vh rgba(0, 0, 0, 0.2);
+}
+
+#create-player-popup {
     display: flex;
     flex-direction: column;
     justify-content: top;
     position: absolute;
 }
 
-#login-popup input[type="text"] {
-    width: 100%;
-    font-size: 1.8vh;
-    color: darkslategray;
-    border-radius: 10%;
-    box-shadow: 0 2vh 3vh rgba(0, 0, 0, 0.2);
+/* Login container */
+
+#login-popup {
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    position: absolute;
 }
 
 #username-container {

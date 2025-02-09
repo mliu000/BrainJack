@@ -1,5 +1,6 @@
 ///// VARIABLES /////
 const statsButton = document.getElementById("stats-button");
+const popups = document.getElementsByClassName("popup");
 const loginPopup = document.getElementById("login-popup");
 const loginButton = document.getElementById("login-button");
 ///// FUNCTIONS /////
@@ -33,10 +34,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Hide if click is outside the popup (and not the show button)
 document.addEventListener("click", (e) => {
-    if (loginPopup.style.display === "flex" 
-        && !loginPopup.contains(e.target) 
+    if (popups.style.display === "flex" 
+        && !popups.contains(e.target) 
         && e.target !== loginButton) {
-        loginPopup.style.display = "none";
+        popups.style.display = "none";
     }
 });
 
