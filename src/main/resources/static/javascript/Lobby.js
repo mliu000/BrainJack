@@ -20,7 +20,7 @@ function toggleStatsButtonVisibility(setVisible) {
 
 // Make the login popup visible upon corresponding button click
 function handleLoginButtonClick() {
-    loginPopup.style.display = "flex";
+    loginPopup.style.display = "block";
 }
 
 ///// PROCEDURAL CODE ////

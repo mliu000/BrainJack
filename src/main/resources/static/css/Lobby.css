@@ -31,6 +31,10 @@ body, html {
     cursor: pointer;
 }
 
+.main-buttons:hover {
+    background-color: rgba(36, 78, 110, 0.886);
+}
+
 .center-buttons {
     background-color: rgba(65, 104, 134, 0.886);
     color: var(--text-color);
@@ -46,7 +50,7 @@ body, html {
     cursor: pointer;
 }
 
-.main-buttons:hover {
+.center-buttons:hover {
     background-color: rgba(36, 78, 110, 0.886);
 }
 
@@ -94,7 +98,7 @@ body, html {
     text-decoration: underline;
 }
 
-#middle-3-buttons {
+#middle-4-buttons {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -176,16 +180,20 @@ body, html {
     box-shadow: 0 2vh 3vh rgba(0, 0, 0, 0.2);
 }
 
-#create-player-popup {
+#create-player-popup-content {
     display: flex;
     flex-direction: column;
     justify-content: top;
     position: absolute;
 }
 
+#create-username-container {
+    padding-bottom: 5%;
+}
+
 /* Login container */
 
-#login-popup {
+#login-popup-content {
     display: flex;
     flex-direction: column;
     justify-content: top;
@@ -211,7 +219,7 @@ body, html {
     text-align: center;
 }
 
-#statistics-popup {
+#statistics-popup-content {
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -222,7 +230,7 @@ body, html {
 
 /* Logout popup container */
 
-#logout-popup {
+#logout-popup-content {
     position: absolute;
     display: flex;
     flex-direction: column;

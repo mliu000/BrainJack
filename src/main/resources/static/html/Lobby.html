@@ -19,8 +19,8 @@
                 </ul>
             </div>
         </div>
-        <div id="middle-3-buttons" class="stacked-buttons">
-            <button class="center-buttons" id="create-player">
+        <div id="middle-4-buttons" class="stacked-buttons">
+            <button class="center-buttons" id="create-player-button">
                 Create New Player
             </button>
             <button class="center-buttons" id="login-button">
@@ -50,45 +50,53 @@
         <a href="Statistics.html" style="display: none;">
             <button id="stats-button" class="main-buttons">View Player Statistics</button>
         </a>
-        <div id="login-popup" class="popup" style="display: none;">
-            <h1>Log In</h1>
-            <div id="username-container" class="text-input-container">
-                <h3>Enter Username</h3>
-                <input type="text" maxlength="20" id="username-text-field" class="input-field">
+        <div id="login-popup" class="popup-background">
+            <div id="login-popup-content" class="popup" style="display: none;">
+                <h1>Log In</h1>
+                <div id="username-container" class="text-input-container">
+                    <h3>Enter Username</h3>
+                    <input type="text" maxlength="20" id="username-text-field" class="input-field">
+                </div>
+                <div id="password-container" class="text-input-container">
+                    <h3>Enter Password</h3>
+                    <input type="text" maxlength="20" id="password-text-field" class="input-field">
+                </div>
+                <h5 id="login-error-message">Error message placeholder</h5>
+                <button id="authenticate-login-button" class="container-button">Log In</button>
             </div>
-            <div id="password-container" class="text-input-container">
-                <h3>Enter Password</h3>
-                <input type="text" maxlength="20" id="password-text-field" class="input-field">
-            </div>
-            <h5 id="login-error-message">Error message placeholder</h5>
-            <button id="authenticate-login-button" class="container-button">Log In</button>
         </div>
-        <div id="statistics-popup" class="popup" style="display: none;">
-            <h2 id="statistics-popup-header" class="popup-header">Choose Player To View Statistics</h2>
-            <button id="player-1-statistics-button" class="container-button" style="display: none;"></button>
-            <button id="player-2-statistics-button" class="container-button" style="display: none;"></button>
-            <button id="player-3-statistics-button" class="container-button" style="display: none;"></button>
-            <button id="player-4-statistics-button" class="container-button" style="display: none;"></button>
-        </div>
-        <div id="logout-popup" class="popup" style="display: none;">
-            <h2 id="logout-popup-header" class="popup-header">Choose Player To Logout</h2>
-            <button id="player-1-logout-button" class="container-button" style="display: none;"></button>
-            <button id="player-2-logout-button" class="container-button" style="display: none;"></button>
-            <button id="player-3-logout-button" class="container-button" style="display: none;"></button>
-            <button id="player-4-logout-button" class="container-button" style="display: none;"></button>
-        </div>
-        <div id="create-player-popup" class="popup" style="display: none;">
-            <h1>Create Player</h1>
-            <div id="username-container" class="text-input-container">
-                <h3>Choose Username</h3>
-                <input type="text" maxlength="20" id="username-text-field-cp" class="input-field">
+        <div id="statistics-popup" class="popup-background">
+            <div id="statistics-popup-content" class="popup" style="display: none;">
+                <h2 id="statistics-popup-header" class="popup-header">Choose Player To View Statistics</h2>
+                <button id="player-1-statistics-button" class="container-button" style="display: none;"></button>
+                <button id="player-2-statistics-button" class="container-button" style="display: none;"></button>
+                <button id="player-3-statistics-button" class="container-button" style="display: none;"></button>
+                <button id="player-4-statistics-button" class="container-button" style="display: none;"></button>
             </div>
-            <div id="password-container" class="text-input-container">
-                <h3>Choose Password</h3>
-                <input type="text" maxlength="20" id="password-text-field-cp" class="input-field">
+        </div>
+        <div id="logout-popup" class="popup-background">
+            <div id="logout-popup-content" class="popup" style="display: none;">
+                <h2 id="logout-popup-header" class="popup-header">Choose Player To Logout</h2>
+                <button id="player-1-logout-button" class="container-button" style="display: none;"></button>
+                <button id="player-2-logout-button" class="container-button" style="display: none;"></button>
+                <button id="player-3-logout-button" class="container-button" style="display: none;"></button>
+                <button id="player-4-logout-button" class="container-button" style="display: none;"></button>
             </div>
-            <h5 id="login-cp-message">Error message placeholder</h5>
-            <button id="authenticate-cp-button" class="container-button">Log In</button>
+        </div>
+        <div id="create-player-popup" class="popup-background" style="display: none;">
+            <div id="create-player-popup-content" class="popup">
+                <h1>Create Player</h1>
+                <div id="create-username-container" class="text-input-container">
+                    <h3>Choose Username</h3>
+                    <input type="text" maxlength="20" id="username-text-field-cp" class="input-field">
+                </div>
+                <div id="create-password-container" class="text-input-container">
+                    <h3>Choose Password</h3>
+                    <input type="text" maxlength="20" id="password-text-field-cp" class="input-field">
+                </div>
+                <h5 id="login-cp-message">Error message placeholder</h5>
+                <button id="authenticate-cp-button" class="container-button">Create Player</button>
+            </div>
         </div>
     </body>
 </html>
