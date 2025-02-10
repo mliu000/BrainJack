@@ -39,7 +39,19 @@ function handleCreatePlayerButtonClick() {
     createPlayerPopup.style.display = "block";
 }
 
-// Make the 
+// Post Request to create new player
+function createPlayerRequest() {
+
+}
+
+
+///// API REQUEST FUNCTIONS ///// 
+
+// Post request
+async function postRequest() {
+    
+}
+
 
 ///// PROCEDURAL CODE ////
 
