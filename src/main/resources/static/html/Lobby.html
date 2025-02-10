@@ -50,8 +50,8 @@
         <a href="Statistics.html" style="display: none;">
             <button id="stats-button" class="main-buttons">View Player Statistics</button>
         </a>
-        <div id="login-popup" class="popup-background">
-            <div id="login-popup-content" class="popup" style="display: none;">
+        <div id="login-popup" class="popup-background" style="display: none;">
+            <div id="login-popup-content" class="popup">
                 <h1>Log In</h1>
                 <div id="username-container" class="text-input-container">
                     <h3>Enter Username</h3>
@@ -65,8 +65,8 @@
                 <button id="authenticate-login-button" class="container-button">Log In</button>
             </div>
         </div>
-        <div id="statistics-popup" class="popup-background">
-            <div id="statistics-popup-content" class="popup" style="display: none;">
+        <div id="statistics-popup" class="popup-background" style="display: none;">
+            <div id="statistics-popup-content" class="popup">
                 <h2 id="statistics-popup-header" class="popup-header">Choose Player To View Statistics</h2>
                 <button id="player-1-statistics-button" class="container-button" style="display: none;"></button>
                 <button id="player-2-statistics-button" class="container-button" style="display: none;"></button>
@@ -74,8 +74,8 @@
                 <button id="player-4-statistics-button" class="container-button" style="display: none;"></button>
             </div>
         </div>
-        <div id="logout-popup" class="popup-background">
-            <div id="logout-popup-content" class="popup" style="display: none;">
+        <div id="logout-popup" class="popup-background" style="display: none;">
+            <div id="logout-popup-content" class="popup">
                 <h2 id="logout-popup-header" class="popup-header">Choose Player To Logout</h2>
                 <button id="player-1-logout-button" class="container-button" style="display: none;"></button>
                 <button id="player-2-logout-button" class="container-button" style="display: none;"></button>
@@ -94,8 +94,8 @@
                     <h3>Choose Password</h3>
                     <input type="text" maxlength="20" id="password-text-field-cp" class="input-field">
                 </div>
-                <h5 id="login-cp-message">Error message placeholder</h5>
-                <button id="authenticate-cp-button" class="container-button">Create Player</button>
+                <h5 id="login-create-player-message"></h5>
+                <button id="authenticate-create-player-button" class="container-button">Create Player</button>
             </div>
         </div>
     </body>

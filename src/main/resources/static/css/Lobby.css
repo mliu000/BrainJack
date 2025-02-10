@@ -121,7 +121,7 @@ body, html {
     left: 5vw;
 }
 
-/* Create Player popup container */
+/* For all the popups in general */
 
 .popup {
     top: 50vh;
@@ -148,6 +148,25 @@ body, html {
     margin-bottom: 0.5vh;
     font-size: 2vh;
 }
+
+.popup-header {
+    color: var(--text-color);
+    font-size: 3vh;
+    margin: 0;
+    text-decoration: underline;
+    text-align: center;
+}
+
+.popup-background {
+    position: fixed;
+    top: 0; 
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Create Player popup container */
 
 .text-input-container {
     padding: 0;
@@ -210,14 +229,6 @@ body, html {
 }
 
 /* View statistics popup container */ 
-
-.popup-header {
-    color: var(--text-color);
-    font-size: 3vh;
-    margin: 0;
-    text-decoration: underline;
-    text-align: center;
-}
 
 #statistics-popup-content {
     position: absolute;
