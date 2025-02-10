@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+ * @Mu Ye Liu - Jan 2025
+ * 
+ * Represents the controller class that represents the API calls and http responses
+ */
 @RestController
 @RequestMapping("/api/brainjack")
 @CrossOrigin(origins = "http://localhost:8080")

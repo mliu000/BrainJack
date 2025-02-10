@@ -11,6 +11,8 @@ const statsButton = document.getElementById("stats-button");
 // For the Create Player popup
 const createPlayerPopup = document.getElementById("create-player-popup");
 const authenticateCreatePlayerButton = document.getElementById("authenticate-create-player-button");
+const createUsernameTextField = document.getElementById("create-username-text-field");
+const createPasswordTextField = document.getElementById("create-password-text-field");
 
 // For the Login popup
 const loginPopup = document.getElementById("login-popup");
@@ -35,8 +37,42 @@ function handleLoginButtonClick() {
     loginPopup.style.display = "block";
 }
 
+// Make the create player popup visible upon corresponding button click
 function handleCreatePlayerButtonClick() {
     createPlayerPopup.style.display = "block";
+}
+
+/// Create Player Popup ///
+
+/*
+Send API POST request with given inputs from createUsernameTextField and createPasswordTextField.
+- Successfully create new player if username and password successful, while also displaying a success
+message for 1 sec, then closes the popup tab,
+- Fails to create new player, and displays corresponding error message. Keeps the tab open.
+*/
+async function handleAuthenticateCreatePlayerButtonClick() {
+    // Gets the text field input values
+    const inputUsername = document.getElementById("create-username-text-field").value;
+    const inputPassword = document.getElementById("create-password-text-field").value;
+    
+    // Puts the input values into body parameter json format
+    const bodyParameter = { 
+        "username": inputUsername,
+        "password": inputPassword
+    }
+
+    // Get the suffix to url address
+    const url = window.apiPrefix + "/players/createPlayer";
+
+    // Gets the response from createPlayer api call
+    const response = await window.postRequest(url, bodyParameter);
+
+    // If returned response is the error response, throw an error
+    if (response && response.error_code) {
+        console.error("API Error Code: " , response.error_code, "API Error Message", response.message);
+    } else {
+        console.log("API Response: ", response);
+    }
 }
 
 // Post Request to create new player
@@ -67,6 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Add the button action listeners
     loginButton.addEventListener("click", handleLoginButtonClick);
     createPlayerButton.addEventListener("click", handleCreatePlayerButtonClick);
+    authenticateCreatePlayerButton.addEventListener("click", handleAuthenticateCreatePlayerButtonClick);
 });
 
 // Hide if click is outside the popup (and not the show button)

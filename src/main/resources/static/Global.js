@@ -1,3 +1,9 @@
+/*
+@Mu Ye Liu - Feb 2025
+
+Represents the global variables and functions for the javascript frontend
+*/
+
 ///// VARIABLES /////
 
 window.apiPrefix = "http://localhost:8080/api/brainjack"
@@ -6,13 +12,10 @@ window.players = [];
 
 ///// FUNCTIONS /////
 
-function getDealer() {
-    
-}
-
 // General post request function
 window.postRequest = async function(url, data) {
     try {
+        // Calls the API. Tries to get the response
         const response = await fetch(url, {
             method: "POST",
             headers: {
@@ -21,17 +24,21 @@ window.postRequest = async function(url, data) {
             body: JSON.stringify(data)
         });
 
+        // Parse response into JSON format
+        const jsonResponse =  await response.json();
+
+        // If the response is not 200 OK, then throw the returned response
         if (!response.ok) {
-            throw new Error(`HTTP error ! Status: ${response.status}`);
+            throw jsonResponse;
         }
 
-        return await response.json();
+        // If the response is 200 OK, then simply return it without throwing error
+        return jsonResponse;
+
     } catch (error) {
-        console.error("Error in Post Request", error);
-        return null;
+        // Throw the error again and let the caller handle it
+        throw error;
     }
 }
 
 ///// PROCEDURAL CODE /////
-
-window.gameState.dealer = getDealer();

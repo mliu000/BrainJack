@@ -7,6 +7,11 @@ import org.springframework.context.event.EventListener;
 
 import java.io.IOException;
 
+/*
+ * @Mu Ye Liu - Jan 2025
+ * 
+ * The main starter class that starts the application
+ */
 @SpringBootApplication
 public class Main {
     public static void main(String[] args) {
