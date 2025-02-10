@@ -11,8 +11,6 @@ const statsButton = document.getElementById("stats-button");
 // For the Create Player popup
 const createPlayerPopup = document.getElementById("create-player-popup");
 const authenticateCreatePlayerButton = document.getElementById("authenticate-create-player-button");
-const createUsernameTextField = document.getElementById("create-username-text-field");
-const createPasswordTextField = document.getElementById("create-password-text-field");
 
 // For the Login popup
 const loginPopup = document.getElementById("login-popup");
@@ -65,13 +63,12 @@ async function handleAuthenticateCreatePlayerButtonClick() {
     const url = window.apiPrefix + "/players/createPlayer";
 
     // Gets the response from createPlayer api call
-    const response = await window.postRequest(url, bodyParameter);
-
-    // If returned response is the error response, throw an error
-    if (response && response.error_code) {
-        console.error("API Error Code: " , response.error_code, "API Error Message", response.message);
-    } else {
+    try {
+        const response = await window.postRequest(url, bodyParameter);
+        // If returned response is the error response, throw an error
         console.log("API Response: ", response);
+    } catch (error) {
+        console.error("API Error Code:" , error.error_code, "API Error Message:", error.message);
     }
 }
 
