@@ -223,11 +223,6 @@ body, html {
     padding-bottom: 5%;
 }
 
-#login-error-message {
-    color: rgb(208, 1, 1);
-    font-size: 1.5vh;
-}
-
 /* View statistics popup container */ 
 
 #statistics-popup-content {

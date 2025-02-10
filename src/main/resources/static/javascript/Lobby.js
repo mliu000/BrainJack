@@ -10,8 +10,8 @@ const statsButton = document.getElementById("stats-button");
 
 // For the Create Player popup
 const createPlayerPopup = document.getElementById("create-player-popup");
-const inputUsername = document.getElementById("create-username-text-field");
-const inputPassword = document.getElementById("create-password-text-field");
+const createUsernameTextField = document.getElementById("create-username-text-field");
+const createPasswordTextField = document.getElementById("create-password-text-field");
 const authenticateCreatePlayerButton = document.getElementById("authenticate-create-player-button");
 const createPlayerMessage = document.getElementById("create-player-message");
 
@@ -56,8 +56,8 @@ async function handleAuthenticateCreatePlayerButtonClick() {
     
     // Puts the input values into body parameter json format
     const bodyParameter = { 
-        "username": inputUsername.value,
-        "password": inputPassword.value
+        "username": createUsernameTextField.value,
+        "password": createPasswordTextField.value
     }
 
     // Get the suffix to url address
@@ -72,34 +72,55 @@ async function handleAuthenticateCreatePlayerButtonClick() {
         // Print out the error
         console.error("API Error Code:" , error.error_code, "API Error Message:", error.message);
         // Reset the text fields to be empty again
-        inputUsername.value = "";
-        inputPassword.value = "";
+        resetTextFields([createUsernameTextField, createPasswordTextField]);
         // Display the error message depending on the the specific error
         switch (error.error_code) {
             case 4004:
-                createPlayerMessage.textContent = "Username already exists. Please try again.";
+                setDisplayMessage(createPlayerMessage, "rgb(241, 23, 12)", "Username already taken. Please try again")
                 break;
             case 4005:
-                createPlayerMessage.textContent = "Username or password must be at least 4 characters long. Please try again";
+                setDisplayMessage(createPlayerMessage, "rgb(241, 23, 12)", "Username or password must be at least 4 characters long. Please try again")
                 break;
         }
     }
 
 }
 
-// Post Request to create new player
-function createPlayerRequest() {
+///// HELPER FUNCTIONS ///// 
 
+/*
+Sets the content of a display message
+REQUIRES: 
+- label: must be a label, like an h1, h2 text in html, etc
+- color: must be a string that represents a color, or rgb, hsla format, etc
+- message: must be a string
+*/
+function setDisplayMessage(label, color, message) {
+    label.style.color = color;
+    label.textContent = message;
 }
 
-
-///// API REQUEST FUNCTIONS ///// 
-
-// Post request
-async function postRequest() {
-
+/*
+Reset text fields to be blank
+REQUIRES: 
+- listOfTextFields: must be a list of text fields
+*/
+function resetTextFields(listOfTextFields) {
+    listOfTextFields.forEach((textField) => {
+        textField.value = "";
+    });
 }
 
+/*
+Reset popup menu after exiting by reset the input field and making the error message disappear again
+REQUIRES:
+- popupWithText: must be a popup with text 
+*/
+function resetPopupWithTextAfterExiting(popupWithTextField, message) {
+    const textFields = Array.from(popupWithTextField.getElementsByClassName("input-field"));
+    resetTextFields(textFields);
+    setDisplayMessage(message, "transparent", "");
+}
 
 ///// INITIALIZATION PROCEDURAL CODE /////
 
@@ -120,8 +141,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Hide if click is outside the popup (and not the show button)
 document.addEventListener("click", (e) => {
+    // Make popup invisible
     if (e.target.classList.contains("popup-background")) {
         e.target.style.display = "none";
-    }
+        // If the popup contains text input fields and feedback message, then reset those as well.
+        if (e.target.querySelector(".feedback-message") && e.target.querySelector(".input-field")) {
+            const feedbackMessage = e.target.querySelector(".feedback-message");
+            resetPopupWithTextAfterExiting(e.target, feedbackMessage);
+        }   
+    } 
 });
 
