@@ -1,5 +1,6 @@
 ///// VARIABLES /////
 
+window.apiPrefix = "http://localhost:8080/api/brainjack"
 window.dealer = null;
 window.players = [];
 
@@ -10,7 +11,6 @@ function getDealer() {
 }
 
 // General post request function
-
 window.postRequest = async function(url, data) {
     try {
         const response = await fetch(url, {

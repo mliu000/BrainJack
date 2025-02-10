@@ -10,7 +10,7 @@ const statsButton = document.getElementById("stats-button");
 
 // For the Create Player popup
 const createPlayerPopup = document.getElementById("create-player-popup");
-const authenticatePlayerButton = document.getElementById("authenticate-create-player-button");
+const authenticateCreatePlayerButton = document.getElementById("authenticate-create-player-button");
 
 // For the Login popup
 const loginPopup = document.getElementById("login-popup");
@@ -49,11 +49,18 @@ function createPlayerRequest() {
 
 // Post request
 async function postRequest() {
-    
+
 }
 
 
-///// PROCEDURAL CODE ////
+///// INITIALIZATION PROCEDURAL CODE /////
+
+// Add action listeners to the text inputs to restrict to alphanumeric inputs
+document.querySelectorAll(".input-field").forEach(field => {
+    field.addEventListener("input", () => {
+        field.value = field.value.replace(/[^a-zA-Z0-9]/g, "");
+    });
+});
 
 // Add the button event listeners
 document.addEventListener("DOMContentLoaded", () => {
