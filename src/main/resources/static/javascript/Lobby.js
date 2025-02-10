@@ -10,7 +10,10 @@ const statsButton = document.getElementById("stats-button");
 
 // For the Create Player popup
 const createPlayerPopup = document.getElementById("create-player-popup");
+const inputUsername = document.getElementById("create-username-text-field");
+const inputPassword = document.getElementById("create-password-text-field");
 const authenticateCreatePlayerButton = document.getElementById("authenticate-create-player-button");
+const createPlayerMessage = document.getElementById("create-player-message");
 
 // For the Login popup
 const loginPopup = document.getElementById("login-popup");
@@ -50,13 +53,11 @@ message for 1 sec, then closes the popup tab,
 */
 async function handleAuthenticateCreatePlayerButtonClick() {
     // Gets the text field input values
-    const inputUsername = document.getElementById("create-username-text-field").value;
-    const inputPassword = document.getElementById("create-password-text-field").value;
     
     // Puts the input values into body parameter json format
     const bodyParameter = { 
-        "username": inputUsername,
-        "password": inputPassword
+        "username": inputUsername.value,
+        "password": inputPassword.value
     }
 
     // Get the suffix to url address
@@ -68,8 +69,22 @@ async function handleAuthenticateCreatePlayerButtonClick() {
         // If returned response is the error response, throw an error
         console.log("API Response: ", response);
     } catch (error) {
+        // Print out the error
         console.error("API Error Code:" , error.error_code, "API Error Message:", error.message);
+        // Reset the text fields to be empty again
+        inputUsername.value = "";
+        inputPassword.value = "";
+        // Display the error message depending on the the specific error
+        switch (error.error_code) {
+            case 4004:
+                createPlayerMessage.textContent = "Username already exists. Please try again.";
+                break;
+            case 4005:
+                createPlayerMessage.textContent = "Username or password must be at least 4 characters long. Please try again";
+                break;
+        }
     }
+
 }
 
 // Post Request to create new player

@@ -41,11 +41,16 @@ public class GameController {
     // Request to create a new player and logges them in
     @PostMapping("/players/createPlayer")
     public ResponseEntity<?> createPlayer(@RequestBody PlayerRequest request) {
+        if (request.username.length() < 4 || request.password.length() < 4) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                Map.of("error_code", 4005, "message", "username or password too short")
+            );
+        }
         Pair<Boolean, Player> result = gameService.createPlayer(request.username, request.password);
         if (result.getFirst() && result.getSecond() == null) {
              // Case 2: player username already exists
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                Map.of("error_code", 4004, "message", "invalid"));
+                Map.of("error_code", 4004, "message", "username already exists"));
         } else if (!result.getFirst() && result.getSecond() == null ) {
             // Case 3: Lobby already full
             return getPlayerLobbyFullErrorCode();
