@@ -78,21 +78,6 @@ public class GameService {
         return new Pair<>(false, null);
     }
 
-    /*
-     * Changes the password of the player
-     * Returns true if password successfully changed. False if not
-     */
-    @Transactional
-    public boolean changePlayerPassword(Player playerToChangePwd, String newPassword) {
-        if (newPassword.length() >= 4 && newPassword.length() <= 20) {
-            playerToChangePwd.setPassword(newPassword);
-            playerRepository.save(playerToChangePwd);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     // THE NEXT 4 METHODS REQUIRE THE PLAYER TO ALREADY BE IN THE ROUND
 
     // Updates the players statistics

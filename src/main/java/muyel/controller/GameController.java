@@ -65,25 +65,6 @@ public class GameController {
         return ResponseEntity.ok(gameService.getPlayersInMatch());
     }
 
-    // Requests to change password for a player
-    @PutMapping("/players/{username}/changePlayerPassword")
-    public ResponseEntity<?> changePlayerPassword(@PathVariable String username, 
-            @RequestBody String newPassword) {
-        // Attempts to find player
-        Player playerToChangePwd = gameService.getPlayersInMatch().get(username);
-        // Returns error message if Player with given username not in match
-        if (playerToChangePwd == null) {
-            return getPlayerNotInMatchErrorCode();
-        } 
-        // If player if found, attempt to change player password
-        boolean result = gameService.changePlayerPassword(playerToChangePwd, newPassword);
-        if (!result) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                Map.of("error_code", 4002, "message", "password invalid"));
-        }
-        return ResponseEntity.ok(playerToChangePwd);
-    }
-
     // Updates the statistics of the player in game
     @PutMapping("/players/{username}/updatePlayerStatistics")
     public ResponseEntity<?> updatePlayerStatistics(@PathVariable String username, 

@@ -86,22 +86,8 @@ public class GameServiceTest {
         assertNull(createdPlayerNull5.getSecond());
         assertFalse(createdPlayerNull5.getFirst());
 
-        ///// public void changePlayerPasswordTest()
-
-        // Case 1: successfully changes password
         Player player1 = gameService.getPlayersInMatch().get("player1");
-        gameService.changePlayerPassword(player1, "nullpassword1");
-        assertTrue(gameService.getEncoder().matches("nullpassword1", player1.getPassword()));
-
-        // Case 2: not successfully changed (too short)
-        Player player2 = gameService.getPlayersInMatch().get("player2");
-        gameService.changePlayerPassword(player2, "np1");
-        assertFalse(gameService.getEncoder().matches("np1", player2.getPassword()));
-
-        // Case 3: not successfully changed (too long)
         Player player3 = gameService.getPlayersInMatch().get("player3");
-        gameService.changePlayerPassword(player3, "player3player3player3");
-        assertFalse(gameService.getEncoder().matches("player3player3player3", player3.getPassword()));
 
         ///// public void modifyParticipantFieldsTest()
         // setPlayerBet
