@@ -3,6 +3,7 @@
 
 Represents the code for the lobby class
 */
+
 ///// VARIABLES /////
 
 /// The main screen variables
@@ -11,6 +12,7 @@ const logoutButton = document.getElementById("logout-button");
 const createPlayerButton = document.getElementById("create-player-button");
 const startGameButton = document.getElementById("start-game-button");
 const statsButton = document.getElementById("stats-button");
+const loggedInPlayerListDisplay = document.getElementById("logged-in-player-list");
 
 // For the stats popup
 const statsPopup = document.getElementById("statistics-popup");
@@ -26,19 +28,6 @@ const createPlayerMessage = document.getElementById("create-player-message");
 const loginPopup = document.getElementById("login-popup");
 
 ///// FUNCTIONS /////
-
-/*
-Toggle the stats button visibility based on whether or not list is empty
-REQUIRES: the param: setVisible must be a boolean
-*/
-function toggleStatsButtonVisibility(setVisible) {
-    // Get the stats button element
-    if (setVisible) {
-        statsButton.style.display = "inline-block";
-    } else {
-        statsButton.style.display = "none";
-    }
-}
 
 // Make the login popup visible upon corresponding button click
 function handleLoginButtonClick() {
@@ -85,17 +74,23 @@ async function handleAuthenticateCreatePlayerButtonClick() {
             createPlayerPopup.style.display = "none";
             resetPopupWithTextAfterExiting(createPlayerPopup, createPlayerMessage);
         }, 1500);
-        addPlayerToList();
+        addPlayerToList(response);
+        addPlayerToListDisplay(response.username);
+        setButtonsBasedOnSizeOfLobby();
     } catch (error) {
         // Print out the error
         console.error("API Error Code:" , error.error_code, "API Error Message:", error.message);
         // Display the error message depending on the the specific error
         switch (error.error_code) {
             case 4004:
-                setDisplayMessage(createPlayerMessage, "rgb(241, 23, 12)", "Username already taken. Please try again")
+                setDisplayMessage(createPlayerMessage, 
+                    "rgb(241, 23, 12)", 
+                    "Username already taken. Please try again")
                 break;
             case 4005:
-                setDisplayMessage(createPlayerMessage, "rgb(241, 23, 12)", "Username or password must be at least 4 characters long. Please try again")
+                setDisplayMessage(createPlayerMessage, 
+                    "rgb(241, 23, 12)", 
+                    "Username or password must be at least 4 characters long. Please try again")
                 break;
         }
     }
@@ -112,6 +107,17 @@ REQUIRES:
 function addPlayerToList(player) {
     window.players.set(player.username, player);
     console.log(window.players);
+}
+
+/*
+Adds player to logged in list
+REQUIRES: 
+- playerUsername: must be an actual player in json format
+*/
+function addPlayerToListDisplay(playerUsername) {
+    const listItem = document.createElement("li");
+    listItem.textContent = playerUsername;
+    loggedInPlayerListDisplay.appendChild(listItem);
 }
 
 /*
@@ -148,62 +154,50 @@ function resetPopupWithTextAfterExiting(popupWithTextField, message) {
     setDisplayMessage(message, "transparent", "");
 }
 
-///// INITIALIZATION HELPER FUNCTIONS /////
+/*
+Sets the button visibility based on parameters
+REQUIRES: 
+- a, b, c, d: must be "none" or "inline-block"
+*/
+function setButtonVisibility(a, b, c, d, e) {
+    loginButton.style.display = a;
+    logoutButton.style.display = b;
+    createPlayerButton.style.display = c;
+    startGameButton.style.display = d;
+    statsButton.style.display = e;
+}
 
 // Sets which buttons are available depending on the size of the lobby
 function setButtonsBasedOnSizeOfLobby() {
-    switch (window.players.length) {
+    switch (window.players.size) {
         case 0:
             // Empty lobby
-            loginButton.style.display = "inline-block";
-            createPlayerButton.style.display = "inline-block";
+            setButtonVisibility("inline-block", "none", "inline-block", "none", "none");
             break;
         case 4: 
             // Full lobby
-            
+            setButtonVisibility("none", "inline-block", "none", "inline-block", "inline-block");
             break;
         default:
             // Not full or empty
-            loginButton.style.display = "inline-block";
-            
-            createPlayerButton.style.display = "inline-block";
-            startGameButton.style.display = "inline-block";
-            statsButton.style.display = "inline-block";
+            setButtonVisibility("inline-block", "inline-block", "inline-block", "inline-block", "inline-block");
             break;
     }
-}
-
-// Initializes the lobby when it is empty or when it is half full
-function initializeLobbyUISize0AndHalfFull() {
-    loginButton.style.display = "inline-block";
-    createPlayerButton.style.display = "inline-block";
-    // If the lobby is non-empty, then display the start-game-button
-    if (window.players.length > 1) {
-        startGameButton.style.display = "inline-block";
-    }
-}
-
-// Initializes lobby when it not full nor empty
-function initializeLobbyUIHalfFull() {
-    loginButton.style.display = "inline-block";
-    createPlayerButton.style.display = "inline"
 }
 
 ///// INITIALIZATION PROCEDURAL CODE /////
 
-// Initializes the log-in-screen based on the number of players logged in.
+// Initializes the lobby based on the number of players logged in.
 document.addEventListener("DOMContentLoaded", () => {
-    // Initializes elements based on number of players logged in
-    if (window.players.length === 0) {
-        // Case 1: the lobby is empty
-        initializeLobbyUISize0AndHalfFull();
-    } else if (window.players.length === 4) {
-        // Case 2: the lobby is full
-        initializeLobbyUISize0AndHalfFull();
-    } else {
-        // Case 3: the lobby is not empty nor full
+    // gets the logged in players from the backend, then initializes the buttons and logged in list
+    // Based on log in size
+    window.getLoggedInPlayers().then(() => {
+        setButtonsBasedOnSizeOfLobby();
+        for (const username of window.players.keys()) {
+            addPlayerToListDisplay(username);
+        }
 
-    }
+    });
 });
 
 // Add action listeners to the text inputs to restrict to alphanumeric inputs
