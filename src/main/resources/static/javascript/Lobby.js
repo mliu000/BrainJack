@@ -35,6 +35,12 @@ const loginPasswordTextField = document.getElementById("login-password-text-fiel
 const authenticateLoginPlayerButton = document.getElementById("authenticate-login-button");
 const loginMessage = document.getElementById("login-message");
 
+// For the logout popup
+const logoutPopup = document.getElementById("logout-popup");
+
+// For the statistics popup
+const statisticsPopup = document.getElementById("statistics-popup");
+
 ///// FUNCTIONS /////
 
 // Make the login popup visible upon corresponding button click
@@ -45,6 +51,16 @@ function handleLoginButtonClick() {
 // Make the create player popup visible upon corresponding button click
 function handleCreatePlayerButtonClick() {
     createPlayerPopup.style.display = "block";
+}
+
+// Makes the logout prompt visible upon button click
+function handleLogoutButtonClick() {
+    logoutPopup.style.display = "block";
+}
+
+// Makes the logout prompt visible upon button click
+function handleStaticticsButtonClick() {
+    statisticsPopup.style.display = "block";
 }
 
 /// Create Player Popup ///
@@ -166,8 +182,38 @@ async function handleAuthenticateLoginPlayerButtonClick() {
     }
 }
 
+/*
+Handle Logout of player given username
+REQUIRES: 
+- username: must be a valid username in string format
+*/
+async function handleLogoutOfPlayer(username) {
+    // Implement this function
+}
+
 ///// HELPER FUNCTIONS ///// 
 
+// MODIFY POPUP BUTTON HELPERS
+
+/*
+Add logout and statistcs button to their corresponding popups
+REQUIRES: 
+- player: must be a valid player in json format
+*/ 
+function addButtonToLogoutAndStatisticsPopups(player) {
+    // Implement this function.
+}
+
+/*
+Removes logout and statistcs button from their corresponding popups
+REQUIRES: 
+- player: must be a valid player in json format
+*/ 
+function removeButtonFromLogoutAndStatisticsPopups(player) {
+    // Implement this function
+}
+
+// CREATE PLAYER AND LOGIN HELPERS
 
 /*
 Adds the player to list. Also, adjusts the visible based on the size of the lobby.
@@ -189,6 +235,30 @@ function addPlayerToListDisplay(playerUsername) {
     listItem.textContent = playerUsername;
     loggedInPlayerListDisplay.appendChild(listItem);
 }
+
+// LOGOUT HELPERS
+
+/*
+Removes the player from the list of active players and display
+REQUIRES: 
+- username: must be a valid username in string format
+*/
+function removePlayerFromList(username) {
+    // Implement this function
+}
+
+// STATISTICS HELPERS
+
+/*
+Handles navigating to statistics page
+REQUIRES: 
+- username: must be a valid username in string format
+*/
+function navigateToStatisticsPage(username) {
+    // Implement this function
+}
+
+// RESET POPUP HELPERS
 
 /*
 Sets the content of a display message
@@ -223,6 +293,8 @@ function resetPopupWithTextAfterExiting(popupWithTextField, message) {
     resetTextFields(textFields);
     setDisplayMessage(message, "transparent", "");
 }
+
+// MISCELLANEOUS HELPERS
 
 /*
 Sets the button visibility based on parameters
@@ -280,8 +352,13 @@ document.querySelectorAll(".input-field").forEach(field => {
 // Add the button event listeners
 document.addEventListener("DOMContentLoaded", () => {
     // Add the button action listeners
+    // For the main buttons
     loginButton.addEventListener("click", handleLoginButtonClick);
     createPlayerButton.addEventListener("click", handleCreatePlayerButtonClick);
+    logoutButton.addEventListener("click", handleLogoutButtonClick);
+    statsButton.addEventListener("click", handleStaticticsButtonClick);
+
+    // For the popup buttons
     authenticateCreatePlayerButton.addEventListener("click", handleAuthenticateCreatePlayerButtonClick);
     authenticateLoginPlayerButton.addEventListener("click", handleAuthenticateLoginPlayerButtonClick);
 });
