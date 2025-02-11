@@ -6,7 +6,11 @@ Represents the code for the lobby class
 
 ///// VARIABLES /////
 
-/// The main screen variables
+// Constants
+const successColor = "rgb(13, 207, 26)";
+const failureColor = "rgb(241, 23, 12)";
+
+// The main screen variables
 const loginButton = document.getElementById("login-button");
 const logoutButton = document.getElementById("logout-button");
 const createPlayerButton = document.getElementById("create-player-button");
@@ -26,6 +30,10 @@ const createPlayerMessage = document.getElementById("create-player-message");
 
 // For the Login popup
 const loginPopup = document.getElementById("login-popup");
+const loginUsernameTextField = document.getElementById("login-username-text-field");
+const loginPasswordTextField = document.getElementById("login-password-text-field");
+const authenticateLoginPlayerButton = document.getElementById("authenticate-login-button");
+const loginMessage = document.getElementById("login-message");
 
 ///// FUNCTIONS /////
 
@@ -69,7 +77,7 @@ async function handleAuthenticateCreatePlayerButtonClick() {
         console.log("API Response: ", response);
         // Set the display message, set a timeout, then close the popup and reset it
         // Also, add player to list and display it.
-        setDisplayMessage(createPlayerMessage, "rgb(13, 207, 26)", "Success. Account Created");
+        setDisplayMessage(createPlayerMessage, successColor, "Success. Account Created");
         setTimeout(() => {
             createPlayerPopup.style.display = "none";
             resetPopupWithTextAfterExiting(createPlayerPopup, createPlayerMessage);
@@ -83,21 +91,83 @@ async function handleAuthenticateCreatePlayerButtonClick() {
         // Display the error message depending on the the specific error
         switch (error.error_code) {
             case 4004:
+                // Case error 1: Username already taken
                 setDisplayMessage(createPlayerMessage, 
-                    "rgb(241, 23, 12)", 
+                    failureColor, 
                     "Username already taken. Please try again")
                 break;
             case 4005:
+                // Case error 2: Username or password is too short
                 setDisplayMessage(createPlayerMessage, 
-                    "rgb(241, 23, 12)", 
-                    "Username or password must be at least 4 characters long. Please try again")
+                    failureColor, 
+                    "Username and password must be at least 4 characters long. Please try again")
                 break;
         }
     }
 
 }
 
+/*
+Send API POST request with given inputs from loginUsernameTextField and loginPasswordTextField
+- Successfully login player if api calls returns correctly, display success message then exists popup
+- Fails to login player if api calls throws error, 
+*/
+async function handleAuthenticateLoginPlayerButtonClick() {
+    // Gets the text field input values
+    
+    // Puts the input values into body parameter json format
+    const bodyParameter = { 
+        "username": loginUsernameTextField.value,
+        "password": loginPasswordTextField.value
+    }
+
+    // Get the suffix to url address
+    const url = window.apiPrefix + "/players/playerLogin";
+
+    // Reset the text fields to be empty again
+    resetTextFields([loginUsernameTextField, loginPasswordTextField]);
+
+    // Gets the response from createPlayer api call
+    try {
+        const response = await window.postRequest(url, bodyParameter);
+        // If returned response is the error response, throw an error
+        console.log("API Response: ", response);
+        // Set the display message, set a timeout, then close the popup and reset it
+        // Also, add player to list and display it.
+        setDisplayMessage(loginMessage, successColor, "Successfully Logged in");
+        setTimeout(() => {
+            loginPopup.style.display = "none";
+            resetPopupWithTextAfterExiting(loginPopup, loginMessage);
+        }, 1500);
+        addPlayerToList(response);
+        addPlayerToListDisplay(response.username);
+        setButtonsBasedOnSizeOfLobby();
+    } catch (error) {
+        // Print out the error
+        console.error("API Error Code:" , error.error_code, "API Error Message:", error.message);
+        // Display the error message depending on the the specific error
+        switch (error.error_code) {
+            case 4001:
+                // Error Case 1: Player already logged in
+                setDisplayMessage(loginMessage, 
+                    failureColor, 
+                    "Player already logged in. Please try again");
+                break;
+            case 4003:
+                // Error Case 2 (shouldn't happen): Lobby alredy full
+                setDisplayMessage(loginMessage, failureColor, "Lobby already full");
+                break;
+            case 4041:
+                // Error Case 3: Player not found, login failure
+                setDisplayMessage(loginMessage, failureColor, 
+                    "Player with username and password not found. Please try again");
+                break;
+        }
+    }
+}
+
 ///// HELPER FUNCTIONS ///// 
+
 
 /*
 Adds the player to list. Also, adjusts the visible based on the size of the lobby.
@@ -213,6 +283,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loginButton.addEventListener("click", handleLoginButtonClick);
     createPlayerButton.addEventListener("click", handleCreatePlayerButtonClick);
     authenticateCreatePlayerButton.addEventListener("click", handleAuthenticateCreatePlayerButtonClick);
+    authenticateLoginPlayerButton.addEventListener("click", handleAuthenticateLoginPlayerButtonClick);
 });
 
 // Hide if click is outside the popup (and not the show button)
