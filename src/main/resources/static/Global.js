@@ -6,7 +6,8 @@ Represents the global variables and functions for the javascript frontend
 
 ///// VARIABLES /////
 
-window.apiPrefix = "http://localhost:8080/api/brainjack"
+window.apiPrefix = "http://localhost:8080/api/brainjack";
+window.htmlPrefix = "http://localhost:8080/html";
 window.dealer = null;
 window.players = new Map();
 

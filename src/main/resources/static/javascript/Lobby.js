@@ -100,6 +100,7 @@ async function handleAuthenticateCreatePlayerButtonClick() {
         }, 1500);
         addPlayerToList(response);
         addPlayerToListDisplay(response.username);
+        addButtonToLogoutAndStatisticsPopups(response.username);
         setButtonsBasedOnSizeOfLobby();
     } catch (error) {
         // Print out the error
@@ -157,6 +158,7 @@ async function handleAuthenticateLoginPlayerButtonClick() {
         }, 1500);
         addPlayerToList(response);
         addPlayerToListDisplay(response.username);
+        addButtonToLogoutAndStatisticsPopups(response.username);
         setButtonsBasedOnSizeOfLobby();
     } catch (error) {
         // Print out the error
@@ -193,15 +195,62 @@ async function handleLogoutOfPlayer(username) {
 
 ///// HELPER FUNCTIONS ///// 
 
-// MODIFY POPUP BUTTON HELPERS
+// MODIFY LOGOUT AND STATISTICS BUTTON HELPERS
 
 /*
 Add logout and statistcs button to their corresponding popups
 REQUIRES: 
-- player: must be a valid player in json format
+- username: must be a valid username in string format
 */ 
-function addButtonToLogoutAndStatisticsPopups(player) {
-    // Implement this function.
+function addButtonToLogoutAndStatisticsPopups(username) {
+    // Get the corresponding lists
+    const logoutButtonList = document.getElementById("logout-button-list");
+    const statisticsButtonList = document.getElementById("statistics-button-list");
+    // Create a new button for each popup, and give it an id and class
+    const newLogoutPlayerButton = document.createElement("button");
+    const newViewPlayerStatisticsButton = document.createElement("button");
+    newLogoutPlayerButton.id = "logout-" + username;
+    newLogoutPlayerButton.classList.add("container-button");
+    newLogoutPlayerButton.textContent = username;
+    newViewPlayerStatisticsButton.id = "statistics-" + username;
+    newViewPlayerStatisticsButton.classList.add("container-button");
+    newViewPlayerStatisticsButton.textContent = username;
+    console.log(newLogoutPlayerButton.id);
+    console.log(newViewPlayerStatisticsButton.id);
+    // Add them to the corresponding button lists
+    logoutButtonList.appendChild(newLogoutPlayerButton);
+    statisticsButtonList.appendChild(newViewPlayerStatisticsButton);
+    // Add action listeners to them
+    addActionListenerToLogoutButtons(newLogoutPlayerButton);
+    addActionListenerToStatisticsButton(newViewPlayerStatisticsButton);
+}
+
+
+/*
+Adds the action listener to the logout popup buttons
+REQUIRES: 
+- playerLogoutButton: Must be a valid logout button in the popup
+*/
+function addActionListenerToLogoutButtons(playerLogoutButton) {
+    playerLogoutButton.addEventListener("click", () => {
+        handleLogoutOfPlayer(logoutButton.textContent);
+    });
+}
+
+/*
+Adds the action listener to the statistics button in the popup, where you navigate to statistics page
+REQUIRES: 
+- statisticsButton: Must be a valid statistics button in the popup
+*/
+function addActionListenerToStatisticsButton(playerStatisticsButton) {
+    playerStatisticsButton.addEventListener("click", () => {
+        // Get the url, and encode the username into it
+        const url = window.htmlPrefix + "/Statistics.html?username=" 
+            + encodeURIComponent(playerStatisticsButton.textContent);
+        // Then, go to url
+        window.location.href = url;
+        
+    });
 }
 
 /*
@@ -247,16 +296,6 @@ function removePlayerFromList(username) {
     // Implement this function
 }
 
-// STATISTICS HELPERS
-
-/*
-Handles navigating to statistics page
-REQUIRES: 
-- username: must be a valid username in string format
-*/
-function navigateToStatisticsPage(username) {
-    // Implement this function
-}
 
 // RESET POPUP HELPERS
 
@@ -334,8 +373,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // gets the logged in players from the backend, then initializes the buttons and logged in list
     // Based on log in size
     window.getLoggedInPlayers().then(() => {
+        // Set the button visibiliity
         setButtonsBasedOnSizeOfLobby();
+        // Add the usernames to display, as well as buttons to corresponding popup
         for (const username of window.players.keys()) {
+            addButtonToLogoutAndStatisticsPopups(username);
             addPlayerToListDisplay(username);
         }
 

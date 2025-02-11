@@ -24,10 +24,10 @@ public class Player extends Participant {
 
     // Stores the current bet of the player
     @Transient
-    private int currBet;
+    private int currBet, gameEarnings;
 
     // Accumulators to store account totals, like rounds played, etc
-    private int roundsPlayed, roundsWon, totalEarnings, gameEarnings;
+    private int roundsPlayed, roundsWon, totalEarnings;
     private double winPercentage;
 
     // Default constructor for api purposes (Do not call)

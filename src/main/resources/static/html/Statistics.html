@@ -7,10 +7,29 @@
     <link rel="stylesheet" href="../css/Statistics.css">
     <link rel="stylesheet" href="../main.css">
     <script src="../javascript/Statistics.js"></script>
+    <script src="../Global.js"></script>
 </head>
 <body>
     <a href="Lobby.html">
         <button id="back-button">Back To Lobby</button>
     </a>
+    <div id="error-screen" class="screen" style="display: none;">
+        <h5 id="error-message">PLAYER NOT FOUND, PLEASE TRY AGAIN</h5>
+    </div>
+    <div id="success-screen" class="screen" style="display: none;">
+        <div id="statistics-container">
+            <h1 id="statistics-page-header"></h1>
+            <div id="player-statistics">
+                <ul id="list-of-statistics">
+                    <li id="rounds-played"></li>
+                    <li id="rounds-won"></li>
+                    <li id="win-percentage"></li>
+                    <li id="total-earnings"></li>
+                    <li id="session-earnings"></li>
+                </ul>
+            </div>
+ 
+        </div>
+    </div>
 </body>
 </html>

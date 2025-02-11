@@ -1,7 +1,6 @@
 :root {
     --text-color: aliceblue;
     --text-color2: lightgray;
-    --button-color: ;
 }
 
 body, html {
@@ -13,6 +12,71 @@ body, html {
     overflow: hidden;
     flex-direction: column;
 }
+
+.screen {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+}
+
+/* ERROR SCREEN */
+
+#error-message {
+    position: absolute;
+    left: 50vw;
+    top: 30vh;
+    transform: translate(-50%, -50%);
+    font-size: 6vh;
+    color: red;
+    text-align: center;
+}
+
+/* SUCCESS SCREEN */
+
+#statistics-container {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+    width: auto;
+    top: 3vh;
+    left: 50vw;
+    transform: translate(-50%);
+}
+
+#statistics-page-header {
+    font-size: 6vh;
+    color: var(--text-color);
+    text-decoration: underline;
+}
+
+#player-statistics {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 3vh;
+    color: var(--text-color2);
+    
+}
+
+#list-of-statistics {
+    height: auto;
+    line-height: 10vh;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    list-style-type: none;
+    color: var(--text-color2);
+    font-size: 3.5vh;
+}
+
+/* THE BACK BUTTON */
 
 #back-button {
     background-color: rgba(65, 104, 134, 0.886);
