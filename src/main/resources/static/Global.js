@@ -18,16 +18,17 @@ General post request function
 REQUIRES:
 url: must be the actual url of the request
 data: must be in requestBody format (json format)
+contentType: must be a valid content type
 */
-window.postRequest = async function(url, data) {
+window.postRequest = async function(url, data, contentType) {
     try {
         // Calls the API. Tries to get the response
         const response = await fetch(url, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": contentType
             }, 
-            body: JSON.stringify(data)
+            body: data
         });
 
         // Parse response into JSON format

@@ -10,6 +10,9 @@ Represents the code for the lobby class
 const successColor = "rgb(13, 207, 26)";
 const failureColor = "rgb(241, 23, 12)";
 
+// Factors
+var clickOutOfPopupDisabled = false;
+
 // The main screen variables
 const loginButton = document.getElementById("login-button");
 const logoutButton = document.getElementById("logout-button");
@@ -88,15 +91,17 @@ async function handleAuthenticateCreatePlayerButtonClick() {
 
     // Gets the response from createPlayer api call
     try {
-        const response = await window.postRequest(url, bodyParameter);
+        const response = await window.postRequest(url, JSON.stringify(bodyParameter), "application/json");
         // If returned response is the error response, throw an error
         console.log("API Response: ", response);
         // Set the display message, set a timeout, then close the popup and reset it
         // Also, add player to list and display it.
         setDisplayMessage(createPlayerMessage, successColor, "Success. Account Created");
+        clickOutOfPopupDisabled = true;
         setTimeout(() => {
             createPlayerPopup.style.display = "none";
             resetPopupWithTextAfterExiting(createPlayerPopup, createPlayerMessage);
+            clickOutOfPopupDisabled = false;
         }, 1500);
         addPlayerToList(response);
         addPlayerToListDisplay(response.username);
@@ -146,15 +151,17 @@ async function handleAuthenticateLoginPlayerButtonClick() {
 
     // Gets the response from createPlayer api call
     try {
-        const response = await window.postRequest(url, bodyParameter);
+        const response = await window.postRequest(url, JSON.stringify(bodyParameter), "application/json");
         // If returned response is the error response, throw an error
         console.log("API Response: ", response);
         // Set the display message, set a timeout, then close the popup and reset it
         // Also, add player to list and display it.
         setDisplayMessage(loginMessage, successColor, "Successfully Logged in");
+        clickOutOfPopupDisabled = true;
         setTimeout(() => {
             loginPopup.style.display = "none";
             resetPopupWithTextAfterExiting(loginPopup, loginMessage);
+            clickOutOfPopupDisabled = false;
         }, 1500);
         addPlayerToList(response);
         addPlayerToListDisplay(response.username);
@@ -190,7 +197,39 @@ REQUIRES:
 - username: must be a valid username in string format
 */
 async function handleLogoutOfPlayer(username) {
-    // Implement this function
+    // Gets the url
+    const url = window.apiPrefix + "/players/playerLogout";
+    try {
+        // Trys to logout
+        const response = await window.postRequest(url, username, "text/plain");
+        // Modify the UI if logout is successful
+        console.log("Logout status" + response);
+        window.players.delete(username);
+        removePlayerFromList(username);
+        removeButtonFromLogoutAndStatisticsPopups(username);
+        setButtonsBasedOnSizeOfLobby();
+        // Make all buttons disappear for 1.5 sec and set the logout feedback message
+        const logoutButtonList = document.getElementById("logout-button-list");
+        logoutButtonList.style.display = "none";
+        const logoutFeedback = document.getElementById("logout-feedback");
+        clickOutOfPopupDisabled = true;
+        setDisplayMessage(logoutFeedback, 
+            successColor, 
+            `Successfully logged out: ${username}`);
+        logoutFeedback.style.display = "block";
+        setTimeout(() => {
+            logoutPopup.style.display = "none";
+            logoutFeedback.style.display = "none";
+            logoutButtonList.style.display = "flex";
+            clickOutOfPopupDisabled = false;
+        }, 1500);
+    
+
+    } catch (error) {
+        // Logout failed (shouldn't happen)
+        
+        console.error("Logout failed. Usernane is not found in logged in player list. Code: " + error.error_code)
+    }
 }
 
 ///// HELPER FUNCTIONS ///// 
@@ -215,13 +254,11 @@ function addButtonToLogoutAndStatisticsPopups(username) {
     newViewPlayerStatisticsButton.id = "statistics-" + username;
     newViewPlayerStatisticsButton.classList.add("container-button");
     newViewPlayerStatisticsButton.textContent = username;
-    console.log(newLogoutPlayerButton.id);
-    console.log(newViewPlayerStatisticsButton.id);
     // Add them to the corresponding button lists
     logoutButtonList.appendChild(newLogoutPlayerButton);
     statisticsButtonList.appendChild(newViewPlayerStatisticsButton);
     // Add action listeners to them
-    addActionListenerToLogoutButtons(newLogoutPlayerButton);
+    addActionListenerToLogoutButtons(newLogoutPlayerButton, username);
     addActionListenerToStatisticsButton(newViewPlayerStatisticsButton);
 }
 
@@ -230,10 +267,11 @@ function addButtonToLogoutAndStatisticsPopups(username) {
 Adds the action listener to the logout popup buttons
 REQUIRES: 
 - playerLogoutButton: Must be a valid logout button in the popup
+- username: Must be a valid username
 */
-function addActionListenerToLogoutButtons(playerLogoutButton) {
+function addActionListenerToLogoutButtons(playerLogoutButton, username) {
     playerLogoutButton.addEventListener("click", () => {
-        handleLogoutOfPlayer(logoutButton.textContent);
+        handleLogoutOfPlayer(username);
     });
 }
 
@@ -256,10 +294,13 @@ function addActionListenerToStatisticsButton(playerStatisticsButton) {
 /*
 Removes logout and statistcs button from their corresponding popups
 REQUIRES: 
-- player: must be a valid player in json format
+- username: must be a valid username in string format
 */ 
-function removeButtonFromLogoutAndStatisticsPopups(player) {
-    // Implement this function
+function removeButtonFromLogoutAndStatisticsPopups(username) {
+    const logoutButtonToRemove = document.getElementById("logout-" + username);
+    const statisticsButtonToRemove = document.getElementById("statistics-" + username);
+    logoutButtonToRemove.remove();
+    statisticsButtonToRemove.remove();
 }
 
 // CREATE PLAYER AND LOGIN HELPERS
@@ -281,6 +322,7 @@ REQUIRES:
 */
 function addPlayerToListDisplay(playerUsername) {
     const listItem = document.createElement("li");
+    listItem.id = "list-display-" + playerUsername;
     listItem.textContent = playerUsername;
     loggedInPlayerListDisplay.appendChild(listItem);
 }
@@ -288,12 +330,16 @@ function addPlayerToListDisplay(playerUsername) {
 // LOGOUT HELPERS
 
 /*
-Removes the player from the list of active players and display
+Removes the player from the list of active players display (only if it exists)
 REQUIRES: 
 - username: must be a valid username in string format
 */
 function removePlayerFromList(username) {
-    // Implement this function
+    // Removes player username from display ilst
+    const listElementToRemove = document.getElementById("list-display-" + username);
+    if (listElementToRemove) {
+        listElementToRemove.remove();
+    }
 }
 
 
@@ -408,7 +454,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Hide if click is outside the popup (and not the show button)
 document.addEventListener("click", (e) => {
     // Make popup invisible
-    if (e.target.classList.contains("popup-background")) {
+    if (e.target.classList.contains("popup-background") && !clickOutOfPopupDisabled) {
         e.target.style.display = "none";
         // If the popup contains text input fields and feedback message, then reset those as well.
         if (e.target.querySelector(".feedback-message") && e.target.querySelector(".input-field")) {

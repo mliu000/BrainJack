@@ -180,6 +180,9 @@ body, html {
     border: 3px solid var(--text-color);  
     text-align: center;        
     font-size: 2vh;         
+    white-space: normal;
+    word-wrap: break-word;   
+    overflow-wrap: break-word; 
     cursor: pointer;  
     border-radius: 4vh;      
     transition: background-color 0.3s ease;

@@ -52,6 +52,7 @@ body, html {
 
 #statistics-page-header {
     font-size: 6vh;
+    text-align: center;
     color: var(--text-color);
     text-decoration: underline;
 }
