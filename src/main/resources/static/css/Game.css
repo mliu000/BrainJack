@@ -1,0 +1,11 @@
+/* OVERRIDE PAGE */
+
+#override-message {
+    position: absolute;
+    left: 50vw;
+    top: 30vh;
+    transform: translate(-50%, -50%);
+    font-size: 6vh;
+    color: red;
+    text-align: center;
+}

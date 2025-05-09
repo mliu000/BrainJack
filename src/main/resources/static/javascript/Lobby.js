@@ -412,10 +412,24 @@ function setButtonsBasedOnSizeOfLobby() {
     }
 }
 
+// Overrides the content page to display error message when game is in play
+function gameInPlayOverride() {
+    const mainPage = document.getElementById("main-page");
+    const overridePage = document.getElementById("override-page");
+    mainPage.style.display = "none";
+    overridePage.style.display = "block";
+}
+
 ///// INITIALIZATION PROCEDURAL CODE /////
 
 // Initializes the lobby based on the number of players logged in.
 document.addEventListener("DOMContentLoaded", () => {
+    // Check or initialize the number of game tabs open
+    if (localStorage.getItem("numGameTabsInAction") !== "0") {
+        gameInPlayOverride();
+        return;
+    }
+
     // gets the logged in players from the backend, then initializes the buttons and logged in list
     // Based on log in size
     window.getLoggedInPlayers().then(() => {

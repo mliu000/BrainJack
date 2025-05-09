@@ -31,11 +31,26 @@ function displayStatistics(player) {
     document.getElementById("success-screen").style.display = "flex";
 }
 
+// Overrides the content page to display error message when game is in play
+function gameInPlayOverride() {
+    const mainPage = document.getElementById("main-page");
+    const overridePage = document.getElementById("override-page");
+    mainPage.style.display = "none";
+    overridePage.style.display = "block";
+}
+
 ///// INITIALIZATION PROCEDURAL CODE /////
 
 
 // Trys to get the username from the link. If the variable doesn't exist, then display error message
 document.addEventListener("DOMContentLoaded", () => {
+    // Check to see whether or not there is a game currently in action. If there is, then set this page
+    // to be inaccessible
+    if (localStorage.getItem("numGameTabsInAction") !== "0") {
+        gameInPlayOverride();
+        return;
+    } 
+    
     const params = new URLSearchParams(window.location.search);
     if (!params.has('username')) {
         // Username variable in url doesn't exist

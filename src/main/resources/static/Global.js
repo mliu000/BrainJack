@@ -78,6 +78,7 @@ window.getRequestNoParams = async function(url) {
       }
 }
 
+// Get all the logged in players
 window.getLoggedInPlayers = async function() {
     // Gets the full api link 
     const url = window.apiPrefix + "/players/getActivePlayers";
@@ -91,5 +92,3 @@ window.getLoggedInPlayers = async function() {
         console.error("Error that shouldn't occur occurred");
     }
 }
-
-///// PROCEDURAL CODE /////
