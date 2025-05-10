@@ -33,12 +33,7 @@ function gameInPlayOverride() {
 
 // Set on load
 window.addEventListener("DOMContentLoaded", () => {
-    // Check to see whether or not game was already loaded in another window. 
-    // If so, do not load it again.
-    if (localStorage.getItem("gameInAction") === true) {
-        // placeholder code
-        document.body.style.display = "none";
-    }
+    // Increment the counter that tracks the number of game tabs open
     changeGameTabCount(1);
 
     console.log(localStorage.getItem("numGameTabsInAction"));

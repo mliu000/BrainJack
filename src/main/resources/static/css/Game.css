@@ -1,3 +1,11 @@
+/* Commonly used constants */
+
+:root {
+    --text-color: aliceblue;
+    --text-color2: lightgray;
+    --pop-up-background-color: rgba(77, 134, 169, 0.95);
+}
+
 /* OVERRIDE PAGE */
 
 #override-message {
@@ -8,4 +16,76 @@
     font-size: 6vh;
     color: red;
     text-align: center;
+}
+
+/* MAIN PAGE */
+
+/* POPUPS */
+
+.popup-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+}
+
+.game-popup {
+    position: absolute;
+    left: 50vw;
+    top: 50vh;
+    transform: translate(-50%, -50%);
+    padding: 5vh;
+    background-color: var(--pop-up-background-color);
+    border-radius: 8vh;
+    border: 0.3vh solid aliceblue;
+    transition: opacity 0.3s ease;
+}
+
+.popup-title {
+    font-size: 4vh;
+    text-align: left;
+    color: var(--text-color);
+    text-decoration: underline;
+}
+
+.popup-text {
+    font-size: 3vh;
+    color: var(--text-color2);
+}
+
+.container-button {
+    width: 30vh;
+    height: 10vh;
+    background-color: rgba(65, 104, 134, 0.886);
+    color: var(--text-color);
+    border: 3px solid var(--text-color);  
+    text-align: center;        
+    font-size: 2vh;         
+    white-space: normal;
+    word-wrap: break-word;   
+    overflow-wrap: break-word; 
+    cursor: pointer;  
+    border-radius: 4vh;      
+    transition: background-color 0.3s ease;
+    font-size: clamp(0vw, 2vw, 3vh);
+    cursor: pointer;
+}
+
+.container-button:hover {
+    background-color: rgba(36, 78, 110, 0.886);
+}
+
+#confirm-leave-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5vw;
+    text-align: center;
+}
+
+#confirm-leave-popup-content {
+    width: auto;
+    height: auto;
 }

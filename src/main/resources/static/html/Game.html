@@ -12,9 +12,18 @@
     <div id="override-page" style="display: none;">
         <h5 id="override-message">GAME IS IN PROGRESS IN ANOTHER TAB. PLEASE EXIT THIS PAGE.</h5>
     </div>
-    <div id="main-page">
-        <div id="confirm-leave-popup">
-
+    <div id="main-page" style="display: block;">
+        <div id="confirm-leave-popup" class="popup-background">
+            <div id="confirm-leave-popup-content" class="game-popup">
+                <h1 id="confirm-leave-title" class="popup-title">Confirm Leave</h1>
+                <p id="confirm-leave-warning" class="popup-text">
+                    Are you sure you want to exit the game? If so, every player will lose their bet.
+                </p>
+                <div id="confirm-leave-button-container">
+                    <button id="confirm-leave-stay-button" class="container-button">Stay</button>
+                    <button id="confirm-leave-exit-button" class="container-button">Exit</button>
+                </div>
+            </div>
         </div>
     </div>
 </body>
