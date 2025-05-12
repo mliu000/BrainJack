@@ -1,23 +1,21 @@
 /*
 @Mu Ye Liu - May 2025
 
-Represents the game page for my brain jack game.
+Represents the UI for the game tab itself.
 */
 
-///// MAIN FUNCTIONS /////
+///// LOAD FUNCTIONS /////
 
-///// HELPER FUNCTIONS /////
+// Adds the basic action listeners for the buttons
+function addActionListeners() {
+    // Retrieve the buttons
+    const startOkButton = document.getElementById("start-ok-button");
 
-// Changes the count based on the number of game tabs open
-function changeGameTabCount(operation) {
-    let currCount = parseInt(localStorage.getItem("numGameTabsInAction")) || 0;
-    if (operation === 1) {
-        currCount++;
-    } else if (operation === -1) {
-        currCount--;
-    }
+    // Add the action listeners
+    startOkButton.addEventListener("click", () => {
+        document.getElementById("start-popup").style.display = "none";
+    });
 
-    localStorage.setItem("numGameTabsInAction", currCount);
 }
 
 // Overrides the content page to display error message when game is in play
@@ -28,23 +26,57 @@ function gameInPlayOverride() {
     overridePage.style.display = "block";
 }
 
+// Initializes the startup screen
+function initializeGameScreen() {
+    // TODO
+}
+
+/* Sets the status of whether or not the game is currently in actions, which determines whether or
+not the popup to confirm exit will show up. Uses session storage.
+REQUIRES: - status: must be a boolean
+*/
+function setInGamePlayStatus(status) {
+    sessionStorage.setItem("gameInPlay", status);
+}
+
 
 ///// ACTION LISTENERS /////
 
 // Set on load
-window.addEventListener("DOMContentLoaded", () => {
-    // Increment the counter that tracks the number of game tabs open
-    changeGameTabCount(1);
+window.addEventListener("DOMContentLoaded", async() => {
+    // Wait for the mutex first. 
+    await waitForMutex();
 
-    console.log(localStorage.getItem("numGameTabsInAction"));
+    try {
+        // Increment the counter that tracks the number of game tabs open, as well as the boolean to
+        // determine whether or not the game is in play
+        changeGameTabCount(1);
+        setInGamePlayStatus(false);
 
-    // If count != 1, then do not allow another game to be played
-    if (localStorage.getItem("numGameTabsInAction") !== "1") {
-        gameInPlayOverride();
+        console.log(localStorage.getItem("numGameTabsInAction"));
+
+        // If count != 1, then do not allow another game to be played
+        if (localStorage.getItem("numGameTabsInAction") === "1") {
+            setInGamePlayStatus(true);
+            initializeGameScreen();
+            addActionListeners();
+        } else {
+            gameInPlayOverride();
+        }
+    } finally {
+        // Release the mutex after initialization
+        releaseMutex();
     }
 });
 
 // Set on unload
-window.addEventListener("beforeunload", () => {
+window.addEventListener("beforeunload", (event) => {
+    if (sessionStorage.getItem("gameInPlay") === "true") {
+        // show custom popup here. 
+        //event.preventDefault();
+        //event.returnValue = "";
+    }
+
     changeGameTabCount(-1);
+
 });

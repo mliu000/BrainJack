@@ -7,22 +7,20 @@
     <link rel="stylesheet" href="../main.css">
     <link rel="stylesheet" href="../css/Game.css">
     <script src="../javascript/Game.js"></script>
+    <script src="../javascript/GameSync.js"></script>
 </head>
 <body>
     <div id="override-page" style="display: none;">
-        <h5 id="override-message">GAME IS IN PROGRESS IN ANOTHER TAB. PLEASE EXIT THIS PAGE.</h5>
+        <h5 id="override-message">GAME IS IN PROGRESS IN ANOTHER TAB. ALSO, MAKE SURE THERE IS ONLY ONE GAME TAB OPEN.</h5>
     </div>
-    <div id="main-page" style="display: block;">
-        <div id="confirm-leave-popup" class="popup-background">
-            <div id="confirm-leave-popup-content" class="game-popup">
-                <h1 id="confirm-leave-title" class="popup-title">Confirm Leave</h1>
-                <p id="confirm-leave-warning" class="popup-text">
-                    Are you sure you want to exit the game? If so, every player will lose their bet.
+    <div id="main-page">
+        <div id="start-popup" class="popup-background">
+            <div id="start-popup-content" class="game-popup">
+                <h1 id="start-title">Important Note:</h1>
+                <p id="start-warning" class="popup-text">
+                    If you try to exit the game while it is still in action, you will receive a standardized warning. If you still proceed to exit, then every player will lose their bet.
                 </p>
-                <div id="confirm-leave-button-container">
-                    <button id="confirm-leave-stay-button" class="container-button">Stay</button>
-                    <button id="confirm-leave-exit-button" class="container-button">Exit</button>
-                </div>
+                <button id="start-ok-button" class="container-button">OK</button>
             </div>
         </div>
     </div>

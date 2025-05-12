@@ -77,15 +77,21 @@
     background-color: rgba(36, 78, 110, 0.886);
 }
 
-#confirm-leave-button-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5vw;
-    text-align: center;
+#start-title {
+    font-size: 4vh;
+    text-align: left;
+    color: red;
+    text-decoration: underline;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
-#confirm-leave-popup-content {
+#start-ok-button {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+#start-popup-content {
     width: auto;
     height: auto;
 }
