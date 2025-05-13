@@ -6,15 +6,24 @@
     <title>Game</title>
     <link rel="stylesheet" href="../main.css">
     <link rel="stylesheet" href="../css/Game.css">
-    <script src="../javascript/Game.js"></script>
+    <script src="../javascript/GameLoad.js"></script>
     <script src="../javascript/GameSync.js"></script>
+    <script src="../javascript/Gameplay.js"></script>
     <script src="../Global.js"></script>
 </head>
 <body>
     <div id="override-page" style="display: none;">
-        <h5 id="override-message">GAME IS IN PROGRESS IN ANOTHER TAB. ALSO, MAKE SURE THERE IS ONLY ONE GAME TAB OPEN.</h5>
+        <h5 id="override-message" class="centre-red-message"></h5>
     </div>
-    <div id="main-page">
+    <div id="no-players-page" style="display: none;">
+        <h5 id="no-players-message" class="centre-red-message">NO PLAYERS ARE LOGGED IN. GO BACK TO LOBBY</h5>
+        <a href="Lobby.html">
+                <button id="no-players-back-button">
+                    Back to Lobby
+                </button>
+            </a>
+    </div>
+    <div id="main-page" style="display: none;">
         <div id="start-popup" class="popup-background">
             <div id="start-popup-content" class="game-popup">
                 <h1 id="start-title">Important Note:</h1>

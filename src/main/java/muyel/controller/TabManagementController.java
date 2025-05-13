@@ -39,7 +39,6 @@ public class TabManagementController {
     @PostMapping("/{tabId}/deregister")
     public ResponseEntity<Integer> deregisterTab(@PathVariable String tabId) {
         activeGameTabs.remove(tabId);
-        System.out.println("Tab deregistered for user: " + tabId);
         return ResponseEntity.ok(activeGameTabs.size());
     }
 

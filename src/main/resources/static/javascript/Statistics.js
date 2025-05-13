@@ -6,7 +6,6 @@ Represents the javascript code for the statistics.html page
 
 ///// FUNCTIONS /////
 
-// 
 /*
 Displays the statistics for the logged in player.
 REQUIRES: 

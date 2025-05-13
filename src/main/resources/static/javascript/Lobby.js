@@ -426,10 +426,14 @@ function gameInPlayOverride() {
 document.addEventListener("DOMContentLoaded", async () => {
     // Check or initialize the number of game tabs open
     const numberOfGameTabs = await window.getNumberOfGameTabsOpen();
+
     if (numberOfGameTabs > 0) {
         gameInPlayOverride();
         return;
     } 
+
+    // Make the main page visible
+    document.getElementById("main-page").style.display = "block";
 
     // gets the logged in players from the backend, then initializes the buttons and logged in list
     // Based on log in size

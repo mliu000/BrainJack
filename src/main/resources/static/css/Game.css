@@ -6,9 +6,9 @@
     --pop-up-background-color: rgba(77, 134, 169, 0.95);
 }
 
-/* OVERRIDE PAGE */
+/* OVERRIDE PAGES (BOTH TOO MANY TABS AND NO PLAYERS PAGES) */
 
-#override-message {
+.centre-red-message {
     position: absolute;
     left: 50vw;
     top: 30vh;
@@ -16,6 +16,28 @@
     font-size: 6vh;
     color: red;
     text-align: center;
+}
+
+#no-players-back-button {
+    position: absolute;
+    bottom: 5vh;
+    right: 5vw;
+    background-color: rgba(65, 104, 134, 0.886);
+    color: var(--text-color);
+    border: 3px solid var(--text-color);  
+    text-align: center;        
+    font-size: 2vh;         
+    cursor: pointer;  
+    border-radius: 4vh;      
+    transition: background-color 0.3s ease;
+    font-size: clamp(0vw, 2vw, 3vh);
+    width: clamp(0vw, 25vw, 35vh);
+    height: 10vh;
+    cursor: pointer;
+}
+
+#no-players-back-button:hover {
+    background-color: rgba(36, 78, 110, 0.886);
 }
 
 /* MAIN PAGE */

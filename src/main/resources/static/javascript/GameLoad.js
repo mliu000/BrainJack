@@ -1,7 +1,7 @@
 /*
 @Mu Ye Liu - May 2025
 
-Represents the UI for the game tab itself.
+Represents the code for loading the ui page
 */
 
 ///// unique identifiers for the tab
@@ -21,17 +21,38 @@ function addActionListeners() {
 
 }
 
-// Overrides the content page to display error message when game is in play
-function gameInPlayOverride() {
+// Overrides the content page to display error message when more than one tab open
+// REQUIRES: - tabs: must be an integer
+function gameInPlayOverride(tabs) {
     const mainPage = document.getElementById("main-page");
     const overridePage = document.getElementById("override-page");
+    const overrideMessage = document.getElementById("override-message");
+    overrideMessage.textContent = `GAME IS IN PROGRESS IN ANOTHER TAB. ALSO, MAKE SURE THERE IS ONLY ONE GAME TAB OPEN, AND WAIT A FEW SEC BEFORE RELOADING. THERE ARE CURRENTLY ${tabs} TABS OPEN`;
     mainPage.style.display = "none";
     overridePage.style.display = "block";
 }
 
-// Initializes the startup screen
+// Overrides the content page to display error message when there are no players
+function notEnoughPlayersOverride() {
+    const mainPage = document.getElementById("main-page");
+    const noPlayersPage = document.getElementById("no-players-page");
+    mainPage.style.display = "none";
+    noPlayersPage.style.display = "block";
+}
+
+// Initializes the game layout screen based on the number of players
+// REQUIRES: the function can only be called when there is at least one player logged in.
 function initializeGameScreen() {
-    // TODO
+    switch (window.players.size) {
+        case 1: 
+            break;
+        case 2: 
+            break;
+        case 3: 
+            break;
+        case 4:
+            break;
+    }
 }
 
 /* Sets the status of whether or not the game is currently in actions, which determines whether or
@@ -42,6 +63,9 @@ function setInGamePlayStatus(status) {
     sessionStorage.setItem("gameInPlay", status);
 }
 
+///// HELPER FUNCTIONS /////
+
+
 
 ///// ACTION LISTENERS /////
 
@@ -50,6 +74,11 @@ window.addEventListener("DOMContentLoaded", async() => {
     // Wait for the mutex first. 
     await waitForMutex();
 
+    // Get all the players first
+    await window.getLoggedInPlayers();
+
+
+    // Use try/finally because error with tab opening could occur
     try {
         // Register the tab to increment its counter. 
         // Also, set the game in action status to false
@@ -57,20 +86,27 @@ window.addEventListener("DOMContentLoaded", async() => {
         console.log(numberOfGameTabsOpen);
         setInGamePlayStatus(false);
 
+        // Make the main page visible
+        document.getElementById("main-page").style.display = "block";
+
         // If count != 1, then do not allow another game to be played
-        if (numberOfGameTabsOpen === 1) {
+        if (numberOfGameTabsOpen > 1) {
+            gameInPlayOverride(numberOfGameTabsOpen); 
+        } else if (window.players.size === 0) {
+            // No players logged in 
+            notEnoughPlayersOverride();
+        } else {
             // Initialize game and set the game in action status to true
             setInGamePlayStatus(true);
             initializeGameScreen();
             addActionListeners();
-        } else {
-            gameInPlayOverride();
         }
     } finally {
         // Release the mutex after initialization and start heartbeat of tab
         heartbeat(tabId);
         releaseMutex();
     }
+
 });
 
 // Set when attempting to unload
@@ -79,5 +115,9 @@ window.addEventListener("beforeunload", (event) => {
         // show custom popup here. 
         event.preventDefault();
         event.returnValue = "";
+        deregisterTab(tabId);
+        return;
     }
+
+    deregisterTab(tabId);
 });
