@@ -4,6 +4,9 @@
 Represents the UI for the game tab itself.
 */
 
+///// unique identifiers for the tab
+const tabId = window.crypto.randomUUID();
+
 ///// LOAD FUNCTIONS /////
 
 // Adds the basic action listeners for the buttons
@@ -48,15 +51,15 @@ window.addEventListener("DOMContentLoaded", async() => {
     await waitForMutex();
 
     try {
-        // Increment the counter that tracks the number of game tabs open, as well as the boolean to
-        // determine whether or not the game is in play
-        changeGameTabCount(1);
+        // Register the tab to increment its counter. 
+        // Also, set the game in action status to false
+        const numberOfGameTabsOpen = await registerTab(tabId);
+        console.log(numberOfGameTabsOpen);
         setInGamePlayStatus(false);
 
-        console.log(localStorage.getItem("numGameTabsInAction"));
-
         // If count != 1, then do not allow another game to be played
-        if (localStorage.getItem("numGameTabsInAction") === "1") {
+        if (numberOfGameTabsOpen === 1) {
+            // Initialize game and set the game in action status to true
             setInGamePlayStatus(true);
             initializeGameScreen();
             addActionListeners();
@@ -64,19 +67,17 @@ window.addEventListener("DOMContentLoaded", async() => {
             gameInPlayOverride();
         }
     } finally {
-        // Release the mutex after initialization
+        // Release the mutex after initialization and start heartbeat of tab
+        heartbeat(tabId);
         releaseMutex();
     }
 });
 
-// Set on unload
+// Set when attempting to unload
 window.addEventListener("beforeunload", (event) => {
     if (sessionStorage.getItem("gameInPlay") === "true") {
         // show custom popup here. 
-        //event.preventDefault();
-        //event.returnValue = "";
+        event.preventDefault();
+        event.returnValue = "";
     }
-
-    changeGameTabCount(-1);
-
 });

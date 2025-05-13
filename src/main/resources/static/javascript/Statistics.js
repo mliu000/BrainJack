@@ -43,10 +43,10 @@ function gameInPlayOverride() {
 
 
 // Trys to get the username from the link. If the variable doesn't exist, then display error message
-document.addEventListener("DOMContentLoaded", () => {
-    // Check to see whether or not there is a game currently in action. If there is, then set this page
-    // to be inaccessible
-    if (localStorage.getItem("numGameTabsInAction") !== "0") {
+document.addEventListener("DOMContentLoaded", async () => {
+    // Check to see whether or not there is a game tab open. If so, then this page is inaccessible
+    const numberOfGameTabs = await window.getNumberOfGameTabsOpen();
+    if (numberOfGameTabs > 0) {
         gameInPlayOverride();
         return;
     } 

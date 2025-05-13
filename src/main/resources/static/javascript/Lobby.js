@@ -423,12 +423,13 @@ function gameInPlayOverride() {
 ///// INITIALIZATION PROCEDURAL CODE /////
 
 // Initializes the lobby based on the number of players logged in.
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     // Check or initialize the number of game tabs open
-    if (localStorage.getItem("numGameTabsInAction") !== "0") {
+    const numberOfGameTabs = await window.getNumberOfGameTabsOpen();
+    if (numberOfGameTabs > 0) {
         gameInPlayOverride();
         return;
-    }
+    } 
 
     // gets the logged in players from the backend, then initializes the buttons and logged in list
     // Based on log in size
@@ -442,17 +443,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
     });
-});
 
-// Add action listeners to the text inputs to restrict to alphanumeric inputs
-document.querySelectorAll(".input-field").forEach(field => {
-    field.addEventListener("input", () => {
-        field.value = field.value.replace(/[^a-zA-Z0-9]/g, "");
-    });
-});
-
-// Add the button event listeners
-document.addEventListener("DOMContentLoaded", () => {
     // Add the button action listeners
     // For the main buttons
     loginButton.addEventListener("click", handleLoginButtonClick);
@@ -463,6 +454,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // For the popup buttons
     authenticateCreatePlayerButton.addEventListener("click", handleAuthenticateCreatePlayerButtonClick);
     authenticateLoginPlayerButton.addEventListener("click", handleAuthenticateLoginPlayerButtonClick);
+});
+
+// Add action listeners to the text inputs to restrict to alphanumeric inputs
+document.querySelectorAll(".input-field").forEach(field => {
+    field.addEventListener("input", () => {
+        field.value = field.value.replace(/[^a-zA-Z0-9]/g, "");
+    });
 });
 
 // Hide if click is outside the popup (and not the show button)

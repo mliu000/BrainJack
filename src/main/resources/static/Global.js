@@ -7,6 +7,7 @@ Represents the global variables and functions for the javascript frontend
 ///// VARIABLES /////
 
 window.apiPrefix = "http://localhost:8080/api/brainjack";
+window.tabApiPrefix = "http://localhost:8080/api/tabManagement";
 window.htmlPrefix = "http://localhost:8080/html";
 window.dealer = null;
 window.players = new Map();
@@ -57,10 +58,7 @@ window.getRequestNoParams = async function(url) {
     try {
         // Make the GET request
         const response = await fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
+            method: "GET"
         });
 
         const jsonResponse = await response.json();
@@ -91,4 +89,13 @@ window.getLoggedInPlayers = async function() {
         // Shouldn't happen
         console.error("Error that shouldn't occur occurred");
     }
+}
+
+// Gets the number of game tabs open (global function)
+// RETURNS: integer
+window.getNumberOfGameTabsOpen = async function() {
+    const url = window.tabApiPrefix + "/numberOfGameTabsOpen";
+    const response = await window.getRequestNoParams(url);
+
+    return response;
 }
