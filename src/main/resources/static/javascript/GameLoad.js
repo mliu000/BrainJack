@@ -110,14 +110,12 @@ window.addEventListener("DOMContentLoaded", async() => {
 });
 
 // Set when attempting to unload
-window.addEventListener("beforeunload", (event) => {
-    if (sessionStorage.getItem("gameInPlay") === "true") {
-        // show custom popup here. 
-        event.preventDefault();
-        event.returnValue = "";
-        deregisterTab(tabId);
-        return;
-    }
+window.addEventListener("beforeunload", () => {
+    // PUT STUFF HERE.
+});
 
-    deregisterTab(tabId);
+// We need this due to the confirmation tab
+window.addEventListener("unload", () => {
+    // Clear the heartbeat and use sendBeacon to deregister the tab
+    navigator.sendBeacon(`${window.tabApiPrefix}/${tabId}/deregister`, "");
 });

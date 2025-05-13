@@ -68,7 +68,7 @@ function heartbeat(tabId) {
     }
     
     const heartBeatId = setInterval(sendHeartBeat, 5000);
-    window.addEventListener("beforeunload", () => clearInterval(heartBeatId));
+    window.addEventListener("unload", () => clearInterval(heartBeatId));
 }
 
 ///// HELPER FUNCTIONS /////
