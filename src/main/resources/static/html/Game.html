@@ -24,7 +24,29 @@
             </a>
     </div>
     <div id="main-page" style="display: none;">
-        <div id="start-popup" class="popup-background">
+        <div id="dealer-region">
+            <div id="dealer-score-container">
+                <h2 id="dealer-score-label">Score</h2>
+                <div id="dealer-score-circle" class="circle">
+                    <p id="dealer-score">0<!--Default setting--></p>
+                </div>
+            </div>
+            <div id="dealer-cards">
+                <!--Dynamically add dealer cards to this div-->
+            </div>
+        </div>
+        <div id="player-region">
+            <!--Create the lines first, then adjust the position based on the number of players-->
+            <!--Horizontal position is set to 4 players by default-->
+            <div id="player-line-1" class="line" style="display: none;"></div>
+            <div id="player-line-2" class="line" style="display: none;"></div>
+            <div id="player-line-3" class="line" style="display: none;"></div>
+            <!--Dynamically Create the player regions here in js-->
+        </div>
+        <div id="middle-horizontal-line" class="line"></div> <!--Horizontal line in the middle of screen-->
+        <h1 id="dealer-label"><u>Dealer</u></h1>
+        <!--Popups here-->
+        <div id="start-popup" class="popup-background" style="display: none;">
             <div id="start-popup-content" class="game-popup">
                 <h1 id="start-title">Important Note:</h1>
                 <p id="start-warning" class="popup-text">

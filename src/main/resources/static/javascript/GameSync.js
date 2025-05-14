@@ -40,7 +40,7 @@ async function waitForMutex() {
     });
 }
 
-///// API'S /////
+///// API'S FOR TAB REGISTRATION/////
 
 /* 
 Registers the tab using api

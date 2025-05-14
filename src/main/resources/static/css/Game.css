@@ -1,12 +1,18 @@
 /* Commonly used constants */
 
 :root {
-    --text-color: aliceblue;
-    --text-color2: lightgray;
+    --color: aliceblue;
+    --color2: lightgray;
     --pop-up-background-color: rgba(77, 134, 169, 0.95);
 }
 
-/* OVERRIDE PAGES (BOTH TOO MANY TABS AND NO PLAYERS PAGES) */
+/* We don't want scroll bars to appear */
+
+html, body {
+  overflow: hidden;
+}
+
+/* ///// OVERRIDE PAGES (BOTH TOO MANY TABS AND NO PLAYERS PAGES) ///// */
 
 .centre-red-message {
     position: absolute;
@@ -23,8 +29,8 @@
     bottom: 5vh;
     right: 5vw;
     background-color: rgba(65, 104, 134, 0.886);
-    color: var(--text-color);
-    border: 3px solid var(--text-color);  
+    color: var(--color);
+    border: 3px solid var(--color);  
     text-align: center;        
     font-size: 2vh;         
     cursor: pointer;  
@@ -40,9 +46,129 @@
     background-color: rgba(36, 78, 110, 0.886);
 }
 
-/* MAIN PAGE */
+/* ///// MAIN PAGE ///// */
 
-/* POPUPS */
+/* Lines */
+
+.line {
+    background-color: var(--color);
+}
+
+#middle-horizontal-line {
+    position: absolute;
+    width: 100vw;
+    height: 0.7vh;
+    top: 40vh;
+    left: 0vw;
+}
+
+#player-line-1 {
+    position: absolute;
+    left: 25vw;
+    width: 0.5vw;
+    height: 60vh;
+    transform: translate(-50%);
+}
+
+#player-line-2 {
+    position: absolute;
+    left: 50vw;
+    width: 0.5vw;
+    height: 60vh;
+    transform: translate(-50%);
+}
+
+#player-line-3 {
+    position: absolute;
+    left: 75vw;
+    width: 0.5vw;
+    height: 60vh;
+    transform: translate(-50%);
+}
+
+/* Circles */
+
+.circle {
+    border-radius: 50%;
+    background-color: var(--pop-up-background-color);
+    border: clamp(0vw, 0.3vw, 0.5vh) solid var(--color2);
+}
+
+/* Dealer */
+
+#dealer-region {
+    position: absolute;
+    left: 0vw;
+    top: 0vh;
+    width: 100vw;
+    height: 40vh;
+}
+
+#dealer-label {
+    position: absolute;
+    margin-top: 0;
+    margin-bottom: 0;
+    top: 3vh;
+    left: 27vw;
+    font-size: clamp(0vw, 5vw, 7vh);
+    color: var(--color);
+}
+
+#dealer-score-container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    left: 30vw;
+    top: 12vh;
+}
+
+#dealer-score-label {
+    font-size: clamp(0vw, 2.4vw, 4vh);
+    margin-top: 2vh;
+    margin-bottom: 1.5vh;
+    color: var(--color2);
+}
+
+#dealer-score-circle {
+    width: clamp(0vw, 9vw, 13vh);
+    height: clamp(0vw, 9vw, 13vh);
+}
+
+#dealer-score {
+    position: relative;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 0;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(0vw, 5vw, 8vh);
+    color: var(--color2);
+}
+
+#dealer-cards {
+    position: absolute;
+    width: 40vw;
+    height: 35vh;
+    left: 50vw;
+    top: 2vh;
+}
+
+/* Players */
+
+#player-region {
+    position: absolute;
+    left: 0vw;
+    bottom: 0vh;
+    width: 100vw;
+    height: 59.3vh;
+}
+
+
+/* ///// POPUPS ///// */
+
+/* General popup settings */
 
 .popup-background {
     position: fixed;
@@ -68,21 +194,21 @@
 .popup-title {
     font-size: 4vh;
     text-align: left;
-    color: var(--text-color);
+    color: var(--color);
     text-decoration: underline;
 }
 
 .popup-text {
     font-size: 3vh;
-    color: var(--text-color2);
+    color: var(--color2);
 }
 
 .container-button {
     width: 30vh;
     height: 10vh;
     background-color: rgba(65, 104, 134, 0.886);
-    color: var(--text-color);
-    border: 3px solid var(--text-color);  
+    color: var(--color);
+    border: 3px solid var(--color);  
     text-align: center;        
     font-size: 2vh;         
     white-space: normal;
@@ -98,6 +224,8 @@
 .container-button:hover {
     background-color: rgba(36, 78, 110, 0.886);
 }
+
+/* Start popup */
 
 #start-title {
     font-size: 4vh;

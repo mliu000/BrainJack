@@ -27,7 +27,7 @@ function gameInPlayOverride(tabs) {
     const mainPage = document.getElementById("main-page");
     const overridePage = document.getElementById("override-page");
     const overrideMessage = document.getElementById("override-message");
-    overrideMessage.textContent = `GAME IS IN PROGRESS IN ANOTHER TAB. ALSO, MAKE SURE THERE IS ONLY ONE GAME TAB OPEN, AND WAIT A FEW SEC BEFORE RELOADING. THERE ARE CURRENTLY ${tabs} TABS OPEN`;
+    overrideMessage.innerHTML = `GAME IS IN PROGRESS IN ANOTHER TAB. ALSO, MAKE SURE THERE IS ONLY ONE GAME TAB OPEN, AND WAIT A FEW SECONDS BEFORE RELOADING. THERE ARE CURRENTLY <u>${tabs}</u> TABS OPEN`;
     mainPage.style.display = "none";
     overridePage.style.display = "block";
 }
