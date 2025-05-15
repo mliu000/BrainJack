@@ -1,7 +1,7 @@
 /*
 @Mu Ye Liu - May 2025
 
-Represents the code for loading the ui page
+Represents the code for loading the ui page and all its elements
 */
 
 ///// unique identifiers for the tab
@@ -46,14 +46,17 @@ function initializeGameScreen() {
     // Create the player profiles
     let ithPlayer = 1;
     for (const [key, value] of window.players) {
+        // Create the profile
         createPlayerProfile(key, value, ithPlayer, window.players.size);
+        // Create win lose screen
+        const winLoseScreen = createWinLoseScreen(ithPlayer, window.players.size);
+        document.getElementById("player-region").appendChild(winLoseScreen); 
         ithPlayer++;
     }
 
     // Adjust the bars based on number of players there are
     adjustPlayerBars();
 
-    // 
 }
 
 ///// HELPER FUNCTIONS /////
@@ -74,12 +77,11 @@ function createPlayerProfile(key, value, ithPlayer, noPlayers) {
         position: "absolute",
         width: "25%",
         height: "100%",
-        left: `${(100*ithPlayer - 50) / noPlayers}vw`, 
+        left: `${(ithPlayer - 1) * (100 / noPlayers) + (100 / (2 * noPlayers) - 100 / 8)}vw`, 
         top: "0%",
-        transform: "translate(-50%)",
     });
 
-    // Create the username label
+    // Create the username and bet label
     const usernameLabel = createLabel(key, "h3", `username-label-${ithPlayer}`, "lightgray", "clamp(0vw, 2vw, 3vh)");
     Object.assign(usernameLabel.style, {
         position: "absolute", 
@@ -88,15 +90,54 @@ function createPlayerProfile(key, value, ithPlayer, noPlayers) {
         transform: "translate(-50%)",
         textDecoration: "underline"
     });
+    const betLabel = createLabel(`Bet: \$${value.currBet}`, "h3", `bet-label-${ithPlayer}`, "lightgray", "clamp(0vw, 1.5vw, 2.2vh)");
+    Object.assign(betLabel.style, {
+        position: "absolute", 
+        left: "40%",
+        top: "14%",
+        transform: "translate(-50%)"
+    });
 
     // Create the score div
     const playerScore = createPlayerScore(ithPlayer);
 
+    // Create the buttons
+    const hitButton = createButton("Hit", `hit-button-${ithPlayer}`, "40%", "5%", "green", "rgba(24, 87, 12, 0.89)", "lightgray", "clamp(0vw, 1vw, 1.5vh)");
+    const stopButton = createButton("Stop", `stop-button-${ithPlayer}`, "40%", "5%", "red", "rgba(150, 0, 0, 0.89)", "lightgray", "clamp(0vw, 1vw, 1.5vh)");
+    Object.assign(hitButton.style, {
+        position: "absolute",
+        left: "50%",
+        bottom: "7%",
+        transform: "translate(-50%)"
+    })
+    Object.assign(stopButton.style, {
+        position: "absolute",
+        left: "50%",
+        bottom: "1%",
+        transform: "translate(-50%)"
+    })
+
+    // Add card holder
+    const cardHolder = document.createElement("div");
+    cardHolder.id = `player-cards-${ithPlayer}`;
+    Object.assign(cardHolder.style, {
+        position: "absolute",
+        bottom: "2%",
+        left: "50%",
+        width: "80%",
+        height: "65%",
+        transform: "translate(-50%)"
+    });
+
     // Append all the elements to the player profile
     playerProfile.appendChild(usernameLabel);
+    playerProfile.appendChild(betLabel);
     playerProfile.appendChild(playerScore);
+    playerProfile.appendChild(hitButton);
+    playerProfile.appendChild(stopButton);
+    playerProfile.appendChild(cardHolder);
     
-    // Append the player profile to the main page
+    // Append the player profile and win/lose screens to player main page.
     playerRegion.appendChild(playerProfile);
 }
 
@@ -173,7 +214,7 @@ function createPlayerScore(ithPlayer) {
         flexDirection: "column", 
         alignItems: "center",
         left: "80%",
-        top: "10%",
+        top: "11%",
         transform: "translate(-50%)"
     });
     Object.assign(newPlayerScoreLabel.style, {
@@ -202,6 +243,70 @@ function createPlayerScore(ithPlayer) {
     return newPlayerScoreContainer;
 }
 
+/* Creates a new button
+REQUIRES: pretty explanatory
+*/
+function createButton(buttonText, buttonID, bWidth, bHeight, backColor, hColor, textColor, ftSize) {
+    const newButton = document.createElement("button");
+    newButton.id = buttonID;
+    newButton.textContent = buttonText;
+    Object.assign(newButton.style, {
+        width: bWidth,
+        height: bHeight,
+        backgroundColor: backColor,
+        color: textColor,
+        border: "3px solid var(--color)",
+        textAlign: "center",
+        fontSize: ftSize,
+        whiteSpace: "normal",
+        wordWrap: "break-word",
+        overflowWrap: "break-word",
+        cursor: "pointer",
+        borderRadius: "4vh",
+        transition: "background-color 0.3s ease",
+        zIndex: "1000"
+    })
+    newButton.addEventListener("mouseenter", () => {
+        newButton.style.backgroundColor = hColor;
+    });
+    newButton.addEventListener("mouseleave", () => {
+        newButton.style.backgroundColor = backColor;
+    });
+    return newButton;
+}
+
+/*
+Creates a new win lose screen
+REQUIRES: - ithPlayer: must be an int from 1 to 4
+          - noPlayers: must be an int from 1 to 4
+*/
+function createWinLoseScreen(ithPlayer, noPlayers) {
+    const newWinLoseScreen = document.createElement("div");
+    const message = document.createElement("h2");
+    newWinLoseScreen.id = `player-win-lose-screen-${ithPlayer}`;
+    message.id = `player-win-lose-message-${ithPlayer}`;
+    message.textContent = "WIN"
+    Object.assign(newWinLoseScreen.style, {
+        position: "absolute",
+        left: `${(ithPlayer - 1) * (100 / noPlayers)}%`,
+        top: "0%",
+        width: `${100 / noPlayers}%`,
+        height: "100%",
+        backgroundColor: "rgba(0, 0, 0, 0.2)",
+    })
+    Object.assign(message.style, {
+        position: "absolute",
+        left: "50%",
+        top: "35%",
+        marginTop: "0",
+        marginBottom: "0",
+        fontSize: "clamp(0vw, 8vw, 12vh)",
+        color: "green",
+        transform: "translate(-50%) rotate(-20deg)"
+    })
+    newWinLoseScreen.appendChild(message);
+    return newWinLoseScreen;
+}
 
 ///// ACTION LISTENERS /////
 
@@ -234,6 +339,7 @@ window.addEventListener("DOMContentLoaded", async() => {
             // Initialize game and set the game in action status to true
             initializeGameScreen();
             addActionListeners();
+            
         }
     } finally {
         // Release the mutex after initialization and start heartbeat of tab
@@ -249,7 +355,7 @@ window.addEventListener("beforeunload", () => {
 });
 
 // We need this due to the confirmation tab
-window.addEventListener("unload", () => {
+window.addEventListener("pagehide", () => {
     // Clear the heartbeat and use sendBeacon to deregister the tab
     navigator.sendBeacon(`${window.tabApiPrefix}/${tabId}/deregister`, "");
 });

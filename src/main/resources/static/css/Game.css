@@ -52,6 +52,7 @@ html, body {
 
 .line {
     background-color: var(--color);
+    z-index: 1000;
 }
 
 #middle-horizontal-line {
