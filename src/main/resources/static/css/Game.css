@@ -52,7 +52,7 @@ html, body {
 
 .line {
     background-color: var(--color);
-    z-index: 1000;
+    z-index: 100;
 }
 
 #middle-horizontal-line {
@@ -178,10 +178,14 @@ html, body {
     height: 100vh;
     width: 100vw;
     background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+    z-index: 101;
 }
 
 .game-popup {
     position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     left: 50vw;
     top: 50vh;
     transform: translate(-50%, -50%);
@@ -192,15 +196,20 @@ html, body {
     transition: opacity 0.3s ease;
 }
 
-.popup-title {
+.popup-header {
     font-size: 4vh;
     text-align: left;
-    color: var(--color);
     text-decoration: underline;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .popup-text {
     font-size: 3vh;
+    color: var(--color2);
+}
+
+.popup-text2 {
+    font-size: 2vh;
     color: var(--color2);
 }
 
@@ -229,20 +238,70 @@ html, body {
 /* Start popup */
 
 #start-title {
-    font-size: 4vh;
-    text-align: left;
+    margin-bottom: 0;
     color: red;
-    text-decoration: underline;
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
-#start-ok-button {
-    position: relative;
+/* Place Bets Popup */
+
+#place-bets-title {
+    color: var(--color);
+}
+
+#place-bets-input {
+    width: 30%;
+    font-size: 1.8vh;
+    color: darkslategray;
+    border-radius: 10%;
+    box-shadow: 0 2vh 3vh rgba(0, 0, 0, 0.2);
+}
+
+#place-bet-button {
+    margin-top: 5vh;
+    margin-bottom: 0vh;
+}
+
+/* Question popup */ 
+
+.answer-container {
+    margin-top: 2vh;
+}
+
+#question-title {
+    color: var(--color);
+}
+
+#answer-button {
+    margin-top: 5vh;
+    margin-bottom: 0vh;
+}
+
+#answer-correctness-cover {
+    position: absolute;
+    left: 0%;
+    top: 0%;
+    width: 100%;
+    height: 100%;
+    border-radius: 8vh;    
+    background-color: rgba(0, 0, 0, 0.8);
+
+}
+
+#correctness-message {
+    margin: 0 0;
+    position: absolute;
     left: 50%;
-    transform: translate(-50%);
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 7vh;
+}   
+
+/* Game over popup */
+
+#game-over-title {
+    color: var(--color);
 }
 
-#start-popup-content {
-    width: auto;
-    height: auto;
+#play-again-button {
+    margin-bottom: 2vh;
 }

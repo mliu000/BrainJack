@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="../css/Game.css">
     <script src="../javascript/GameLoad.js"></script>
     <script src="../javascript/GameSync.js"></script>
-    <script src="../javascript/Gameplay.js"></script>
+    <script src="../javascript/GameLogic.js"></script>
+    <script src="../javascript/GameApi.js"></script>
     <script src="../Global.js"></script>
 </head>
 <body>
@@ -46,13 +47,52 @@
         <div id="middle-horizontal-line" class="line"></div> <!--Horizontal line in the middle of screen-->
         <h1 id="dealer-label"><u>Dealer</u></h1>
         <!--Popups here-->
-        <div id="start-popup" class="popup-background" style="display: none;">
+        <div id="start-popup" class="popup-background" style="display: block;">
             <div id="start-popup-content" class="game-popup">
-                <h1 id="start-title">Important Note:</h1>
+                <h1 id="start-title" class="popup-header">Important Note:</h1>
                 <p id="start-warning" class="popup-text">
-                    If you try to exit the game page while it is still in action, then every player will lose their bet.
+                    If you try to exit the game or reload page while it is still in action, then every player will lose their bet.
                 </p>
                 <button id="start-ok-button" class="container-button">OK</button>
+            </div>
+        </div>
+        <div id="place-bets-popup" class="popup-background" style="display: none;">
+            <div id="place-bets-popup-content" class="game-popup">
+                <h1 id="place-bets-title" class="popup-header">Start By Placing Bets!</h1>
+                <h3 id="place-bets-username" class="popup-text2">For user: </h3>
+                <input id="place-bets-input">
+                <button id="place-bet-button" class="container-button">Place Bet</button>
+            </div>
+        </div>
+        <div id="question-popup" class="popup-background" style="display: none;">
+            <div id="question-popup-content" class="game-popup">
+                <h1 id="question-title" class="popup-header">Answer To Half Your Loss:</h1>
+                <h3 id="question-username" class="popup-text2">For user: </h3>
+                <h3 id="actual-question" class="popup-text2">Here is the question blah blah blah</h3>
+                <form id="question-answers">
+                    <!--Put answers here-->
+                    <!-- EXAMPLE TO FOLLOW BELOW FOR AN ANSWER
+                    <div class="answer-container">
+                        <label class="popup-text2">
+                            <input type="radio" name="q1" value="A">
+                            Option A
+                        </label>
+                    </div>
+                    -->
+                </form>
+                <button id="answer-button" class="container-button">Answer</button>
+                <div id="answer-correctness-cover" style="display: none;">
+                    <h1 id="correctness-message">Correct</h1>
+                </div>
+            </div>
+        </div>
+        <div id="game-over-popup" class="popup-background" style="display: none;">
+            <div id="game-over-popup-content" class="game-popup">
+                <h1 id="game-over-title" class="popup-header">Game Over. Wanna play again?</h1>
+                <button id="play-again-button" class="container-button">Play Again</button>
+                <a href="Lobby.html">
+                    <button id="back-to-lobby-button" class="container-button">Back to Lobby</button>
+                </a>
             </div>
         </div>
     </div>

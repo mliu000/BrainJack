@@ -9,18 +9,6 @@ const tabId = window.crypto.randomUUID();
 
 ///// LOAD FUNCTIONS /////
 
-// Adds the basic action listeners for the buttons
-function addActionListeners() {
-    // Retrieve the buttons
-    const startOkButton = document.getElementById("start-ok-button");
-
-    // Add the action listeners
-    startOkButton.addEventListener("click", () => {
-        document.getElementById("start-popup").style.display = "none";
-    });
-
-}
-
 // Overrides the content page to display error message when more than one tab open
 // REQUIRES: - tabs: must be an integer
 function gameInPlayOverride(tabs) {
@@ -50,6 +38,7 @@ function initializeGameScreen() {
         createPlayerProfile(key, value, ithPlayer, window.players.size);
         // Create win lose screen
         const winLoseScreen = createWinLoseScreen(ithPlayer, window.players.size);
+        winLoseScreen.style.display = "none";
         document.getElementById("player-region").appendChild(winLoseScreen); 
         ithPlayer++;
     }
@@ -116,6 +105,8 @@ function createPlayerProfile(key, value, ithPlayer, noPlayers) {
         bottom: "1%",
         transform: "translate(-50%)"
     })
+    hitButton.style.display = "none";
+    stopButton.style.display = "none";
 
     // Add card holder
     const cardHolder = document.createElement("div");
@@ -302,7 +293,8 @@ function createWinLoseScreen(ithPlayer, noPlayers) {
         marginBottom: "0",
         fontSize: "clamp(0vw, 8vw, 12vh)",
         color: "green",
-        transform: "translate(-50%) rotate(-20deg)"
+        transform: "translate(-50%) rotate(-20deg)",
+        textShadow: "0 0 5px rgba(0, 0, 0, 0.5)"
     })
     newWinLoseScreen.appendChild(message);
     return newWinLoseScreen;
