@@ -24,7 +24,7 @@ public class Deck {
         this.deckOfCards = new ArrayList<>();
 
         // Create and iterate over numbers to create the cards, then store them in the hashset
-        String[] suites = {"Diamonds", "Clover", "Hearts", "Spades"};
+        String[] suites = {"Diamonds", "Clubs", "Hearts", "Spades"};
         String[] numbers = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
 
         for (String suite: suites) {

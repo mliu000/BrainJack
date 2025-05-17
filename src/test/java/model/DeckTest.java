@@ -1,11 +1,14 @@
 package model;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import muyel.model.*;
+import muyel.model.Deck;
+import muyel.model.PokerCard;
 
 /*
  * @Mu Ye Liu - Jan 2025
@@ -64,7 +67,7 @@ public class DeckTest {
     // Helper method to check that all cards in the deck are restored
     public static void checkDeckState(Deck deckParam) {
         int diamondCount = 0;
-        int cloverCount = 0;
+        int clubsCount = 0;
         int heartsCount = 0;
         int spadesCount = 0;
         int numAcount = 0;
@@ -91,8 +94,8 @@ public class DeckTest {
                 case "Hearts":
                     heartsCount++;
                     break;
-                case "Clover":
-                    cloverCount++;
+                case "Clubs":
+                    clubsCount++;
                     break;
                 default: // Case spades
                     spadesCount++;
@@ -159,7 +162,7 @@ public class DeckTest {
         assertEquals(13, diamondCount);
         assertEquals(13, heartsCount);
         assertEquals(13, spadesCount);
-        assertEquals(13, cloverCount);
+        assertEquals(13, clubsCount);
         assertEquals(52, deckParam.getDeckOfCards().size());
     }
     

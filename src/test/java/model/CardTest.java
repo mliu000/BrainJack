@@ -1,11 +1,10 @@
 package model;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import muyel.model.*;
+import muyel.model.PokerCard;
 
 /*
  * @Mu Ye Liu - Jan 2025
@@ -27,7 +26,7 @@ public class CardTest {
         cardA = new PokerCard("Diamonds", "A");
         card2 = new PokerCard("Hearts", "2");
         cardJ = new PokerCard("Spades", "J");
-        cardQ = new PokerCard("Clover", "Q");
+        cardQ = new PokerCard("Clubs", "Q");
         cardK = new PokerCard("Diamonds", "K");
     }
 
