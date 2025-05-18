@@ -11,38 +11,38 @@ const successColor = "rgb(13, 207, 26)";
 const failureColor = "rgb(241, 23, 12)";
 
 // Factors
-var clickOutOfPopupDisabled = false;
+let clickOutOfPopupDisabled = false;
 
 // The main screen variables
-const loginButton = document.getElementById("login-button");
-const logoutButton = document.getElementById("logout-button");
-const createPlayerButton = document.getElementById("create-player-button");
-const startGameButton = document.getElementById("start-game-button");
-const statsButton = document.getElementById("stats-button");
-const loggedInPlayerListDisplay = document.getElementById("logged-in-player-list");
+let loginButton;
+let logoutButton;
+let createPlayerButton;
+let startGameButton;
+let statsButton;
+let loggedInPlayerListDisplay;
 
 // For the stats popup
-const statsPopup = document.getElementById("statistics-popup");
+let statsPopup;
 
 // For the Create Player popup
-const createPlayerPopup = document.getElementById("create-player-popup");
-const createUsernameTextField = document.getElementById("create-username-text-field");
-const createPasswordTextField = document.getElementById("create-password-text-field");
-const authenticateCreatePlayerButton = document.getElementById("authenticate-create-player-button");
-const createPlayerMessage = document.getElementById("create-player-message");
+let createPlayerPopup;
+let createUsernameTextField;
+let createPasswordTextField;
+let authenticateCreatePlayerButton;
+let createPlayerMessage;
 
 // For the Login popup
-const loginPopup = document.getElementById("login-popup");
-const loginUsernameTextField = document.getElementById("login-username-text-field");
-const loginPasswordTextField = document.getElementById("login-password-text-field");
-const authenticateLoginPlayerButton = document.getElementById("authenticate-login-button");
-const loginMessage = document.getElementById("login-message");
+let loginPopup;
+let loginUsernameTextField;
+let loginPasswordTextField;
+let authenticateLoginPlayerButton;
+let loginMessage;
 
 // For the logout popup
-const logoutPopup = document.getElementById("logout-popup");
+let logoutPopup;
 
 // For the statistics popup
-const statisticsPopup = document.getElementById("statistics-popup");
+let statisticsPopup;
 
 ///// FUNCTIONS /////
 
@@ -92,16 +92,16 @@ async function handleAuthenticateCreatePlayerButtonClick() {
     // Gets the response from createPlayer api call
     try {
         const response = await window.postRequest(url, JSON.stringify(bodyParameter), "application/json");
-        // If returned response is the error response, throw an error
-        console.log("API Response: ", response);
         // Set the display message, set a timeout, then close the popup and reset it
         // Also, add player to list and display it.
         setDisplayMessage(createPlayerMessage, successColor, "Success. Account Created");
         clickOutOfPopupDisabled = true;
+        authenticateCreatePlayerButton.disabled = true;
         setTimeout(() => {
             createPlayerPopup.style.display = "none";
             resetPopupWithTextAfterExiting(createPlayerPopup, createPlayerMessage);
             clickOutOfPopupDisabled = false;
+            authenticateCreatePlayerButton.disabled = false;
         }, 1500);
         addPlayerToList(response);
         addPlayerToListDisplay(response.username);
@@ -152,16 +152,16 @@ async function handleAuthenticateLoginPlayerButtonClick() {
     // Gets the response from createPlayer api call
     try {
         const response = await window.postRequest(url, JSON.stringify(bodyParameter), "application/json");
-        // If returned response is the error response, throw an error
-        console.log("API Response: ", response);
         // Set the display message, set a timeout, then close the popup and reset it
         // Also, add player to list and display it.
         setDisplayMessage(loginMessage, successColor, "Successfully Logged in");
         clickOutOfPopupDisabled = true;
+        authenticateLoginPlayerButton.disabled = true;
         setTimeout(() => {
             loginPopup.style.display = "none";
             resetPopupWithTextAfterExiting(loginPopup, loginMessage);
             clickOutOfPopupDisabled = false;
+            authenticateLoginPlayerButton.disabled = false;
         }, 1500);
         addPlayerToList(response);
         addPlayerToListDisplay(response.username);
@@ -312,7 +312,6 @@ REQUIRES:
 */
 function addPlayerToList(player) {
     window.players.set(player.username, player);
-    console.log(window.players);
 }
 
 /*
@@ -424,38 +423,62 @@ function gameInPlayOverride() {
 
 // Initializes the lobby based on the number of players logged in.
 document.addEventListener("DOMContentLoaded", async () => {
+    // Assign DOM elements after DOM is loaded
+    loginButton = document.getElementById("login-button");
+    logoutButton = document.getElementById("logout-button");
+    createPlayerButton = document.getElementById("create-player-button");
+    startGameButton = document.getElementById("start-game-button");
+    statsButton = document.getElementById("stats-button");
+    loggedInPlayerListDisplay = document.getElementById("logged-in-player-list");
+
+    statsPopup = document.getElementById("statistics-popup");
+
+    createPlayerPopup = document.getElementById("create-player-popup");
+    createUsernameTextField = document.getElementById("create-username-text-field");
+    createPasswordTextField = document.getElementById("create-password-text-field");
+    authenticateCreatePlayerButton = document.getElementById("authenticate-create-player-button");
+    createPlayerMessage = document.getElementById("create-player-message");
+
+    loginPopup = document.getElementById("login-popup");
+    loginUsernameTextField = document.getElementById("login-username-text-field");
+    loginPasswordTextField = document.getElementById("login-password-text-field");
+    authenticateLoginPlayerButton = document.getElementById("authenticate-login-button");
+    loginMessage = document.getElementById("login-message");
+
+    logoutPopup = document.getElementById("logout-popup");
+    statisticsPopup = document.getElementById("statistics-popup");
+
+    logoutButtonList = document.getElementById("logout-button-list");
+    logoutFeedback = document.getElementById("logout-feedback");
+    mainPage = document.getElementById("main-page");
+    overridePage = document.getElementById("override-page");
+
     // Check or initialize the number of game tabs open
     const numberOfGameTabs = await window.getNumberOfGameTabsOpen();
 
     if (numberOfGameTabs > 0) {
         gameInPlayOverride();
         return;
-    } 
+    }
 
     // Make the main page visible
-    document.getElementById("main-page").style.display = "block";
+    mainPage.style.display = "block";
 
-    // gets the logged in players from the backend, then initializes the buttons and logged in list
-    // Based on log in size
+    // Get logged in players, initialize list and buttons
     window.getLoggedInPlayers().then(() => {
-        // Set the button visibiliity
         setButtonsBasedOnSizeOfLobby();
-        // Add the usernames to display, as well as buttons to corresponding popup
         for (const username of window.players.keys()) {
             addButtonToLogoutAndStatisticsPopups(username);
             addPlayerToListDisplay(username);
         }
-
     });
 
     // Add the button action listeners
-    // For the main buttons
     loginButton.addEventListener("click", handleLoginButtonClick);
     createPlayerButton.addEventListener("click", handleCreatePlayerButtonClick);
     logoutButton.addEventListener("click", handleLogoutButtonClick);
     statsButton.addEventListener("click", handleStaticticsButtonClick);
 
-    // For the popup buttons
     authenticateCreatePlayerButton.addEventListener("click", handleAuthenticateCreatePlayerButtonClick);
     authenticateLoginPlayerButton.addEventListener("click", handleAuthenticateLoginPlayerButtonClick);
 });

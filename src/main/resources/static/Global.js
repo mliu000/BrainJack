@@ -9,7 +9,6 @@ Represents the global variables and functions for the javascript frontend
 window.apiPrefix = "http://localhost:8080/api/brainjack";
 window.tabApiPrefix = "http://localhost:8080/api/tabManagement";
 window.htmlPrefix = "http://localhost:8080/html";
-window.dealer = null;
 window.players = new Map();
 
 ///// FUNCTIONS /////

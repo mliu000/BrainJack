@@ -12,7 +12,9 @@ RETURNS: the same player along with their bet set.
 async function setPlayerBet(username, bet) {
     try {
         const url = `${window.apiPrefix}/players/${username}/setPlayerBet`;
-        const response = window.putRequest(url, bet, "application/json");
+        const response = await window.putRequest(url, bet, "application/json");
+
+        window.players.set(username, response);
 
         return response;
     } catch (error) {
@@ -28,7 +30,9 @@ RETURNS: the same player along with their additional hit card
 async function playerHit(username) {
     try {
         const url = `${window.apiPrefix}/players/${username}/playerHit`;
-        const response = window.putRequest(url, null, "text/plain");
+        const response = await window.putRequest(url, null, "text/plain");
+
+        window.players.set(username, response);
 
         return response;
     } catch (error) {
@@ -49,7 +53,9 @@ async function updatePlayerStatistics(username, win, correct) {
             "correct": correct
         }
         const url = `${window.apiPrefix}/players/${username}/updatePlayerStatistics`;
-        const response = window.putRequest(url, JSON.stringify(body), "application/json");
+        const response = await window.putRequest(url, JSON.stringify(body), "application/json");
+
+        window.players.set(username, response);
 
         return response;
     } catch (error) {
@@ -65,7 +71,15 @@ RETURNS: the same player/dealer along with their decks reset
 async function participantStartDraw(username) {
     try {
         const url = `${window.apiPrefix}/participant/${username}/participantStartDraw`;
-        const response = window.putRequest(url, null, "text/plain");
+        const response = await window.putRequest(url, null, "text/plain");
+
+        window.players.set(username, response);
+
+        if (username === "d") {
+            dealer = response;
+        } else {
+            window.players.set(username, response);
+        }
 
         return response;
     } catch (error) {
@@ -81,7 +95,13 @@ RETURNS: the same player/dealer along with their decks reset
 async function participantReset(username) {
     try {
         const url = `${window.apiPrefix}/participant/${username}/participantReset`;
-        const response = window.putRequest(url, null, "text/plain");
+        const response = await window.putRequest(url, null, "text/plain");
+
+        if (username === "d") {
+            dealer = response;
+        } else {
+            window.players.set(username, response);
+        }
 
         return response;
     } catch (error) {
@@ -96,7 +116,9 @@ RETURNS: the dealer with the cards drawn
 async function dealerPlayHand() {
     try {
         const url = `${window.apiPrefix}/dealerPlayHand`;
-        const response = window.putRequest(url, null, "text/plain");
+        const response = await window.putRequest(url, null, "text/plain");
+
+        dealer = response;
 
         return response;
     } catch (error) {
@@ -111,7 +133,7 @@ RETURNS: A multiple choice question with 3-4 choices
 async function getRandomQuestion() {
     try {
         const url = `${window.apiPrefix}/getRandomQuestion`;
-        const response = window.getRequestNoParams(url);
+        const response = await window.getRequestNoParams(url);
 
         return response;
     } catch (error) {

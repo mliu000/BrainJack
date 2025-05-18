@@ -6,6 +6,33 @@ Represents the code for loading the ui page and all its elements
 
 ///// unique identifiers for the tab
 const tabId = window.crypto.randomUUID();
+let dealer;
+
+// Useful constants
+
+const successColor = "rgb(13, 207, 26)";
+const warningColor = "rgb(252, 206, 5)";
+const failureColor = "rgb(241, 23, 12)";
+
+///// LOAD ELEMENTS PREMATURELY /////
+
+// Start ok popup
+let startPopup;
+let startOkButton;
+
+// Place bets popup
+let placeBetsPopup;
+let placeBetsButton;
+let placeBetsUsername;
+let placeBetsMessage;
+let placeBetsInput;
+
+// Player profiles
+let betLabelList = [];
+let userNameLabelList = [];
+let playerScoreList = [];
+let playerHitButtonList = [];
+let playerStopButtonList = [];
 
 ///// LOAD FUNCTIONS /////
 
@@ -71,17 +98,19 @@ function createPlayerProfile(key, value, ithPlayer, noPlayers) {
     });
 
     // Create the username and bet label
-    const usernameLabel = createLabel(key, "h3", `username-label-${ithPlayer}`, "lightgray", "clamp(0vw, 2vw, 3vh)");
+    const usernameLabel = createLabel(key, `username-label-${ithPlayer}`, "h3", "lightgray", "clamp(0vw, 2vw, 3vh)");
     Object.assign(usernameLabel.style, {
         position: "absolute", 
+        marginTop: "0",
         left: "50%",
         top: "2%",
         transform: "translate(-50%)",
         textDecoration: "underline"
     });
-    const betLabel = createLabel(`Bet: \$${value.currBet}`, "h3", `bet-label-${ithPlayer}`, "lightgray", "clamp(0vw, 1.5vw, 2.2vh)");
+    const betLabel = createLabel(`Bet: \$${value.currBet}`, `bet-label-${ithPlayer}`, "h3", "lightgray", "clamp(0vw, 1.5vw, 2.2vh)");
     Object.assign(betLabel.style, {
         position: "absolute", 
+        marginTop: "0",
         left: "40%",
         top: "14%",
         transform: "translate(-50%)"
@@ -191,9 +220,9 @@ REQUIRES: - ithPlayer: must be an int from 1 to 4
 */
 function createPlayerScore(ithPlayer) {
     const newPlayerScoreContainer = document.createElement("div");
-    const newPlayerScoreLabel = createLabel("Score", `player-score-label-${ithPlayer}`);
+    const newPlayerScoreLabel = createLabel("Score", `player-score-label-${ithPlayer}`, "h3", "var(--color2)", "clamp(0vw, 1.2vw, 1.8vh)",);
     const newPlayerScoreCircle = document.createElement("div");
-    const newPlayerScore = createLabel("0", `player-score-${ithPlayer}`);
+    const newPlayerScore = createLabel("0", `player-score-${ithPlayer}`, "h3", "var(--color2)", "clamp(0vw, 2vw, 3vh)");
 
     newPlayerScoreContainer.id = `player-score-container-${ithPlayer}`;
     newPlayerScoreCircle.id = `player-score-circle-${ithPlayer}`;
@@ -209,10 +238,8 @@ function createPlayerScore(ithPlayer) {
         transform: "translate(-50%)"
     });
     Object.assign(newPlayerScoreLabel.style, {
-        fontSize: "clamp(0vw, 1.2vw, 1.8vh)",
         marginTop: "1vh",
-        marginBottom: "0",
-        color: "lightgray"
+        marginBottom: "0"
     })
     Object.assign(newPlayerScoreCircle.style, {
         width: "clamp(0vw, 4vw, 6vh)",
@@ -222,10 +249,8 @@ function createPlayerScore(ithPlayer) {
     Object.assign(newPlayerScore.style, {
         position: "absolute",
         left: "50%",
-        top: "50%",
+        top: "0%",
         transform: "translate(-50%, -50%)",
-        fontSize: "clamp(0vw, 2vw, 3vh)",
-        color: "lightgray"
     })
 
     newPlayerScoreCircle.appendChild(newPlayerScore);
@@ -300,6 +325,30 @@ function createWinLoseScreen(ithPlayer, noPlayers) {
     return newWinLoseScreen;
 }
 
+
+// Reference all static elements as fields
+function referenceStaticElements() {
+    startPopup = document.getElementById("start-popup");
+    startOkButton = document.getElementById("start-ok-button");
+    placeBetsPopup = document.getElementById("place-bets-popup");
+    placeBetsButton = document.getElementById("place-bet-button");
+    placeBetsUsername = document.getElementById("place-bets-username");
+    placeBetsMessage = document.getElementById("place-bets-message");
+    placeBetsInput = document.getElementById("place-bets-input");
+}
+
+// Reference all dynamic elements as fields
+function referenceDynamicElements() {
+    for (let i = 1; i <= window.players.size; i++) {
+        userNameLabelList.push(document.getElementById(`username-label-${i}`));
+        betLabelList.push(document.getElementById(`bet-label-${i}`));
+        playerScoreList.push(document.getElementById(`player-score-${i}`));
+        playerHitButtonList.push(document.getElementById(`hit-button-${i}`));
+        playerStopButtonList.push(document.getElementById(`stop-button-${i}`));
+    }
+}
+
+
 ///// ACTION LISTENERS /////
 
 // Set on load
@@ -329,9 +378,10 @@ window.addEventListener("DOMContentLoaded", async() => {
             notEnoughPlayersOverride();
         } else {
             // Initialize game and set the game in action status to true
+            referenceStaticElements();
             initializeGameScreen();
+            referenceDynamicElements();
             addActionListeners();
-            
         }
     } finally {
         // Release the mutex after initialization and start heartbeat of tab
