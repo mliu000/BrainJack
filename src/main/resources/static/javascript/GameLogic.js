@@ -129,7 +129,7 @@ function nextPlayer(ithPlayer) {
     } else {
         playerStopButtonList[ithPlayer].style.display = "block";
         playerHitButtonList[ithPlayer].style.display = "block";
-    }
+    } 
 }
 
 // Updates all the player bets displays
@@ -154,7 +154,8 @@ function startGameFlow() {
 // Start draws for all players, and updates the score of the players
 async function playerStartDraws() {
     for (let i = 1; i <= window.players.size; i++) {
-        const response = await participantStartDraw(userNameLabelList[i - 1].textContent);
+        const username = userNameLabelList[i - 1].textContent;
+        const response = await participantStartDraw(username);
         const playerHand = response.hand;
 
         for (let j = 0; j < 2; j++) {
@@ -174,10 +175,8 @@ async function dealerStartDraw() {
     for (let i = 0; i < 2; i++) {
         const cardDiv = createCard(response.hand[i].number, response.hand[i].suite.toLowerCase(), "slideLeftFromRight");
         addDealerCardDivProperties(cardDiv);
-        console.log(`here ${i}`);
         dealerCards.appendChild(cardDiv);
     }
-    console.log(response.score);
     dealerScore.textContent = response.score;
 }
 

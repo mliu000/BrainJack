@@ -1,9 +1,12 @@
 package service;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -112,9 +115,7 @@ public class GameServiceTest {
         gameService.playerHit(player4);
         assertEquals(3, player4.getHand().size());
         gameService.playerHit(player4);
-        assertEquals(3, player4.getHand().size());
-        gameService.participantStartDraw(player4);
-        assertEquals(3, player4.getHand().size());
+        assertEquals(4, player4.getHand().size());
 
         // participantReset (both dealer and player)
         gameService.participantReset(player4);

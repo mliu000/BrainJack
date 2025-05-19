@@ -73,13 +73,9 @@ async function participantStartDraw(username) {
         const url = `${window.apiPrefix}/participant/${username}/participantStartDraw`;
         const response = await window.putRequest(url, null, "text/plain");
 
-        window.players.set(username, response);
-
-        if (username === "d") {
-            dealer = response;
-        } else {
+        if (username != "d") {
             window.players.set(username, response);
-        }
+        } 
 
         return response;
     } catch (error) {

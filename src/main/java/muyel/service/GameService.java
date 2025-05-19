@@ -8,9 +8,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import muyel.model.*;
-import muyel.utility.Pair;
+import muyel.model.Dealer;
+import muyel.model.Deck;
+import muyel.model.Participant;
+import muyel.model.Player;
+import muyel.model.Question;
+import muyel.model.QuestionBank;
 import muyel.respository.PlayerRepository;
+import muyel.utility.Pair;
 
 /*
  * @Mu Ye Liu - Jan 2025
@@ -100,9 +105,7 @@ public class GameService {
     // Player hit draw card
     @Transactional
     public void playerHit(Player playerToUpdate) {
-        if (playerToUpdate.getScore() < 21) {
-            playerToUpdate.drawCard(DECK);
-        }
+        playerToUpdate.drawCard(DECK);
     }
 
     // Player login to round
