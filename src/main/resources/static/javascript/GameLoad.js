@@ -6,7 +6,6 @@ Represents the code for loading the ui page and all its elements
 
 ///// unique identifiers for the tab
 const tabId = window.crypto.randomUUID();
-let dealer;
 
 // Useful constants
 
@@ -33,6 +32,14 @@ let userNameLabelList = [];
 let playerScoreList = [];
 let playerHitButtonList = [];
 let playerStopButtonList = [];
+let playerCardHolder = [];
+let playerWinLoseScreen = [];
+let playerWinLoseMessage = [];
+
+// Dealer
+let dealerScore;
+let dealerCards;
+
 
 ///// LOAD FUNCTIONS /////
 
@@ -126,13 +133,15 @@ function createPlayerProfile(key, value, ithPlayer, noPlayers) {
         position: "absolute",
         left: "50%",
         bottom: "7%",
-        transform: "translate(-50%)"
+        transform: "translate(-50%)",
+        zIndex: "1000"
     })
     Object.assign(stopButton.style, {
         position: "absolute",
         left: "50%",
         bottom: "1%",
-        transform: "translate(-50%)"
+        transform: "translate(-50%)",
+        zIndex: "1000"
     })
     hitButton.style.display = "none";
     stopButton.style.display = "none";
@@ -335,6 +344,8 @@ function referenceStaticElements() {
     placeBetsUsername = document.getElementById("place-bets-username");
     placeBetsMessage = document.getElementById("place-bets-message");
     placeBetsInput = document.getElementById("place-bets-input");
+    dealerScore = document.getElementById("dealer-score");
+    dealerCards = document.getElementById("dealer-cards");
 }
 
 // Reference all dynamic elements as fields
@@ -345,6 +356,9 @@ function referenceDynamicElements() {
         playerScoreList.push(document.getElementById(`player-score-${i}`));
         playerHitButtonList.push(document.getElementById(`hit-button-${i}`));
         playerStopButtonList.push(document.getElementById(`stop-button-${i}`));
+        playerCardHolder.push(document.getElementById(`player-cards-${i}`));
+        playerWinLoseScreen.push(document.getElementById(`player-win-lose-screen-${i}`));
+        playerWinLoseMessage.push(document.getElementById(`player-win-lose-message-${i}`));
     }
 }
 

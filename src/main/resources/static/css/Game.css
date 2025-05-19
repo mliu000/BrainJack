@@ -305,3 +305,29 @@ html, body {
 #play-again-button {
     margin-bottom: 2vh;
 }
+
+/* Animations */
+
+/* This is for the player cards */
+@keyframes slideInFromBelow {
+  from {
+    transform: translate(-50%, 200%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%);
+    opacity: 1;
+  }
+}
+
+/* This is for dealer cards */
+@keyframes slideLeftFromRight {
+  from {
+    transform: translate(500%, -50%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(0%, -50%);
+    opacity: 1;
+  }
+}
