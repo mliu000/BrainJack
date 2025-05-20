@@ -42,7 +42,7 @@ Finally, this program also uses mySQL to store player accounts and stats between
 
 ## Instructions to run on local computer
 
-After cloning this project, it should run automatically because it uses Java Maven, which automatically managed the dependencies. To run the project, do the following: 
+After cloning this project, it should run automatically because it uses Java Maven, which automatically managed the dependencies. To run the project, type the following in the terminal (root directory is fine): 
 
 **mvn spring-boot:run**
 
