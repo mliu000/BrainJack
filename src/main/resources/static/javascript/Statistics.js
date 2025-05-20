@@ -20,7 +20,7 @@ function displayStatistics(player) {
     document.getElementById("rounds-won").innerHTML = 
         `<strong>Rounds Won: </strong> ${player.roundsWon}`;
     document.getElementById("win-percentage").innerHTML = 
-        `<strong>Win Percentage: </strong> ${player.winPercentage}%`;
+        `<strong>Win Percentage: </strong> ${player.winPercentage.toFixed(2)}%`;
     document.getElementById("total-earnings").innerHTML = 
         `<strong>Career Earnings: </strong> \$${player.totalEarnings}`;
     document.getElementById("session-earnings").innerHTML = 
