@@ -50,9 +50,9 @@ However, you will have to set up the mySQL, which the instructions are below:
 
 #### Setting up mySql
 
-Download mySQL, preferrably with version 8 or newer. Once downloaded, create a database and give it name. Then in the **application.properties** file (in the resource folder), and change the following lines to: 
+Download mySQL, preferrably with version 8 or newer. Once downloaded, create a database and give it name. Then in the ***application.properties*** file (in the resource folder), and change the following lines to: 
 
-spring.datasource.url=jdbc:mysql://localhost:<**Your Port**>/**Your database name**
+spring.datasource.url=jdbc:mysql://localhost:<**Your Port**>/**Your database name** <br>
 spring.datasource.password=**Your sql account password**
 
 
