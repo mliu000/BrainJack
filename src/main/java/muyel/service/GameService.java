@@ -149,6 +149,7 @@ public class GameService {
     // Resets the participants after they finish
     public void participantReset(Participant participantToReset) {
         participantToReset.reset(DECK);
+        System.out.println(DECK.getDeckOfCards().size());
     }
 
     ///// INPUT METHODS FOR DEALER ONLY /////

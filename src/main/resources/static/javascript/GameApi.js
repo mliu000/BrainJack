@@ -53,7 +53,7 @@ async function updatePlayerStatistics(username, win, correct) {
             "correct": correct
         }
         const url = `${window.apiPrefix}/players/${username}/updatePlayerStatistics`;
-        const response = await window.putRequest(url, JSON.stringify(body), "application/json");
+        const response = await window.postRequest(url, JSON.stringify(body), "application/json");
 
         window.players.set(username, response);
 
@@ -91,7 +91,7 @@ RETURNS: the same player/dealer along with their decks reset
 async function participantReset(username) {
     try {
         const url = `${window.apiPrefix}/participant/${username}/participantReset`;
-        const response = await window.putRequest(url, null, "text/plain");
+        const response = await window.postRequest(url, null, "text/plain");
 
         if (username === "d") {
             dealer = response;

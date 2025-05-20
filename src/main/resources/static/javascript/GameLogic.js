@@ -66,6 +66,7 @@ function initializePlaceBetsScreen() {
                     placeBetsUsername.textContent = `For user: ${playerEntries[index]}`;
                 } else {
                     placeBetsPopup.style.display = "none";
+                    sessionStorage.setItem("game-in-action", "true");
                     placeBetsButton.removeEventListener("click", handlePlaceBetButtonClick);
                     updatePlayerBetDisplays();
                     playerStartDraws();
@@ -266,6 +267,7 @@ function initializeGameOverScreen() {
 // Final function: display end game popup
 async function endGame() {
     // Perform api calls
+    sessionStorage.setItem("game-in-action", "false");
     document.getElementById("game-over-popup").style.display = "block";
     for (const [key, value] of window.players) {
         const win = !value.busted && (dealer.busted || dealer.score < value.score);
@@ -418,6 +420,8 @@ function reset() {
 
 // Adds the basic action listeners for the buttons, doing it by div
 function addActionListeners() {
+    sessionStorage.setItem("game-in-action", "false");
+
     startPopupActionListeners();
     addBetInputActionListener();
     initializePlayerButtonsPanel();

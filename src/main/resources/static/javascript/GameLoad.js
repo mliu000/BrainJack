@@ -124,7 +124,7 @@ function createPlayerProfile(key, value, ithPlayer, noPlayers) {
         transform: "translate(-50%)",
         textDecoration: "underline"
     });
-    const betLabel = createLabel(`Bet: \$${value.currBet}`, `bet-label-${ithPlayer}`, "h3", "lightgray", "clamp(0vw, 1.5vw, 2.2vh)");
+    const betLabel = createLabel(`Bet: \$0`, `bet-label-${ithPlayer}`, "h3", "lightgray", "clamp(0vw, 1.5vw, 2.2vh)");
     Object.assign(betLabel.style, {
         position: "absolute", 
         marginTop: "0",
@@ -403,9 +403,11 @@ window.addEventListener("DOMContentLoaded", async() => {
 
         // If count != 1, then do not allow another game to be played
         if (numberOfGameTabsOpen > 1) {
+            sessionStorage.setItem("game-in-action", "false");
             gameInPlayOverride(numberOfGameTabsOpen); 
         } else if (window.players.size === 0) {
             // No players logged in 
+            sessionStorage.setItem("game-in-action", "false");
             notEnoughPlayersOverride();
         } else {
             // Initialize game and set the game in action status to true
@@ -422,13 +424,21 @@ window.addEventListener("DOMContentLoaded", async() => {
 
 });
 
-// Set when attempting to unload
-window.addEventListener("beforeunload", () => {
-    // PUT STUFF HERE.
-});
-
 // We need this due to the confirmation tab
 window.addEventListener("pagehide", () => {
     // Clear the heartbeat and use sendBeacon to deregister the tab
     navigator.sendBeacon(`${window.tabApiPrefix}/${tabId}/deregister`, "");
+
+    if (sessionStorage.getItem("game-in-action") === "true") {
+        for (const username of window.players.keys()) {
+            const body = {
+                "win": false,
+                "correct": false
+            }
+            const blob = new Blob([JSON.stringify(body)], { type: "application/json" });
+            navigator.sendBeacon(`${window.apiPrefix}/players/${username}/updatePlayerStatistics`, blob);
+            navigator.sendBeacon(`${window.apiPrefix}/participant/${username}/participantReset`, null);
+        }
+        navigator.sendBeacon(`${window.apiPrefix}/participant/d/participantReset`, null);
+    }
 });

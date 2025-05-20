@@ -1,16 +1,25 @@
 package muyel.controller;
 
-import muyel.model.*;
-import muyel.service.GameService;
-import muyel.utility.Pair;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
+import muyel.model.Dealer;
+import muyel.model.Player;
+import muyel.model.Question;
+import muyel.service.GameService;
+import muyel.utility.Pair;
 
 /*
  * @Mu Ye Liu - Jan 2025
@@ -66,7 +75,7 @@ public class GameController {
     }
 
     // Updates the statistics of the player in game
-    @PutMapping("/players/{username}/updatePlayerStatistics")
+    @PostMapping("/players/{username}/updatePlayerStatistics")
     public ResponseEntity<?> updatePlayerStatistics(@PathVariable String username, 
             @RequestBody FinishRequest request) {
         // Attempts to find player
@@ -174,7 +183,7 @@ public class GameController {
      * Resets the participant after round
      * username = "d" for dealer, actual username for player
      */ 
-    @PutMapping("/participant/{username}/participantReset")
+    @PostMapping("/participant/{username}/participantReset")
     public ResponseEntity<?> participantReset(@PathVariable String username) {
         if (username.equals("d")) {
             // Case 1: string is "d" so we will proceed with dealer
