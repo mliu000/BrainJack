@@ -8,29 +8,29 @@ Brainjack is a very fun multiplayer game that incorporates traditional blackjack
 
 Log In up to 4 players at once, each of you will have a personal account with a personalized username and stat tracking. 
 
-<img src="../brainjack_nwhacks_2025_rebuild/src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125711.png" alt="Gameplay Screenshot" width="400"/>
+<img src="src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125711.png" alt="Gameplay Screenshot" width="400"/>
 
-<img src="../brainjack_nwhacks_2025_rebuild/src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125907.png" alt="Gameplay Screenshot" width="400"/>
+<img src="src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125907.png" alt="Gameplay Screenshot" width="400"/>
 
-<img src="../brainjack_nwhacks_2025_rebuild/src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125928.png" alt="Gameplay Screenshot" width="400"/>
+<img src="src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125928.png" alt="Gameplay Screenshot" width="400"/>
 
 #### *Set Your Bets*
 
 Each player gets to set a bet value, which if they win the match, they will win the amount they betted. If they lose, they they will answer a random question to potentially half their loss compared to their bet.
 
-<img src="../brainjack_nwhacks_2025_rebuild/src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125823.png" alt="Gameplay Screenshot" width="400"/>
+<img src="src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125823.png" alt="Gameplay Screenshot" width="400"/>
 
 ##### *Answer Questions to Half your loss*
 
 If the player loses, either by busting or the dealer beats them, they will answer a randomly generated question in which they can half their bet to 
 
-<img src="../brainjack_nwhacks_2025_rebuild/src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125938.png" alt="Gameplay Screenshot" width="400"/>
+<img src="src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125938.png" alt="Gameplay Screenshot" width="400"/>
 
 ##### *View Player Statistics*
 
 In Between matches, you can view statistics (such as net win/loss, number of matches played, number of matches won) all one one screen.
 
-<img src="../brainjack_nwhacks_2025_rebuild/src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125759.png" alt="Gameplay Screenshot" width="400"/>
+<img src="src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125759.png" alt="Gameplay Screenshot" width="400"/>
 
 ### Implementation Features
 
