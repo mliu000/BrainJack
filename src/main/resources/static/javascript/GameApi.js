@@ -73,7 +73,7 @@ async function participantStartDraw(username) {
         const url = `${window.apiPrefix}/participant/${username}/participantStartDraw`;
         const response = await window.putRequest(url, null, "text/plain");
 
-        if (username != "d") {
+        if (username !== "d") {
             window.players.set(username, response);
         } 
 

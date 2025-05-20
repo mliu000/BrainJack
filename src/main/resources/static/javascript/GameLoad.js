@@ -35,11 +35,21 @@ let playerStopButtonList = [];
 let playerCardHolder = [];
 let playerWinLoseScreen = [];
 let playerWinLoseMessage = [];
+let playerBetList = [];
 
 // Dealer
+let dealer;
 let dealerScore;
 let dealerCards;
 
+// Question popup
+let questionPopup;
+let answerButton;
+let actualQuestion;
+let questionUsername;
+let answerContainer;
+
+let answerCorrectnessCover;
 
 ///// LOAD FUNCTIONS /////
 
@@ -346,6 +356,12 @@ function referenceStaticElements() {
     placeBetsInput = document.getElementById("place-bets-input");
     dealerScore = document.getElementById("dealer-score");
     dealerCards = document.getElementById("dealer-cards");
+    questionUsername = document.getElementById("question-username");
+    answerContainer = document.getElementById("answer-container");
+    answerButton = document.getElementById("answer-button");
+    answerCorrectnessCover = document.getElementById("answer-correctness-cover");
+    questionPopup = document.getElementById("question-popup");
+    actualQuestion = document.getElementById("actual-question");
 }
 
 // Reference all dynamic elements as fields
@@ -359,6 +375,7 @@ function referenceDynamicElements() {
         playerCardHolder.push(document.getElementById(`player-cards-${i}`));
         playerWinLoseScreen.push(document.getElementById(`player-win-lose-screen-${i}`));
         playerWinLoseMessage.push(document.getElementById(`player-win-lose-message-${i}`));
+        playerBetList.push(document.getElementById(`bet-label-${i}`));
     }
 }
 

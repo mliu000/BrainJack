@@ -5,6 +5,11 @@ Represents the code for the game itself
 Includes adding action listeners, case handling, and api calls
 */
 
+// Question answered correctly [username, correct]
+const usernameAnswerCorrect = new Map();
+// usernames of players who lose
+const loserUsernames = new Set();
+
 ///// GAME LOGIC FUNCTIONS /////
 
 // Adds the action listeners for the start up screen
@@ -33,9 +38,10 @@ function initializePlaceBetsScreen() {
     const playerEntries = Array.from(window.players.keys());
     let index = 0;
 
+    placeBetsMessage.style.display = "none";
     placeBetsUsername.textContent = `For user: ${playerEntries[index]}`;
 
-    placeBetsButton.addEventListener("click", async () => {
+    const handlePlaceBetButtonClick = async function () {
         if (placeBetsInput.value === "") {
             placeBetsMessage.textContent = "Bet Cannot Be Empty";
             Object.assign(placeBetsMessage.style, {
@@ -60,7 +66,7 @@ function initializePlaceBetsScreen() {
                     placeBetsUsername.textContent = `For user: ${playerEntries[index]}`;
                 } else {
                     placeBetsPopup.style.display = "none";
-                    index = 0;
+                    placeBetsButton.removeEventListener("click", handlePlaceBetButtonClick);
                     updatePlayerBetDisplays();
                     playerStartDraws();
                     dealerStartDraw();
@@ -70,8 +76,9 @@ function initializePlaceBetsScreen() {
                 // Error message already thrown in caller function. Simply catch it
             }
         }
-        
-    });
+    }
+
+    placeBetsButton.addEventListener("click", handlePlaceBetButtonClick);
 
     placeBetsPopup.style.display = "block"; 
 }
@@ -85,14 +92,13 @@ function initializePlayerButtonsPanel() {
             addPlayerCard(i);
             playerScoreList[i - 1].textContent = response.score;
             if (response.busted) {
-                playerHitButtonList[i - 1].disabled = "true";
-                playerStopButtonList[i - 1].disabled = "true";
+                loserUsernames.add(userNameLabelList[i - 1].textContent);
+                playerHitButtonList[i - 1].disabled = true;
+                playerStopButtonList[i - 1].disabled = true;
                 await wait(1000);
-                playerHitButtonList[i - 1].disabled = "false";
-                playerStopButtonList[i - 1].disabled = "false";
-                playerWinLoseMessage[i - 1].textContent = "LOSE";
-                playerWinLoseMessage[i - 1].style.color = failureColor;
-                playerWinLoseScreen[i - 1].style.display = "block";
+                playerHitButtonList[i - 1].disabled = false;
+                playerStopButtonList[i - 1].disabled = false;
+                displayPlayerResult(i, false);
                 nextPlayer(i);
             }
         });
@@ -124,8 +130,12 @@ function nextPlayer(ithPlayer) {
     playerStopButtonList[ithPlayer - 1].style.display = "none";
     playerHitButtonList[ithPlayer - 1].style.display = "none";
     if (ithPlayer === window.players.size) {
-        // TODO: Allow dealer to play
-        dealerPlay();
+        // TODO: Allow dealer to play or end game if everyone busts
+        if (loserUsernames.size === window.players.size) {
+            processResults();
+        } else {
+            dealerPlay();
+        }
     } else {
         playerStopButtonList[ithPlayer].style.display = "block";
         playerHitButtonList[ithPlayer].style.display = "block";
@@ -141,8 +151,18 @@ function updatePlayerBetDisplays() {
 }
 
 // Allow dealer to play
-function dealerPlay() {
-    
+async function dealerPlay() {
+    dealer = await dealerPlayHand();
+    for (let i = 1; i < dealer.hand.length; i++) {
+        await wait(1500);
+        const cardDiv = createCard(dealer.hand[i].number, dealer.hand[i].suite.toLowerCase(), "slideLeftFromRight");
+        addDealerCardDivProperties(cardDiv);
+        dealerCards.appendChild(cardDiv);
+        dealerScore.textContent = parseInt(dealerScore.textContent) + dealer.hand[i].value;
+    } 
+
+    await wait(1500);
+    processResults();
 }
 
 // Start the game flow
@@ -170,14 +190,91 @@ async function playerStartDraws() {
 
 // Start draw for dealer
 async function dealerStartDraw() {
-    const response = await participantStartDraw("d");
+    dealer = await participantStartDraw("d");
 
-    for (let i = 0; i < 2; i++) {
-        const cardDiv = createCard(response.hand[i].number, response.hand[i].suite.toLowerCase(), "slideLeftFromRight");
-        addDealerCardDivProperties(cardDiv);
-        dealerCards.appendChild(cardDiv);
+    const cardDiv = createCard(dealer.hand[0].number, dealer.hand[0].suite.toLowerCase(), "slideLeftFromRight");
+    addDealerCardDivProperties(cardDiv);
+    dealerCards.appendChild(cardDiv);
+
+    dealerScore.textContent = dealer.hand[0].value;
+}
+
+// Process results
+async function processResults() {
+    for (let i = 1; i <= window.players.size; i++) {
+        const username = userNameLabelList[i - 1].textContent;
+        const busted = window.players.get(username).busted;
+        const lessThanOrEqualToDealerScore = window.players.get(username).score <= dealer.score;
+        if (busted || (lessThanOrEqualToDealerScore && !dealer.busted)) {
+            displayPlayerResult(i, false);
+            loserUsernames.add(username);
+        } else {
+            displayPlayerResult(i, true);
+        }
     }
-    dealerScore.textContent = response.score;
+
+    await wait(2000);
+    displayQuestionPopup();
+}
+
+// Display Question popup
+function displayQuestionPopup() {
+    const loserUsernamesList = Array.from(loserUsernames);
+    if (loserUsernamesList.length !== 0) {
+        let index = 0;
+        let currUsername = loserUsernamesList[index];
+
+        displayQuestion(currUsername);
+        questionPopup.style.display = "block";
+
+        const answerButtonEvent = async function () {
+            const correctness = checkAnswer();
+            usernameAnswerCorrect.set(currUsername, correctness);
+            await wait(1500);
+            answerCorrectnessCover.style.display = "none";
+            index++;
+            if (index === loserUsernamesList.length) {
+                questionPopup.style.display = "none";
+                answerButton.removeEventListener("click", answerButtonEvent);
+                endGame();
+            } else {
+                currUsername = loserUsernamesList[index];
+                displayQuestion(currUsername);
+            }
+        }
+
+        answerButton.addEventListener("click", answerButtonEvent);
+    
+    } else {
+        endGame();
+    }
+}
+
+// Initialize the game over screen
+function initializeGameOverScreen() {
+    document.getElementById("play-again-button").addEventListener("click", () => {
+        // Reset the game
+        document.getElementById("game-over-popup").style.display = "none";
+        reset();
+
+        usernameAnswerCorrect.clear();
+        loserUsernames.clear();
+        window.players.forEach((_, key) => usernameAnswerCorrect.set(key, false));
+    });
+}
+
+// Final function: display end game popup
+async function endGame() {
+    // Perform api calls
+    document.getElementById("game-over-popup").style.display = "block";
+    for (const [key, value] of window.players) {
+        const win = !value.busted && (dealer.busted || dealer.score < value.score);
+        const correct = usernameAnswerCorrect.get(key);
+        await updatePlayerStatistics(key, win, correct);
+        await participantReset(key);
+    }
+    await participantReset("d");
+
 }
 
 ///// HELPER FUNCTIONS /////
@@ -241,6 +338,82 @@ function addPlayerCardDivProperties(cardDiv, ithPlayer) {
     })
 }
 
+/* Displays the player result
+REQUIRES: - ithPlayer: must be a valid int from 1 to 4
+          - win: must be a boolean
+*/
+function displayPlayerResult(ithPlayer, win) {
+    if (win) {
+        playerWinLoseMessage[ithPlayer - 1].textContent = "WIN";
+        playerWinLoseMessage[ithPlayer - 1].style.color = successColor;
+        playerWinLoseScreen[ithPlayer - 1].style.display = "block";
+    } else {
+        playerWinLoseMessage[ithPlayer - 1].textContent = "LOSE";
+        playerWinLoseMessage[ithPlayer - 1].style.color = failureColor;
+        playerWinLoseScreen[ithPlayer - 1].style.display = "block";
+    }
+}
+
+// Displays a new question
+// REQUIRES: - currUsername: must be a username of player that has lost
+async function displayQuestion(currUsername) {
+    answerContainer.replaceChildren();
+    const question = await getRandomQuestion();
+    sessionStorage.setItem("correct-answer", question.correctAnswer);
+    actualQuestion.textContent = question.question;
+    console.log(question.question);
+    questionUsername.textContent = `For User: ${currUsername}`;
+
+    for (let i = 0; i < question.answers.length; i++) {
+        const label = document.createElement("label");
+        label.className = "popup-text2";
+
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = "answers";
+
+        label.appendChild(input);
+        label.appendChild(document.createTextNode(question.answers[i]));
+        answerContainer.appendChild(label);
+    }
+}
+
+// Check answer
+// RETURNS: True for correct answer, false for incorrect or no answer
+function checkAnswer() {
+    const selected = document.querySelector("input[name=answers]:checked");
+
+    if (selected) {
+        const text = selected.parentElement.textContent;
+        if (text === sessionStorage.getItem("correct-answer")) {
+            document.getElementById("correctness-message").textContent = "CORRECT";
+            document.getElementById("correctness-message").style.color = successColor;
+            answerCorrectnessCover.style.display = "block";
+            return true;
+        }
+    }
+
+    document.getElementById("correctness-message").textContent = "INCORRECT";
+    document.getElementById("correctness-message").style.color = failureColor;
+    answerCorrectnessCover.style.display = "block";
+    return false;
+}
+
+// Resets the game
+function reset() {
+    for (let i = 0; i < window.players.size; i++) {
+        playerWinLoseScreen[i].style.display = "none";
+        playerCardHolder[i].replaceChildren();
+        playerScoreList[i].textContent = "0";
+        playerBetList[i].textContent = `Bet: \$0`;
+        dealerCards.replaceChildren();
+        dealerScore.textContent = "0";
+        answerContainer.replaceChildren();
+    }
+
+    initializePlaceBetsScreen();
+}
+
 ///// MAIN FUNCTION THAT CALLS THE LOGIC FUNCTIONS/////
 
 // Adds the basic action listeners for the buttons, doing it by div
@@ -248,5 +421,8 @@ function addActionListeners() {
     startPopupActionListeners();
     addBetInputActionListener();
     initializePlayerButtonsPanel();
+    initializeGameOverScreen();
+
+    window.players.forEach((_, key) => usernameAnswerCorrect.set(key, false));
 }
 

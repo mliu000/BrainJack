@@ -150,7 +150,8 @@ html, body {
 
 #dealer-cards {
     position: absolute;
-    width: 40vw;
+    overflow: visible;
+    width: 48vw;
     height: 35vh;
     left: 50vw;
     top: 2vh;
@@ -271,6 +272,11 @@ html, body {
     color: var(--color);
 }
 
+#answer-container {
+    display: flex; 
+    flex-direction: column;
+}
+
 #answer-button {
     margin-top: 5vh;
     margin-bottom: 0vh;
@@ -285,6 +291,10 @@ html, body {
     border-radius: 8vh;    
     background-color: rgba(0, 0, 0, 0.8);
 
+}
+
+#actual-question {
+    text-align: center;
 }
 
 #correctness-message {
