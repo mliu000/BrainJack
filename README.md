@@ -1,10 +1,10 @@
-## BrainJack 
+# BrainJack 
 
 Brainjack is a very fun multiplayer game that incorporates traditional blackjack with the ability to answer non-trivial questions to half your loss. This game allows up to 4 players play against a dealer at the same time, minicking a real blackjack game at a casino.
 
-### Game Features
+## Game Features
 
-#### *Multiplayer*
+### *Multiplayer*
 
 Log In up to 4 players at once, each of you will have a personal account with a personalized username and stat tracking. 
 
@@ -14,19 +14,19 @@ Log In up to 4 players at once, each of you will have a personal account with a 
 
 <img src="src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125928.png" alt="Gameplay Screenshot" width="400"/>
 
-#### *Set Your Bets*
+### *Set Your Bets*
 
 Each player gets to set a bet value, which if they win the match, they will win the amount they betted. If they lose, they they will answer a random question to potentially half their loss compared to their bet.
 
 <img src="src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125823.png" alt="Gameplay Screenshot" width="400"/>
 
-#### *Answer Questions to Half your loss*
+### *Answer Questions to Half your loss*
 
 If the player loses, either by busting or the dealer beats them, they will answer a randomly generated question in which  they can half their loss if answered correctly.
 
 <img src="src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125938.png" alt="Gameplay Screenshot" width="400"/>
 
-#### *View Player Statistics*
+### *View Player Statistics*
 
 In Between matches, you can view statistics (such as net win/loss, number of matches played, number of matches won) all one one screen.
 
@@ -40,7 +40,7 @@ The game uses mutexes to stagger tab loading to prevent the game from loading ab
 
 Finally, this program also uses mySQL to store player accounts and stats between sessions, so they can be retrieved and used again.
 
-### Instructions to run on local computer
+## Instructions to run on local computer
 
 After cloning this project, it should run automatically because it uses Java Maven, which automatically managed the dependencies. To run the project, do the following: 
 
@@ -48,11 +48,11 @@ After cloning this project, it should run automatically because it uses Java Mav
 
 However, you will have to set up the mySQL, which the instructions are below:
 
-#### Setting up mySql
+### Setting up mySql
 
 Download mySQL, preferrably with version 8 or newer. Once downloaded, create a database and give it name. Then in the ***application.properties*** file (in the resource folder), and change the following lines to: 
 
-spring.datasource.url=jdbc:mysql://localhost:<**Your Port**>/**Your database name** <br>
-spring.datasource.password=**Your sql account password**
+spring.datasource.url=jdbc:mysql://localhost:<**Your Port**>/<**Your database name**> <br>
+spring.datasource.password=<**Your sql account password**>
 
 
