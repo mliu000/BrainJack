@@ -22,7 +22,7 @@ Each player gets to set a bet value, which if they win the match, they will win 
 
 ##### *Answer Questions to Half your loss*
 
-If the player loses, either by busting or the dealer beats them, they will answer a randomly generated question in which they can half their bet to 
+If the player loses, either by busting or the dealer beats them, they will answer a randomly generated question in which  they can half their loss if answered correctly.
 
 <img src="src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125938.png" alt="Gameplay Screenshot" width="400"/>
 
