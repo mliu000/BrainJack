@@ -1,6 +1,6 @@
 # BrainJack 
 
-Brainjack is a very fun multiplayer game that incorporates traditional blackjack with the ability to answer non-trivial questions to half your loss. This game allows up to 4 players play against a dealer at the same time, minicking a real blackjack game at a casino.
+BrainJack is a very fun multiplayer game that incorporates traditional blackjack with the ability to answer non-trivial questions to half your loss. This game allows up to 4 players play against a dealer at the same time, minicking a real blackjack game at a casino.
 
 ## Game Features
 
