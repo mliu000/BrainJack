@@ -14,9 +14,9 @@ Log In up to 4 players at once, each of you will have a personal account with a 
 
 <img src="src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125928.png" alt="Gameplay Screenshot" width="400"/>
 
-### *Set Your Bets*
+### *Place Your Bets*
 
-Each player gets to set a bet value, which if they win the match, they will win the amount they betted. If they lose, they they will answer a random question to potentially half their loss compared to their bet.
+Each player gets to place the amount they want to bet, which if they win, they will win the amount they betted. If they lose, they they will answer a random question to potentially half their loss compared to their bet.
 
 <img src="src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125823.png" alt="Gameplay Screenshot" width="400"/>
 
@@ -28,7 +28,7 @@ If the player loses, either by busting or the dealer beats them, they will answe
 
 ### *View Player Statistics*
 
-In Between matches, you can view statistics (such as net win/loss, number of matches played, number of matches won) all one one screen.
+In Between matches, you can view statistics (such as net win/loss, number of matches played, number of matches won) all on one screen.
 
 <img src="src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125759.png" alt="Gameplay Screenshot" width="400"/>
 
@@ -48,7 +48,7 @@ After cloning this project, it should run automatically because it uses Java Mav
 
 However, you will have to set up the mySQL, which the instructions are below:
 
-### Setting up mySql
+### Setting up mySQL
 
 Download mySQL, preferrably with version 8 or newer. Once downloaded, create a database and give it name. Then in the ***application.properties*** file (in the resource folder), and change the following lines to: 
 
