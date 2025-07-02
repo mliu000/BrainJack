@@ -32,27 +32,64 @@ In Between matches, you can view statistics (such as net win/loss, number of mat
 
 <img src="src/main/resources/static/images/Readme_pictures/Screenshot 2025-05-20 125759.png" alt="Gameplay Screenshot" width="400"/>
 
-### Implementation Features
+## Implementation Overview
 
-This game was implemented with a Java Springboot using RESTFul API for the server, with Vanilla JS frontend + html + css. The core logic of the game is on the Java backend, while the animations, dom manipulation and styling is on the frontend. The JS frontend sends API calls to the Java Backend to perform sensitive game logic that is exploitable on the frontend. 
+BrainJack is a full-stack multiplayer blackjack game with backend-controlled logic, session persistence, and anti-exploit design.
 
-The game uses mutexes to stagger tab loading to prevent the game from loading abnormally. Whenever a new game tab is opened, the tab is registered in the Java backend, and the total amount of game tabs opened is returned. This allows the feature of only allowing one game tab to allow the game to run at a time (to ensure it runs smoothly). Also, when at least one game tab is running, the lobby is blocked to disallow players from logging out while the game is running. When the tab is closed, it gets deregistered, decrementing the number of tabs open. Also, a heartbeat feature is set up to allow the server to automatically decrement the tab counter if a tab were to fail to deregister after closing, ensuring the number of tabs is accurately tracked. 
+### Tech Stack
 
-Finally, this program also uses mySQL to store player accounts and stats between sessions, so they can be retrieved and used again.
+- **Backend**: Java Spring Boot (RESTful API)
+- **Frontend**: Vanilla JavaScript, HTML, CSS
+- **Database**: MySQL (persistent account and stat tracking)
+- **Build Tool**: Maven
 
-## Instructions to run on local computer
+### Backend Logic
 
-After cloning this project, it should run automatically because it uses Java Maven, which automatically managed the dependencies. To run the project, type the following in the terminal (root directory is fine): 
+- Core game logic (card draws, dealer behavior, bust detection) is handled securely on the backend
+- Frontend sends REST API calls to avoid frontend-exploitable logic
+- Backend fully manages player actions, betting flow, and round resolution
 
-**mvn spring-boot:run**
+### Multiplayer Tab Management
 
-However, you will have to set up the mySQL, which the instructions are below:
+To maintain consistency and prevent session conflicts:
 
-### Setting up mySQL
+- **Tab Registration**:
+  - Each active game tab is registered in the backend
+  - A server-side counter tracks the number of open tabs
+- **Single-Tab Enforcement**:
+  - Only one game tab is allowed to run at a time
+  - New tabs are blocked to ensure game consistency
+- **Lobby Lockout**:
+  - While a game is active, login/logout functionality in the lobby is disabled
+- **Heartbeat Mechanism**:
+  - A periodic heartbeat keeps track of active tabs
+  - If a tab closes unexpectedly, the backend auto-decrements after a timeout
 
-Download mySQL, preferrably with version 8 or newer. Once downloaded, create a database and give it name. Then in the ***application.properties*** file (in the resource folder), and change the following lines to: 
+### Persistent Player Stats
 
-spring.datasource.url=jdbc:mysql://localhost:<**Your Port**>/<**Your database name**> <br>
-spring.datasource.password=<**Your sql account password**>
+- Player accounts are stored in MySQL
+- Tracks stats across sessions:
+  - Net win/loss
+  - Total matches played
+  - Matches won
+
+---
+
+## Setting up
+
+### Requirements
+
+- Java 17+
+- Maven
+- MySQL 8.0+
+
+### Steps to run the project:
+
+- Clone the Repo
+- Go to ```src/main/resources/application.properties```, and edit the following: 
+    - ```spring.datasource.url=jdbc:mysql://localhost:<your_port>/brainjack```, default ```3306```.
+    - ```spring.datasource.username=<your_mysql_username>```, default ````root```.
+    - ```spring.datasource.password=<your_mysql_password>```
+- From the root directory, type: ```mvn spring-boot:run```.
 
 
