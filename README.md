@@ -88,7 +88,7 @@ To maintain consistency and prevent session conflicts:
 - Clone the Repo
 - Go to ```src/main/resources/application.properties```, and edit the following: 
     - ```spring.datasource.url=jdbc:mysql://localhost:<your_port>/brainjack```, default ```3306```.
-    - ```spring.datasource.username=<your_mysql_username>```, default ````root```.
+    - ```spring.datasource.username=<your_mysql_username>```, default ```root```.
     - ```spring.datasource.password=<your_mysql_password>```
 - From the root directory, type: ```mvn spring-boot:run```.
 
